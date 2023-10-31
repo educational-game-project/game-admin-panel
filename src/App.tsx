@@ -1,10 +1,16 @@
+import { Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+
 function App() {
 	return (
 		<>
 			<div className="">
-				<div className="">
-					<h1 className="font-bold text-violet-600">Header</h1>
-				</div>
+				<Routes>
+					<Route
+						path="/"
+						element={<Dashboard />}
+					/>
+				</Routes>
 			</div>
 		</>
 	);
