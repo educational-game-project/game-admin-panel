@@ -1,6 +1,6 @@
 function Dashboard() {
   return (
-    <div>
+    <div className="h-[1500px]">
       <div className="">Dashboard</div>
     </div>
   );
