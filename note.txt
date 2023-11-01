@@ -1,0 +1,6 @@
+admin manajemen siswa
+- CRUD siswa => table
+- history skor => table
+- report => table, line chart
+- analisis => sudah diolah datanya
+- login, reg, 
