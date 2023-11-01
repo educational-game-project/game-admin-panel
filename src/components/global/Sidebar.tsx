@@ -1,9 +1,11 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from 'lucide-react';
 import { useContext, createContext, useState, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 type SidebarItemProps = {
   icon: ReactNode;
   text: string;
+  path: string;
   active: boolean;
   alert: boolean;
 };
@@ -22,8 +24,8 @@ export default function Sidebar({ children }: SidebarProps) {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <aside className="h-screen">
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+    <aside className="h-full fixed">
+      <nav className="h-[calc(100%-24px)] flex flex-col bg-slate-200 rounded-xl">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src="https://img.logoipsum.com/243.svg"
@@ -66,12 +68,19 @@ export default function Sidebar({ children }: SidebarProps) {
   );
 }
 
-export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
+export function SidebarItem({
+  icon,
+  text,
+  path,
+  active,
+  alert,
+}: SidebarItemProps) {
   const { expanded } = useContext(SidebarContext);
 
   return (
-    <li
-      className={`
+    <li>
+      <Link
+        className={`
         relative flex items-center py-2 px-3 my-1
         font-medium rounded-md cursor-pointer
         transition-colors group
@@ -79,34 +88,35 @@ export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
           active
             ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
             : 'hover:bg-indigo-50 text-gray-600'
-        }
-    `}>
-      {icon}
-      <span
-        className={`overflow-hidden transition-all ${
-          expanded ? 'w-52 ml-3' : 'w-0'
-        }`}>
-        {text}
-      </span>
-      {alert && (
-        <div
-          className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
-            expanded ? '' : 'top-2'
-          }`}
-        />
-      )}
+        }`}
+        to={path}>
+        {icon}
+        <span
+          className={`overflow-hidden transition-all ${
+            expanded ? 'w-52 ml-3' : 'w-0'
+          }`}>
+          {text}
+        </span>
+        {alert && (
+          <div
+            className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
+              expanded ? '' : 'top-2'
+            }`}
+          />
+        )}
 
-      {!expanded && (
-        <div
-          className={`
+        {!expanded && (
+          <div
+            className={`
           absolute left-full rounded-md px-2 py-1 ml-6
           bg-indigo-100 text-indigo-800 text-sm
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}>
-          {text}
-        </div>
-      )}
+            {text}
+          </div>
+        )}
+      </Link>
     </li>
   );
 }
