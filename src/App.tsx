@@ -1,93 +1,92 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
-import Sidebar, { SidebarItem } from './components/global/Sidebar';
+import Sidebar, {
+  SeparateSidebar,
+  SidebarItem,
+} from './components/global/Sidebar';
 import {
-  BarChart3,
-  Boxes,
-  LayoutDashboard,
-  LifeBuoy,
-  Package,
-  Receipt,
+  Headphones,
+  HomeIcon,
+  LineChart,
+  MousePointerClick,
   Settings,
-  UserCircle,
+  UserSquare2,
 } from 'lucide-react';
+import Home from './pages/Home';
 import Students from './pages/Students';
 import Score from './pages/Score';
+import Analysis from './pages/Analysis';
+import Preferences from './pages/Preferences';
+import Support from './pages/Support';
+import ErrorPage from './pages/Error';
+import { useSidebar } from './context/SidebarContext';
+import Profile from './pages/Profile';
 
 function App() {
   const currentLocation: string = useLocation()?.pathname;
   const firstPath: string = currentLocation?.split('/')[1];
   const isCurrentLocation = (path: string) => path === firstPath;
+  const { expanded } = useSidebar();
 
   return (
     <div className="w-full p-3">
       <main className="w-full flex">
         {/* sidebar */}
         <Sidebar>
+          <SeparateSidebar caption="Administrator" />
           <SidebarItem
-            icon={<LayoutDashboard size={20} />}
-            text="Dashboard"
+            icon={<HomeIcon size={20} />}
+            text="Home"
             path="/"
             alert={true}
             active={isCurrentLocation('')}
           />
           <SidebarItem
-            icon={<UserCircle size={20} />}
+            icon={<UserSquare2 size={20} />}
             text="Students"
             path="/student"
             alert={false}
             active={isCurrentLocation('student')}
           />
           <SidebarItem
-            icon={<BarChart3 size={20} />}
+            icon={<MousePointerClick size={20} />}
             text="Score"
             path="/score"
-            alert={false}
+            alert={true}
             active={isCurrentLocation('score')}
           />
           <SidebarItem
-            icon={<Boxes size={20} />}
-            text="Inventory"
-            path="/"
+            icon={<LineChart size={20} />}
+            text="Analysis"
+            path="/analysis"
             alert={false}
-            active={false}
+            active={isCurrentLocation('analysis')}
           />
-          <SidebarItem
-            icon={<Package size={20} />}
-            text="Orders"
-            path="/"
-            alert={true}
-            active={false}
-          />
-          <SidebarItem
-            icon={<Receipt size={20} />}
-            text="Billings"
-            path="/"
-            alert={false}
-            active={false}
-          />
-          <hr className="my-3" />
+          <hr className="my-6" />
+          <SeparateSidebar caption="Settings" />
           <SidebarItem
             icon={<Settings size={20} />}
-            text="Setting"
-            path="/"
+            text="Preferences"
+            path="/preferences"
             alert={false}
-            active={false}
+            active={isCurrentLocation('preferences')}
           />
           <SidebarItem
-            icon={<LifeBuoy size={20} />}
-            text="Help"
-            path="/"
+            icon={<Headphones size={20} />}
+            text="Support"
+            path="/support"
             alert={false}
-            active={false}
+            active={isCurrentLocation('support')}
           />
         </Sidebar>
         {/* main content */}
-        <section className="p-7 w-[calc(100%-288px)] ml-auto">
+        <section
+          className={`p-7 ml-auto transition-all-200 ${
+            expanded ? 'w-[calc(100%-288px)]' : 'w-[calc(100%-76px)]'
+          }`}>
           <Routes>
             <Route
               path="/"
-              element={<Dashboard />}
+              element={<Home />}
             />
             <Route
               path="/student"
@@ -96,6 +95,26 @@ function App() {
             <Route
               path="/score"
               element={<Score />}
+            />
+            <Route
+              path="/analysis"
+              element={<Analysis />}
+            />
+            <Route
+              path="/preferences"
+              element={<Preferences />}
+            />
+            <Route
+              path="/support"
+              element={<Support />}
+            />
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
+            <Route
+              path="*"
+              element={<ErrorPage />}
             />
           </Routes>
         </section>
