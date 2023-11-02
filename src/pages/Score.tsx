@@ -1,10 +1,8 @@
 function Score() {
   return (
-    <div>
-      <div className="">
-        <h5 className="font-bold text-xl">Score</h5>
-      </div>
-    </div>
+    <div className="h-[1500px]">
+    <h5 className="font-bold text-xl">Score</h5>
+  </div>
   );
 }
 
