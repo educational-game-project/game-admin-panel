@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  @apply font-inter;
+}
+
+html,
+body {
+  @apply bg-slate-200;
+}
+
 .transition-all-200 {
   @apply transition-all duration-200 ease-in-out;
 }
