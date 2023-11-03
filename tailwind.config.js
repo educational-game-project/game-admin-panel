@@ -9,6 +9,7 @@ export default {
       },
       fontSize: {
         '2xs': '.625rem',
+        '1.5xs': '13px',
       },
     },
   },
