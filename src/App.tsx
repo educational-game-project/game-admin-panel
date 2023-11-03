@@ -12,53 +12,51 @@ import Login from './pages/auth/Login';
 
 function App() {
   return (
-    <div className="w-full p-3">
-      <Routes>
-        {/* routes with layout */}
+    <Routes>
+      {/* routes with layout */}
+      <Route
+        path="/"
+        element={<Layout />}>
         <Route
-          path="/"
-          element={<Layout />}>
-          <Route
-            index
-            element={<Home />}
-          />
-          <Route
-            path="/student"
-            element={<Students />}
-          />
-          <Route
-            path="/score"
-            element={<Score />}
-          />
-          <Route
-            path="/analysis"
-            element={<Analysis />}
-          />
-          <Route
-            path="/preferences"
-            element={<Preferences />}
-          />
-          <Route
-            path="/support"
-            element={<Support />}
-          />
-          <Route
-            path="/profile"
-            element={<Profile />}
-          />
-        </Route>
-        {/* routes without layout */}
-        <Route
-          path="/login"
-          element={<Login />}
+          index
+          element={<Home />}
         />
-        {/* not exist routes */}
         <Route
-          path="*"
-          element={<ErrorPage />}
+          path="/student"
+          element={<Students />}
         />
-      </Routes>
-    </div>
+        <Route
+          path="/score"
+          element={<Score />}
+        />
+        <Route
+          path="/analysis"
+          element={<Analysis />}
+        />
+        <Route
+          path="/preferences"
+          element={<Preferences />}
+        />
+        <Route
+          path="/support"
+          element={<Support />}
+        />
+        <Route
+          path="/profile"
+          element={<Profile />}
+        />
+      </Route>
+      {/* routes without layout */}
+      <Route
+        path="/login"
+        element={<Login />}
+      />
+      {/* not exist routes */}
+      <Route
+        path="*"
+        element={<ErrorPage />}
+      />
+    </Routes>
   );
 }
 
