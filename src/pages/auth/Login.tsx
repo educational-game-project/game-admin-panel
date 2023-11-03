@@ -1,6 +1,6 @@
 function Login() {
   return (
-    <div>
+    <div className="container mx-auto">
       <div className="">
         <h1 className="">Login</h1>
       </div>

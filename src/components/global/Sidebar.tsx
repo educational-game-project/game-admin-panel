@@ -94,6 +94,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           }
       `}>
                 Iwan Suryaningrat
+                <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent" />
               </div>
             )}
           </button>
@@ -220,6 +221,7 @@ export function SidebarItem({
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}>
             {text}
+            <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent" />
           </div>
         )}
       </Link>
