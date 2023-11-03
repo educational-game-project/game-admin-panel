@@ -4,3 +4,8 @@ admin manajemen siswa
 - report => table, line chart
 - analisis => sudah diolah datanya
 - login, reg, 
+
+!!ALERT!!
+- nested context
+- how to manage cookies / using cookies
+- how to manage dark theme
