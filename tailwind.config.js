@@ -10,6 +10,10 @@ export default {
       fontSize: {
         '2xs': '.625rem',
         '1.5xs': '13px',
+        8: '2rem',
+      },
+      spacing: {
+        4.5: '1.125rem',
       },
     },
   },
