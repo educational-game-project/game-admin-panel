@@ -8,6 +8,7 @@ import Preferences from './pages/Preferences';
 import Support from './pages/Support';
 import Profile from './pages/Profile';
 import ErrorPage from './pages/Error';
+import Login from './pages/auth/Login';
 
 function App() {
   return (
@@ -47,6 +48,11 @@ function App() {
           />
         </Route>
         {/* routes without layout */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        {/* not exist routes */}
         <Route
           path="*"
           element={<ErrorPage />}
