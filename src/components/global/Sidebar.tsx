@@ -19,12 +19,13 @@ type SidebarItemProps = {
 };
 type SidebarProps = {
   children: ReactNode;
+  currentPath: string;
 };
 type SeparateSidebarProps = {
   caption: string;
 };
 
-export default function Sidebar({ children }: SidebarProps) {
+export default function Sidebar({ children, currentPath }: SidebarProps) {
   const { expanded, sidebarToggle } = useSidebar();
   const [profileToggle, setProfileToggle] = useState(false);
 
@@ -46,7 +47,8 @@ export default function Sidebar({ children }: SidebarProps) {
             onClick={() => sidebarToggle()}
             className={`p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ${
               expanded ? 'm-0' : 'mx-auto'
-            }`}>
+            }`}
+            title={`${expanded ? 'Sidebar Minimize' : 'Sidebar Open'}`}>
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
@@ -55,12 +57,14 @@ export default function Sidebar({ children }: SidebarProps) {
         {/* bottom */}
         <div className="border-t p-3">
           <button
-            className="flex p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-all-200 text-left"
+            className="flex p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-all-200 text-left group"
             onClick={() => setProfileToggle((curr) => !curr)}>
             <img
               src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=Iwan+Suryaningrat"
               alt="iwan suryaningrat profile"
-              className="w-10 h-10 rounded-full object-cover object-center"
+              className={`${
+                expanded ? 'w-10 h-10' : 'w-9 h-9'
+              } rounded-full object-cover object-center`}
             />
             <div
               className={`
@@ -79,6 +83,19 @@ export default function Sidebar({ children }: SidebarProps) {
                 <MoreVertical size={20} />
               </div>
             </div>
+            {!expanded && (
+              <div
+                className={`
+          absolute left-full rounded-md px-2 py-1 ml-2 whitespace-nowrap
+          bg-gray-800 text-slate-200 text-sm
+          invisible opacity-20 -translate-x-3 transition-all
+          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 ${
+            profileToggle ? 'hidden' : 'block'
+          }
+      `}>
+                Iwan Suryaningrat
+              </div>
+            )}
           </button>
         </div>
         {/* modal profile preference */}
@@ -93,14 +110,14 @@ export default function Sidebar({ children }: SidebarProps) {
               <img
                 src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=Iwan+Suryaningrat"
                 alt="iwan suryaningrat profile"
-                className="w-8 h-8 rounded-full object-cover object-center"
+                className="w-9 h-9 rounded-full object-cover object-center"
               />
               <div className="flex justify-between items-center overflow-hidden transition-all ml-2">
                 <div className="leading-4">
-                  <h4 className="font-semibold mb-0.5 text-xs line-clamp-1 text-ellipsis">
+                  <h4 className="font-semibold mb-0.5 text-1.5xs line-clamp-1 text-ellipsis">
                     Iwan Suryaningrat
                   </h4>
-                  <span className="text-2xs text-gray-600 line-clamp-1 block text-ellipsis">
+                  <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis">
                     Administrator
                   </span>
                 </div>
@@ -109,14 +126,22 @@ export default function Sidebar({ children }: SidebarProps) {
             <hr className="mt-2 mb-1.5" />
             <div className="">
               <Link
-                className="relative flex items-center py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-indigo-50 text-gray-600"
+                className={`relative flex items-center py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group ${
+                  currentPath === 'profile'
+                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
+                    : 'hover:bg-indigo-50 text-gray-600'
+                }`}
                 to="/profile"
                 title="Account Settings">
                 <UserCog size={17} />
                 <span className="ml-2.5 text-sm">Account Settings</span>
               </Link>
               <Link
-                className="relative flex items-center py-1.5 px-2 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-indigo-50 text-gray-600"
+                className={`relative flex items-center py-1.5 px-2 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+                  currentPath === 'activity'
+                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
+                    : 'hover:bg-indigo-50 text-gray-600'
+                }`}
                 to="/activity"
                 title="Activity">
                 <Activity size={17} />
@@ -126,7 +151,7 @@ export default function Sidebar({ children }: SidebarProps) {
             <hr className="mt-2 mb-1.5" />
             <button
               className="relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors group hover:bg-red-50 hover:text-red-500 text-gray-600 w-full"
-              title="Activity"
+              title="Logout"
               role="button">
               <LogOut size={17} />
               <span className="ml-2.5 text-sm">Logout</span>
@@ -170,10 +195,19 @@ export function SidebarItem({
         </span>
         {alert && (
           <div
-            className={`absolute right-2 bg-red-400 text-slate-50 text-xs rounded-full text-center ${
-              expanded ? 'py-1 px-2 min-w-[26px]' : 'w-2 h-2 top-2'
+            className={`absolute right-2 text-[11px] rounded-full text-center ${
+              expanded
+                ? 'py-1 px-2 min-w-[26px] bg-red-400 text-slate-50'
+                : 'w-2.5 h-2.5 top-2'
             }`}>
-            {expanded && '10'}
+            {expanded ? (
+              '10'
+            ) : (
+              <>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-[3px] translate-x-[1px]"></span>
+              </>
+            )}
           </div>
         )}
 
