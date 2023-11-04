@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSidebar } from '../../context/SidebarContext';
+import { useSidebar } from '../context/SidebarContext';
 
 type SidebarItemProps = {
   icon: ReactNode;
@@ -48,7 +48,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             className={`p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ${
               expanded ? 'm-0' : 'mx-auto'
             }`}
-            title={`${expanded ? 'Sidebar Minimize' : 'Sidebar Open'}`}>
+            title={`${expanded ? 'Sidebar Close' : 'Sidebar Open'}`}>
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
