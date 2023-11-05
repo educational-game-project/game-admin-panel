@@ -8,7 +8,11 @@
 
 html,
 body {
-  @apply bg-slate-200 text-gray-900  text-sm;
+  @apply bg-slate-200 text-gray-900;
+}
+
+body {
+  @apply antialiased text-sm;
 }
 
 .transition-all-200 {
