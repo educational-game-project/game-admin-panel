@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { appleIcon, googleIcon } from '../../assets/img';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
 import regex from '../../utilities/regex';
+import { showDefaultToast } from '../../utilities/toastUtils';
 
 type LoginFieldsProps = {
   email: string;
@@ -87,13 +88,18 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(loginFields);
+    if (
+      validationLoginFields.email.status &&
+      validationLoginFields.password.status
+    ) {
+      showDefaultToast('Login success!');
+    }
   };
 
   return (
-    <div className="w-full min-h-screen p-3 bg-white">
-      <div className="grid grid-cols-12 gap-4 min-h-screen">
-        <div className="col-span-6">
+    <main className="w-full min-h-screen p-3 bg-white">
+      <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-4 min-h-screen">
+        <div className="col-span-full lg:col-span-6">
           <div className="">
             <div className="mx-10 mt-10">
               <Link to="/">
@@ -185,13 +191,13 @@ function Login() {
                     {showPassword ? (
                       <Eye
                         size={18}
-                        className="absolute top-0 right-0 mt-4 mr-4 text-gray-400 cursor-pointer"
+                        className="absolute top-0 right-0 mt-4.5 mr-4 text-gray-400 cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
                       />
                     ) : (
                       <EyeOff
                         size={18}
-                        className="absolute top-0 right-0 mt-4 mr-4 text-gray-400 cursor-pointer"
+                        className="absolute top-0 right-0 mt-4.5 mr-4 text-gray-400 cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
                       />
                     )}
@@ -264,11 +270,11 @@ function Login() {
             </div>
           </div>
         </div>
-        <div className="col-span-6">
+        <div className="lg:col-span-6 hidden lg:block">
           <div className="w-full h-full bg-gradient-to-br from-indigo-200 from-20% via-sky-200 via-40% to-emerald-200 to-90% rounded-2xl"></div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
