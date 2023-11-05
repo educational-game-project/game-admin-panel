@@ -1,13 +1,26 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { appleIcon, googleIcon } from '../../assets/img';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, Eye, EyeOff } from 'lucide-react';
+import regex from '../../utilities/regex';
 
 type LoginFieldsProps = {
   email: string;
   password: string;
   remember: boolean;
 };
+type validationLoginFieldsProps = {
+  email: {
+    status: boolean;
+    message: string;
+  };
+  password: {
+    status: boolean;
+    message: string;
+  };
+};
+
+const { email: EMAIL_REGEX } = regex;
 
 function Login() {
   const [loginFields, setLoginFields] = useState<LoginFieldsProps>({
@@ -15,12 +28,54 @@ function Login() {
     password: '',
     remember: false,
   });
+  const [validationLoginFields, setValidationLoginFields] =
+    useState<validationLoginFieldsProps>({
+      email: {
+        status: true,
+        message: '',
+      },
+      password: {
+        status: true,
+        message: '',
+      },
+    });
+  const [showPassword, setShowPassword] = useState(false);
 
   const updateField = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginFields({
-      ...loginFields,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setLoginFields({ ...loginFields, [name]: value });
+  };
+
+  const validateFiled = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { name } = e.currentTarget;
+    const { value } = e.currentTarget;
+    switch (name) {
+      case 'email':
+        setValidationLoginFields({
+          ...validationLoginFields,
+          email: {
+            status: value.length > 0 && EMAIL_REGEX.test(value),
+            message:
+              value.length === 0
+                ? 'Missing email.'
+                : EMAIL_REGEX.test(value)
+                ? ''
+                : 'Invalid email.',
+          },
+        });
+        break;
+      case 'password':
+        setValidationLoginFields({
+          ...validationLoginFields,
+          password: {
+            status: value.length > 0,
+            message: value.length > 0 ? '' : 'Missing password.',
+          },
+        });
+        break;
+      default:
+        break;
+    }
   };
 
   const updateRemember = () => {
@@ -40,7 +95,7 @@ function Login() {
       <div className="grid grid-cols-12 gap-4 min-h-screen">
         <div className="col-span-6">
           <div className="">
-            <div className="mx-11 mt-11">
+            <div className="mx-10 mt-10">
               <Link to="/">
                 <img
                   src="https://img.logoipsum.com/243.svg"
@@ -53,7 +108,7 @@ function Login() {
               <h3 className="font-bold text-8 mb-6 text-center">
                 Sign in to Gameon
               </h3>
-              <p className="text-gray-400 text-center mb-9">
+              <p className="text-gray-400 text-center mb-8">
                 Send, receive and organize your scores, analysis and
                 preferences.
               </p>
@@ -94,23 +149,58 @@ function Login() {
                     id="email"
                     name="email"
                     type="email"
-                    className="p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80"
+                    className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      !validationLoginFields.email.status
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
+                        : ''
+                    }`}
                     placeholder="Enter your email"
                     value={loginFields.email}
                     required
                     onChange={updateField}
+                    onKeyUp={validateFiled}
                   />
+                  {!validationLoginFields.email.status && (
+                    <p className="mt-1.5 text-red-500">
+                      {validationLoginFields.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="mb-6">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    className="p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80"
-                    placeholder="Enter your password"
-                    required
-                    onChange={updateField}
-                  />
+                  <div className="relative">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                        !validationLoginFields.password.status
+                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
+                          : ''
+                      }`}
+                      placeholder="Enter your password"
+                      required
+                      onChange={updateField}
+                      onKeyUp={validateFiled}
+                    />
+                    {showPassword ? (
+                      <Eye
+                        size={18}
+                        className="absolute top-0 right-0 mt-4 mr-4 text-gray-400 cursor-pointer"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <EyeOff
+                        size={18}
+                        className="absolute top-0 right-0 mt-4 mr-4 text-gray-400 cursor-pointer"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    )}
+                  </div>
+                  {!validationLoginFields.password.status && (
+                    <p className="mt-1.5 text-red-500">
+                      {validationLoginFields.password.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center justify-between mb-7">
                   <div className="flex">
@@ -164,7 +254,7 @@ function Login() {
                 </button>
               </form>
             </div>
-            <div className="flex items-center justify-between mx-11 mb-8">
+            <div className="flex items-center justify-between mx-10 mb-8">
               <Link
                 to="/privacy"
                 className="text-gray-400 hover:underline underline-offset-2">
