@@ -46,9 +46,9 @@ export const showWarningToast = (message: string) => {
 };
 
 export const showDefaultToast = (message: string) => {
-  toast(message, {
+  toast.info(message, {
     ...toastConfig,
     icon: <CheckCircle2 size={20} />,
-    className: 'toastify-containers toastify-default',
+    className: 'toastify-containers toastify-info',
   });
 };
