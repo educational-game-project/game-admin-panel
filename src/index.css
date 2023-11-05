@@ -18,3 +18,44 @@ body {
 .transition-all-200 {
   @apply transition-all duration-200 ease-in-out;
 }
+
+/* react toastify */
+.Toastify__toast-container {
+  @apply w-full sm:w-[25rem];
+}
+
+.toastify-containers {
+  @apply relative flex min-h-0 overflow-hidden cursor-pointer pl-2 pr-4 py-2 rounded-lg items-center mb-4 mx-2 sm:mx-0 mt-2 sm:mt-0;
+}
+
+.Toastify__toast-body > div:last-child {
+  @apply text-base font-medium leading-tight;
+}
+
+.Toastify__close-button {
+  @apply py-0.75 pl-0.75 pr-0.5 bg-transparent rounded self-center;
+}
+
+.Toastify__close-button:hover {
+  @apply bg-gray-900/10;
+}
+
+.Toastify__toast-icon {
+  @apply w-auto mr-3;
+}
+
+.Toastify__toast--success {
+  @apply bg-emerald-500;
+}
+
+.Toastify__toast--error {
+  @apply bg-red-500;
+}
+
+.Toastify__toast--warning {
+  @apply bg-amber-500;
+}
+
+.Toastify__toast--info {
+  @apply bg-violet-500;
+}
