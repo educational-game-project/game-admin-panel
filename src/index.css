@@ -21,7 +21,7 @@ body {
 
 /* react toastify */
 .Toastify__toast-container {
-  @apply w-auto;
+  @apply w-full xsm:w-auto;
 }
 
 .toastify-containers {
@@ -33,7 +33,7 @@ body {
 }
 
 .Toastify__toast-body > div:last-child {
-  @apply text-base font-medium leading-tight;
+  @apply text-sm font-medium leading-tight whitespace-nowrap;
 }
 
 .Toastify__close-button {
