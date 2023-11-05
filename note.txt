@@ -1,11 +1,21 @@
-admin manajemen siswa
-- CRUD siswa => table
-- history skor => table
-- report => table, line chart
-- analisis => sudah diolah datanya
-- login, reg, 
+💡!!BACKLOG!!
+- view CRUD siswa (table)
+- view history score (table)
+- view report (table, line chart)
+- view analysis (sudah diolah datanya)
 
-!!ALERT!!
+😃!!DO!!
+- view login page
+- validation login page
+- custom alert/toast/notification
+- implemented alert/toast/notification on login page
+
+🧪!!TEST!!
+- sidebar
+
+🎯!!DONE!!
+
+🔥!!LEARN!!
 - nested context
 - how to manage cookies / using cookies
 - how to manage dark theme
