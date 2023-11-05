@@ -12,7 +12,7 @@ body {
 }
 
 body {
-  @apply antialiased text-sm;
+  @apply antialiased text-sm selection:bg-indigo-500 selection:text-gray-50;
 }
 
 .transition-all-200 {
@@ -21,11 +21,15 @@ body {
 
 /* react toastify */
 .Toastify__toast-container {
-  @apply w-full sm:w-[25rem];
+  @apply w-auto;
 }
 
 .toastify-containers {
   @apply relative flex min-h-0 overflow-hidden cursor-pointer pl-2 pr-4 py-2 rounded-lg items-center mb-4 mx-2 sm:mx-0 mt-2 sm:mt-0;
+}
+
+.Toastify__toast-body {
+  @apply mr-5;
 }
 
 .Toastify__toast-body > div:last-child {
