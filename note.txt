@@ -6,10 +6,10 @@
 - view analysis (sudah diolah datanya)
 
 😃!!DO!!
-- view login page::responsive
-- custom alert/toast/notification
+- sync login page api
 
 🧪!!TEST!!
+- view login page
 
 🎯!!DONE!!
 
