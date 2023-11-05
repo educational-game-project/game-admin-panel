@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const AutoScrollToTop: React.FC = () => {
+const AutoTopProvider: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
@@ -11,4 +11,4 @@ const AutoScrollToTop: React.FC = () => {
   return null; // This component doesn't render anything in the DOM.
 };
 
-export default AutoScrollToTop;
+export default AutoTopProvider;
