@@ -1,17 +1,15 @@
 💡!!BACKLOG!!
+- sidebar
 - view CRUD siswa (table)
 - view history score (table)
 - view report (table, line chart)
 - view analysis (sudah diolah datanya)
 
 😃!!DO!!
-- view login page
-- validation login page
+- view login page::responsive
 - custom alert/toast/notification
-- implemented alert/toast/notification on login page
 
 🧪!!TEST!!
-- sidebar
 
 🎯!!DONE!!
 
