@@ -9,6 +9,7 @@ import {
   UserSquare2,
 } from 'lucide-react';
 import { useSidebar } from '../context/SidebarContext';
+import Navbar from './Navbar';
 
 function Layout() {
   const currentLocation: string = useLocation()?.pathname;
@@ -69,10 +70,13 @@ function Layout() {
         </Sidebar>
         {/* main content */}
         <section
-          className={`p-7 ml-auto transition-all-200 ${
+          className={`pl-4 ml-auto transition-all-200 ${
             expanded ? 'w-[calc(100%-288px)]' : 'w-[calc(100%-76px)]'
           }`}>
-          <Outlet />
+          <div className="">
+            <Navbar />
+            <Outlet />
+          </div>
         </section>
       </div>
     </main>
