@@ -133,6 +133,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     : 'hover:bg-indigo-50 text-gray-600'
                 }`}
                 to="/profile"
+                onClick={() => setProfileToggle(false)}
                 title="Account Settings">
                 <UserCog size={17} />
                 <span className="ml-2.5 text-sm">Account Settings</span>
@@ -144,6 +145,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     : 'hover:bg-indigo-50 text-gray-600'
                 }`}
                 to="/activity"
+                onClick={() => setProfileToggle(false)}
                 title="Activity">
                 <Activity size={17} />
                 <span className="ml-2.5 text-sm">Activity</span>
@@ -153,6 +155,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             <button
               className="relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors group hover:bg-red-50 hover:text-red-500 text-gray-600 w-full"
               title="Logout"
+              onClick={() => setProfileToggle(false)}
               role="button">
               <LogOut size={17} />
               <span className="ml-2.5 text-sm">Logout</span>
@@ -196,9 +199,9 @@ export function SidebarItem({
         </span>
         {alert && (
           <div
-            className={`absolute right-2 text-[11px] rounded-full text-center ${
+            className={`absolute right-2 text-2xs rounded-full text-center ${
               expanded
-                ? 'py-1 px-2 min-w-[26px] bg-red-400 text-slate-50'
+                ? 'py-px px-1.5 min-w-[26px] bg-red-400 text-slate-50'
                 : 'w-2.5 h-2.5 top-2'
             }`}>
             {expanded ? (
@@ -206,7 +209,7 @@ export function SidebarItem({
             ) : (
               <>
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-[3px] translate-x-[1px]"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-[4.6px] translate-x-[0.5px]"></span>
               </>
             )}
           </div>
