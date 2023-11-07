@@ -18,6 +18,7 @@ import { desktopIcon } from './assets/img';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import ButtonClipboard from './components/ButtonClipboard';
+import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
 
 function App() {
   const isDesktopView = useResponsiveLayout();
@@ -25,60 +26,62 @@ function App() {
     <>
       {isDesktopView ? (
         <>
-          <AutoTopProvider />
-          <ToastProvider>
-            <ToastContainer
-              limit={3}
-              transition={Slide}
-              draggable={false}
-              closeOnClick={true}
-            />
-            <Routes>
-              {/* routes with layout */}
-              <Route
-                path="/"
-                element={<Layout />}>
-                <Route
-                  index
-                  element={<Home />}
-                />
-                <Route
-                  path="/student"
-                  element={<Students />}
-                />
-                <Route
-                  path="/score"
-                  element={<Score />}
-                />
-                <Route
-                  path="/analysis"
-                  element={<Analysis />}
-                />
-                <Route
-                  path="/preferences"
-                  element={<Preferences />}
-                />
-                <Route
-                  path="/support"
-                  element={<Support />}
-                />
-                <Route
-                  path="/profile"
-                  element={<Profile />}
-                />
-              </Route>
-              {/* routes without layout */}
-              <Route
-                path="/login"
-                element={<Login />}
+          <BreadcrumbsProvider>
+            <AutoTopProvider />
+            <ToastProvider>
+              <ToastContainer
+                limit={3}
+                transition={Slide}
+                draggable={false}
+                closeOnClick={true}
               />
-              {/* not exist routes */}
-              <Route
-                path="*"
-                element={<ErrorPage />}
-              />
-            </Routes>
-          </ToastProvider>
+              <Routes>
+                {/* routes with layout */}
+                <Route
+                  path="/"
+                  element={<Layout />}>
+                  <Route
+                    index
+                    element={<Home />}
+                  />
+                  <Route
+                    path="/student"
+                    element={<Students />}
+                  />
+                  <Route
+                    path="/score"
+                    element={<Score />}
+                  />
+                  <Route
+                    path="/analysis"
+                    element={<Analysis />}
+                  />
+                  <Route
+                    path="/preferences"
+                    element={<Preferences />}
+                  />
+                  <Route
+                    path="/support"
+                    element={<Support />}
+                  />
+                  <Route
+                    path="/profile"
+                    element={<Profile />}
+                  />
+                </Route>
+                {/* routes without layout */}
+                <Route
+                  path="/login"
+                  element={<Login />}
+                />
+                {/* not exist routes */}
+                <Route
+                  path="*"
+                  element={<ErrorPage />}
+                />
+              </Routes>
+            </ToastProvider>
+          </BreadcrumbsProvider>
         </>
       ) : (
         <ToastProvider>
