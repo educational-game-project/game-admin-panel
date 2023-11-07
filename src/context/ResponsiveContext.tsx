@@ -1,7 +1,13 @@
-import React, { createContext, useEffect, useState, useContext } from 'react';
+import {
+  createContext,
+  useEffect,
+  useState,
+  useContext,
+  ReactNode,
+} from 'react';
 
 type ResponsiveProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 const ResponsiveContext = createContext<boolean | undefined>(undefined);
 
