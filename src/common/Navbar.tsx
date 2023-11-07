@@ -1,8 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { BellRingIcon, CommandIcon, SearchIcon } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
+import { useSidebar } from '../context/SidebarContext';
 
 function Navbar() {
+  const { expanded } = useSidebar();
   const [isOpenGlobalSearch, setIsOpenGlobalSearch] = useState(false);
 
   const closeGlobalSearch = () => {
@@ -31,8 +33,11 @@ function Navbar() {
   }, []);
 
   return (
-    <>
-      <nav className="w-full py-4 px-5 rounded-xl bg-white mb-6">
+    <div
+      className={`fixed pt-3 pb-6 top-0 z-10 bg-slate-100 ${
+        expanded ? 'w-[calc(100%-328px)]' : 'w-[calc(100%-116px)]'
+      }`}>
+      <nav className="py-4 px-5 rounded-xl bg-white w-full before:content-[''] before:absolute before:bg-transparent before:left-0 before:-bottom-12 before:h-12 before:w-full before:rounded-t-xl before:shadow-[0_-12px_0_0_rgb(241,245,249)]">
         <div className="grid items-center grid-cols-12 gap-2">
           <div className="col-span-7 xl:col-span-5">
             <button
@@ -138,7 +143,7 @@ function Navbar() {
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 }
 

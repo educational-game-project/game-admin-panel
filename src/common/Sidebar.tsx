@@ -30,7 +30,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
   const [profileToggle, setProfileToggle] = useState(false);
 
   return (
-    <aside className="h-full fixed">
+    <aside className="h-full fixed z-10">
       <nav className="h-[calc(100%-24px)] flex flex-col bg-white rounded-xl relative">
         {/* head */}
         <div className="px-4 py-5 flex justify-between items-center">

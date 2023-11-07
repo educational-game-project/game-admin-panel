@@ -73,9 +73,11 @@ function Layout() {
           className={`pl-4 ml-auto transition-all-200 ${
             expanded ? 'w-[calc(100%-288px)]' : 'w-[calc(100%-76px)]'
           }`}>
-          <div className="">
+          <div className="relative w-full">
             <Navbar />
-            <Outlet />
+            <div className="mt-24">
+              <Outlet />
+            </div>
           </div>
         </section>
       </div>
