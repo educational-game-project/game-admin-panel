@@ -9,7 +9,12 @@ function Score() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: <MousePointerClick size={16} className='mr-2' />,
+        icon: (
+          <MousePointerClick
+            size={16}
+            className="mr-1.5"
+          />
+        ),
         label: 'Scores',
         path: '/score',
       },
@@ -18,8 +23,8 @@ function Score() {
   return (
     <div className="">
       <div className="mb-5">
-        <h5 className="font-semibold text-3xl mb-4">Scores</h5>
         <Breadcrumbs />
+        <h5 className="font-semibold text-3xl">Scores</h5>
       </div>
       <div className="h-[1500px] bg-white py-4 px-5 rounded-xl"></div>
     </div>
