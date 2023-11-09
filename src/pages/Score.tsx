@@ -22,7 +22,7 @@ function Score() {
   }, [setBreadcrumbs]);
   return (
     <div className="">
-      <div className="mb-5">
+      <div className="mb-6">
         <Breadcrumbs />
         <h5 className="font-semibold text-3xl">Scores</h5>
       </div>

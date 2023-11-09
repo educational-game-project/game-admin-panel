@@ -1,115 +1,46 @@
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { appleIcon, googleIcon } from '../../assets/img';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
-import regex from '../../utilities/regex';
 import { showDefaultToast } from '../../utilities/toastUtils';
 
-type LoginFieldsProps = {
+interface LoginFormProps {
   email: string;
   password: string;
-  remember: boolean;
-};
-type validationLoginFieldsProps = {
-  email: {
-    status: boolean;
-    message: string;
-  };
-  password: {
-    status: boolean;
-    message: string;
-  };
-};
+  remember?: boolean;
+}
 
-const { email: EMAIL_REGEX } = regex;
+const schema = yup.object().shape({
+  email: yup.string().required('Missing email').email('Invalid email'),
+  password: yup.string().required('Missing password'),
+});
 
 function Login() {
-  const [loginFields, setLoginFields] = useState<LoginFieldsProps>({
-    email: '',
-    password: '',
-    remember: false,
-  });
-  const [validationLoginFields, setValidationLoginFields] =
-    useState<validationLoginFieldsProps>({
-      email: {
-        status: true,
-        message: '',
-      },
-      password: {
-        status: true,
-        message: '',
-      },
-    });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const updateField = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setLoginFields({ ...loginFields, [name]: value });
-  };
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    watch,
+  } = useForm<LoginFormProps>({
+    mode: 'onTouched',
+    resolver: yupResolver(schema),
+  });
 
-  const validateFiled = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const { name } = e.currentTarget;
-    const { value } = e.currentTarget;
-    switch (name) {
-      case 'email':
-        setValidationLoginFields({
-          ...validationLoginFields,
-          email: {
-            status: value.length > 0 && EMAIL_REGEX.test(value),
-            message:
-              value.length === 0
-                ? 'Missing email.'
-                : EMAIL_REGEX.test(value)
-                ? ''
-                : 'Invalid email.',
-          },
-        });
-        break;
-      case 'password':
-        setValidationLoginFields({
-          ...validationLoginFields,
-          password: {
-            status: value.length > 0,
-            message: value.length > 0 ? '' : 'Missing password.',
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
+  const rememberVal = watch('remember', false);
 
-  const updateRemember = () => {
-    setLoginFields({
-      ...loginFields,
-      remember: !loginFields.remember,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (
-      validationLoginFields.email.status &&
-      validationLoginFields.password.status
-    ) {
-      if (loginFields.email === '' && loginFields.password === '') {
-        setValidationLoginFields({
-          ...validationLoginFields,
-          email: {
-            status: false,
-            message: 'Missing email.',
-          },
-          password: {
-            status: false,
-            message: 'Missing password.',
-          },
-        });
-      } else {
-        setIsLoading(true);
-        showDefaultToast('Login success!');
-      }
-    }
+  const onLogin: SubmitHandler<LoginFormProps> = async (data) => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log(data);
+    setIsLoading(false);
+    showDefaultToast('Login success!');
   };
 
   return (
@@ -165,27 +96,24 @@ function Login() {
                 <span className="absolute w-1/3 left-0 h-px bg-gray-200 top-1/2" />
                 <span className="absolute w-1/3 right-0 h-px bg-gray-200 top-1/2" />
               </div>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit(onLogin)}>
                 <div className="mb-4">
                   <input
                     id="email"
-                    name="email"
                     type="email"
                     className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
-                      !validationLoginFields.email.status
+                      errors.email
                         ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
                         : ''
                     }`}
                     placeholder="Enter your email"
-                    value={loginFields.email}
                     aria-required="true"
-                    aria-invalid={!validationLoginFields.email.status}
-                    onChange={updateField}
-                    onKeyUp={validateFiled}
+                    aria-invalid={errors.email ? 'true' : 'false'}
+                    {...register('email')}
                   />
-                  {!validationLoginFields.email.status && (
+                  {errors.email && (
                     <p className="mt-1 -mb-1.5 text-red-500">
-                      {validationLoginFields.email.message}
+                      {errors.email.message}
                     </p>
                   )}
                 </div>
@@ -193,18 +121,16 @@ function Login() {
                   <div className="relative">
                     <input
                       id="password"
-                      name="password"
                       type={showPassword ? 'text' : 'password'}
                       className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
-                        !validationLoginFields.password.status
+                        errors.password
                           ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
                           : ''
                       }`}
                       placeholder="Enter your password"
                       aria-required="true"
-                      aria-invalid={!validationLoginFields.password.status}
-                      onChange={updateField}
-                      onKeyUp={validateFiled}
+                      aria-invalid={errors.password ? 'true' : 'false'}
+                      {...register('password')}
                     />
                     {showPassword ? (
                       <Eye
@@ -220,9 +146,9 @@ function Login() {
                       />
                     )}
                   </div>
-                  {!validationLoginFields.password.status && (
+                  {errors.password && (
                     <p className="mt-1 -mb-1.5 text-red-500">
-                      {validationLoginFields.password.message}
+                      {errors.password.message}
                     </p>
                   )}
                 </div>
@@ -231,24 +157,19 @@ function Login() {
                     <div className="relative">
                       <input
                         type="checkbox"
-                        name="remember"
                         id="remember"
                         className="w-4.5 h-4.5 opacity-0 invisible -z-10"
-                        onChange={() => {
-                          updateRemember;
-                        }}
+                        {...register('remember')}
                       />
                       <div className="absolute left-0 top-px">
                         <div
                           className={`w-4.5 h-4.5 rounded-full flex items-center justify-center ${
-                            loginFields.remember
-                              ? 'bg-indigo-500'
-                              : 'bg-gray-300'
+                            rememberVal ? 'bg-indigo-500' : 'bg-gray-300'
                           }`}
                           role="checkbox"
                           aria-checked="false"
                           title="Remember me"
-                          onClick={updateRemember}>
+                          onClick={() => setValue('remember', !rememberVal)}>
                           <CheckIcon
                             size={10}
                             strokeWidth={4}
@@ -259,8 +180,7 @@ function Login() {
                     </div>
                     <label
                       htmlFor="remember"
-                      className="ml-2.5"
-                      onClick={updateRemember}>
+                      className="ml-2.5">
                       Remember me
                     </label>
                   </div>
