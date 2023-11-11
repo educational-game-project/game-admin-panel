@@ -106,7 +106,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               ? 'visible opacity-100 z-10 translate-x-0'
               : 'invisible opacity-20 -z-10'
           }`}>
-          <div className="bg-white w-56 rounded-lg p-3">
+          <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-100">
             <div className="flex">
               <img
                 src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=Iwan+Suryaningrat"
