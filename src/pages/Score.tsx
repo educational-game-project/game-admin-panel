@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useBreadcrumbs } from '../context/BreadcrumbsContext';
 import { MousePointerClick } from 'lucide-react';
+// import BasicTable from '../components/tanstack/BasicTable';
+import MyTable from '../components/tanstack/MyTable';
 
 function Score() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -26,7 +28,9 @@ function Score() {
         <Breadcrumbs />
         <h5 className="font-semibold text-3xl">Scores</h5>
       </div>
-      <div className="h-[1500px] bg-white py-4 px-5 rounded-xl"></div>
+      <div className="bg-white p-5 rounded-xl">
+        <MyTable />
+      </div>
     </div>
   );
 }
