@@ -7,8 +7,24 @@ interface UserMockProps {
   dob: string;
 }
 
+interface MoviewMockProps {
+  id: string;
+  name: string;
+  genre: string;
+  rating: number;
+}
+
 interface UserMockResponse {
   data: UserMockProps[];
 }
 
-export type { UserMockProps, UserMockResponse };
+interface MoviewMockResponse {
+  data: MoviewMockProps[];
+}
+
+export type {
+  UserMockProps,
+  UserMockResponse,
+  MoviewMockProps,
+  MoviewMockResponse,
+};
