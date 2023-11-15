@@ -10,7 +10,7 @@ import Preferences from './pages/Preferences';
 import Support from './pages/Support';
 import Profile from './pages/Profile';
 import ErrorPage from './pages/Error';
-import Login from './pages/auth/Login';
+import Login from './pages/Auth/Login';
 import AutoTopProvider from './components/AutoTopProvider';
 import ToastProvider from './components/ToastProvider';
 import { useResponsiveLayout } from './context/ResponsiveContext';
