@@ -19,6 +19,10 @@ body {
   @apply transition-all duration-200 ease-in-out;
 }
 
+.forms-checkbox {
+  @apply form-checkbox h-4 w-4 border border-gray-600 rounded bg-gray-50 focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-indigo-600/20 focus:border-indigo-500/50 focus:ring-offset-0 focus:ring-0 block;
+}
+
 /* react toastify */
 .Toastify__toast-container {
   @apply w-full xsm:w-auto;
