@@ -19,7 +19,7 @@ function Breadcrumbs() {
 
   return (
     <ul
-      className={`flex items-center space-x-2 pt-2 mb-4 relative ${
+      className={`flex items-center space-x-2 pt-2 mb-5 relative ${
         isOnTop ? 'z-10' : 'z-0'
       }`}>
       <li className="flex items-center">
