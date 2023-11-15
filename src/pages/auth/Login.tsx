@@ -101,7 +101,7 @@ function Login() {
                   <input
                     id="email"
                     type="email"
-                    className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                    className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
                       errors.email
                         ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
                         : ''
@@ -122,7 +122,7 @@ function Login() {
                     <input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
-                      className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-3 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
                         errors.password
                           ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
                           : ''

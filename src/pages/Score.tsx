@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useBreadcrumbs } from '../context/BreadcrumbsContext';
+import ScoreTable from '../components/Table/ScoreTable';
 import { MousePointerClick } from 'lucide-react';
-// import BasicTable from '../components/tanstack/BasicTable';
-import MyTable from '../components/tanstack/MyTable';
 
 function Score() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -17,7 +16,7 @@ function Score() {
             className="mr-1.5"
           />
         ),
-        label: 'Scores',
+        label: 'Skor',
         path: '/score',
       },
     ]);
@@ -26,10 +25,13 @@ function Score() {
     <div className="">
       <div className="mb-6">
         <Breadcrumbs />
-        <h5 className="font-semibold text-3xl">Scores</h5>
+        <h5 className="font-semibold text-3xl mb-1.5">Skor</h5>
+        <p className="text-gray-500">
+          Lihat poin yang didapat oleh setiap pemain.
+        </p>
       </div>
       <div className="bg-white p-5 rounded-xl">
-        <MyTable />
+        <ScoreTable />
       </div>
     </div>
   );
