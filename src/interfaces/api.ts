@@ -14,6 +14,16 @@ interface MoviewMockProps {
   rating: number;
 }
 
+interface ScoreProps {
+  id: string;
+  name: string;
+  score: number;
+}
+
+interface ScoreResponse {
+  data: ScoreProps[];
+}
+
 interface UserMockResponse {
   data: UserMockProps[];
 }
@@ -27,4 +37,6 @@ export type {
   UserMockResponse,
   MoviewMockProps,
   MoviewMockResponse,
+  ScoreProps,
+  ScoreResponse,
 };
