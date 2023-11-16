@@ -41,12 +41,18 @@ function MyTable() {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const data = useMemo(() => scoreData, []);
+  const headerClass: Record<string, string> = {
+    checkboxs: 'w-14 text-center',
+    row_number: 'w-12',
+    name: '',
+    score: '',
+  };
 
   const columnHelper = createColumnHelper<ScoreProps>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
-        id: 'actions',
+        id: 'checkboxs',
         header: ({ table }) => (
           <IndeterminateCheckbox
             {...{
@@ -56,26 +62,15 @@ function MyTable() {
             }}
           />
         ),
-        cell: ({ row, getValue }) => (
-          <div
-            style={{
-              paddingLeft: `${row.depth * 2}rem`,
-            }}>
-            <>
-              <IndeterminateCheckbox
-                {...{
-                  checked: row.getIsSelected(),
-                  indeterminate: row.getIsSomeSelected(),
-                  onChange: row.getToggleSelectedHandler(),
-                }}
-              />{' '}
-              <button
-                {...{
-                  onClick: row.getToggleExpandedHandler(),
-                  style: { cursor: 'pointer' },
-                }}></button>
-              {getValue()}
-            </>
+        cell: ({ row }) => (
+          <div className="flex justify-center">
+            <IndeterminateCheckbox
+              {...{
+                checked: row.getIsSelected(),
+                indeterminate: row.getIsSomeSelected(),
+                onChange: row.getToggleSelectedHandler(),
+              }}
+            />
           </div>
         ),
       }),
@@ -166,12 +161,16 @@ function MyTable() {
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="font-bold text-xs text-gray-500 tracking-wide px-5 py-3 text-left">
+                      className={`font-bold text-xs text-gray-500 tracking-wide px-3 py-3 text-left ${
+                        headerClass[header.id] ?? ''
+                      }`}>
                       {header.isPlaceholder ? null : (
                         <div
                           {...{
                             className: header.column.getCanSort()
                               ? 'cursor-pointer select-none'
+                              : header.id === 'checkboxs'
+                              ? 'flex justify-center'
                               : '',
                             onClick: header.column.getToggleSortingHandler(),
                           }}>
@@ -198,7 +197,7 @@ function MyTable() {
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className={`whitespace-nowrap text-sm px-5 py-3 text-gray-500 ${
+                      className={`whitespace-nowrap text-sm px-3 py-3 text-gray-500 ${
                         cell.column.id === 'score' ? 'font-semibold' : ''
                       }`}>
                       {flexRender(
