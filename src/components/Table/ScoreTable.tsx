@@ -12,7 +12,14 @@ import {
 
 import scoreData from '../../data/SCORE_DATA.json';
 import { ScoreProps } from '../../interfaces/api';
-import { ListFilterIcon, SearchIcon } from 'lucide-react';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ChevronDownIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+  SearchIcon,
+} from 'lucide-react';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -128,30 +135,8 @@ function MyTable() {
               />
             </div>
           </div>
-          <div className="relative">
-            <select
-              className="bg-transparent focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pl-7"
-              value={table.getState().pagination.pageSize}
-              onChange={(e) => {
-                table.setPageSize(Number(e.target.value));
-              }}>
-              {[10, 20, 50, 100].map((pageSize) => (
-                <option
-                  key={pageSize}
-                  value={pageSize}>
-                  Show {pageSize}
-                </option>
-              ))}
-            </select>
-            <div className="absolute left-0 top-0">
-              <ListFilterIcon
-                size={20}
-                className="text-gray-500"
-              />
-            </div>
-          </div>
         </div>
-        <div className="mb-3 pb-4 overflow-x-auto">
+        <div className="pb-3 overflow-x-auto">
           <table className="w-full pb-4">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -211,48 +196,98 @@ function MyTable() {
             </tbody>
           </table>
         </div>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex space-x-3 mb-4 px-5">
+        <div className="flex items-center justify-between mb-3 px-5">
+          <div className="flex items-center">
+            <p className="text-gray-500 mr-3">Showing</p>
+            <div className="relative">
+              <select
+                id="tableScore_paginate"
+                name="tableScore_paginate"
+                className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none"
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  table.setPageSize(Number(e.target.value));
+                }}>
+                {[10, 20, 50, 100].map((pageSize) => (
+                  <option
+                    key={pageSize}
+                    value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-1.5 top-1.5">
+                <label
+                  htmlFor="tableScore_paginate"
+                  className="block">
+                  <ChevronDownIcon
+                    size={20}
+                    className="text-gray-500"
+                  />
+                </label>
+              </div>
+            </div>
+            {/* total data */}
+            <p className="text-gray-500 ml-3">out of {data.length}</p>
+          </div>
+          <div className="flex space-x-3">
             <button
-              className="px-3 py-1.5 rounded-md border border-gray-400"
+              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}>
-              First Page
+              <ChevronsLeftIcon
+                size={16}
+                className="mr-1"
+              />
+              First
             </button>
             <button
-              className="px-3 py-1.5 rounded-md border border-gray-400"
+              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}>
-              Previous Page
+              <ArrowLeftIcon
+                size={16}
+                className="mr-1"
+              />
+              Previous
             </button>
             <button
-              className="px-3 py-1.5 rounded-md border border-gray-400"
+              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}>
-              Next Page
+              Next
+              <ArrowRightIcon
+                size={16}
+                className="ml-1"
+              />
             </button>
             <button
-              className="px-3 py-1.5 rounded-md border border-gray-400"
+              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}>
-              Last Page
+              Last
+              <ChevronsRightIcon
+                size={16}
+                className="ml-1"
+              />
             </button>
           </div>
-          <p className="">
-            <span>Page</span>{' '}
-            <span>
-              {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
-            </span>
-          </p>
-          <div>{table.getRowModel().rows.length} Rows</div>
         </div>
+      </div>
+      <div className="mt-10">
         <button
           className="border rounded p-2 mb-2"
           onClick={() => console.info('rowSelection', rowSelection)}>
           Log `rowSelection` state
         </button>
       </div>
+      <p className="">
+        <span>Page</span>{' '}
+        <span>
+          {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+        </span>
+      </p>
+      <div>{table.getRowModel().rows.length} Rows</div>
     </div>
   );
 }
