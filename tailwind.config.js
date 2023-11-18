@@ -9,7 +9,7 @@ export default {
       },
       fontSize: {
         '2xs': '.625rem',
-        '1.5xs': '13px',
+        '3.25xs': '13px',
         8: '2rem',
       },
       spacing: {
