@@ -115,7 +115,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               />
               <div className="flex justify-between items-center overflow-hidden transition-all ml-2">
                 <div className="leading-4">
-                  <h4 className="font-semibold mb-0.5 text-1.5xs line-clamp-1 text-ellipsis">
+                  <h4 className="font-semibold mb-0.5 text-3.25xs line-clamp-1 text-ellipsis">
                     Iwan Suryaningrat
                   </h4>
                   <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis">

@@ -16,8 +16,6 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   ChevronDownIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
   SearchIcon,
 } from 'lucide-react';
 
@@ -135,6 +133,11 @@ function MyTable() {
               />
             </div>
           </div>
+          <div className="">
+            <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs">
+              {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+            </p>
+          </div>
         </div>
         <div className="pb-3 overflow-x-auto">
           <table className="w-full pb-4">
@@ -198,7 +201,7 @@ function MyTable() {
         </div>
         <div className="flex items-center justify-between mb-3 px-5">
           <div className="flex items-center">
-            <p className="text-gray-500 mr-3">Showing</p>
+            <p className="text-gray-500 mr-3">Menampilkan</p>
             <div className="relative">
               <select
                 id="tableScore_paginate"
@@ -228,21 +231,17 @@ function MyTable() {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">out of {data.length}</p>
+            <p className="text-gray-500 ml-3">dari {data.length} data</p>
           </div>
           <div className="flex space-x-3">
             <button
-              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}>
-              <ChevronsLeftIcon
-                size={16}
-                className="mr-1"
-              />
               First
             </button>
             <button
-              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}>
               <ArrowLeftIcon
@@ -252,7 +251,7 @@ function MyTable() {
               Previous
             </button>
             <button
-              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}>
               Next
@@ -262,32 +261,23 @@ function MyTable() {
               />
             </button>
             <button
-              className="px-2.5 py-1 rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}>
               Last
-              <ChevronsRightIcon
-                size={16}
-                className="ml-1"
-              />
             </button>
           </div>
         </div>
       </div>
-      <div className="mt-10">
-        <button
-          className="border rounded p-2 mb-2"
-          onClick={() => console.info('rowSelection', rowSelection)}>
-          Log `rowSelection` state
-        </button>
+      <div className="fixed bottom-12 transform -translate-x-1/2 left-1/2">
+        <div className="bg-gray-50 rounded-full px-12 py-4 shadow-lg">
+          <button
+            className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+            onClick={() => console.info('rowSelection', rowSelection)}>
+            Log `rowSelection` state
+          </button>
+        </div>
       </div>
-      <p className="">
-        <span>Page</span>{' '}
-        <span>
-          {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-        </span>
-      </p>
-      <div>{table.getRowModel().rows.length} Rows</div>
     </div>
   );
 }
