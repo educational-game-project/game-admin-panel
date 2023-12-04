@@ -19,6 +19,7 @@ import { desktopIcon } from './assets/img';
 import 'react-toastify/dist/ReactToastify.min.css';
 import ButtonClipboard from './components/ButtonClipboard';
 import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
+import EditStudent from './pages/Students/EditStudent';
 
 function App() {
   const isDesktopView = useResponsiveLayout();
@@ -47,6 +48,10 @@ function App() {
                   <Route
                     path="/student"
                     element={<Students />}
+                  />
+                  <Route
+                    path="/student/edit/:studentId"
+                    element={<EditStudent />}
                   />
                   <Route
                     path="/score"
