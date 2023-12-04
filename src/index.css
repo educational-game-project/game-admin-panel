@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  @apply font-inter;
+  @apply font-inter leading-normal;
 }
 
 html,
