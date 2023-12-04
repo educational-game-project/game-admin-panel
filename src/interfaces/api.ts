@@ -20,8 +20,50 @@ interface ScoreProps {
   score: number;
 }
 
+interface StudentProps {
+  _id: string;
+  name: string;
+  role: string;
+  images: {
+    _id: string;
+    originalname: string;
+    filename: string;
+    fileLink: string;
+    mimeType: string;
+    size: number;
+    isDefault: boolean;
+    deletedAt: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  email: string;
+  phoneNumber: string;
+  password: string;
+  deletedAt: string;
+  school: {
+    _id: string;
+    name: string;
+    address: string;
+    images: string;
+    adminsCount: number;
+    studentsCount: number;
+    deletedAt: string;
+    createdAt: string;
+    updatedAt: string;
+    createdAtString: string;
+    updatedAtString: string;
+  };
+  createdAt: string;
+  createdAtString: string;
+  updatedAtString: string;
+}
+
 interface ScoreResponse {
   data: ScoreProps[];
+}
+
+interface StudentResponse {
+  data: StudentProps[];
 }
 
 interface UserMockResponse {
@@ -39,4 +81,6 @@ export type {
   MoviewMockResponse,
   ScoreProps,
   ScoreResponse,
+  StudentProps,
+  StudentResponse,
 };
