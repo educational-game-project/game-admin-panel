@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import Breadcrumbs from '../components/Breadcrumbs';
-import { useBreadcrumbs } from '../context/BreadcrumbsContext';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
 import { UserSquare2 } from 'lucide-react';
+import StudentsTable from '../../components/Table/StudentsTable';
 
 function Students() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -22,11 +23,14 @@ function Students() {
   }, [setBreadcrumbs]);
   return (
     <div className="">
-      <div className="mb-5">
+      <div className="mb-6">
         <Breadcrumbs />
-        <h5 className="font-semibold text-3xl">Students</h5>
+        <h5 className="font-semibold text-3xl mb-1.5">Siswa</h5>
+        <p className="text-gray-500">Lihat daftar siswa yang terdaftar.</p>
       </div>
-      <div className="h-[1500px] bg-white py-4 px-5 rounded-xl"></div>
+      <div className="bg-white p-5 rounded-xl">
+        <StudentsTable />
+      </div>
     </div>
   );
 }
