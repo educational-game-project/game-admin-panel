@@ -1,4 +1,6 @@
 import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
+import studentData from '../../data/STUDENT_DATA.json';
+import { StudentProps } from '../../interfaces/api';
 import {
   SortingState,
   createColumnHelper,
@@ -9,18 +11,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-
-import scoreData from '../../data/SCORE_DATA.json';
-import { ScoreProps } from '../../interfaces/api';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  PenSquareIcon,
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -44,22 +45,25 @@ function IndeterminateCheckbox({
   );
 }
 
-function ScoreTable() {
+function StudentsTable() {
   const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const data = useMemo(() => scoreData, []);
+  const data: StudentProps[] = useMemo(
+    () => studentData.filter((ele) => ele.role === 'user'),
+    []
+  );
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
-    name: '',
-    score: '',
+    name: 'whitespace-nowrap',
+    phoneNumber: 'whitespace-nowrap',
   };
 
-  const columnHelper = createColumnHelper<ScoreProps>();
+  const columnHelper = createColumnHelper<StudentProps>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -92,11 +96,57 @@ function ScoreTable() {
       }),
       columnHelper.accessor('name', {
         header: 'Nama Lengkap',
+        cell: (info) => (
+          <div className="flex items-center">
+            <img
+              src={info.row.original.images.fileLink}
+              alt={`${info.getValue()} Profile`}
+              className="mr-3 w-6 h-6 object-cover object-center rounded-full"
+            />
+            <p className="pr-3">{info.getValue()}</p>
+          </div>
+        ),
+      }),
+      columnHelper.accessor('email', {
+        header: 'Email',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('score', {
-        header: 'Skor',
+      columnHelper.accessor('phoneNumber', {
+        header: 'Telepon',
         cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('school.name', {
+        header: 'Sekolah',
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('school.address', {
+        header: 'Alamat Sekolah',
+        cell: (info) => info.getValue(),
+      }),
+      // action edit and delete
+      columnHelper.display({
+        id: 'action',
+        header: '',
+        cell: (info) => (
+          <div className="flex space-x-4 px-2">
+            <Link
+              className=""
+              to={`/student/edit/${info.row.original._id}`}>
+              <PenSquareIcon
+                size={16}
+                className="text-sky-500 hover:text-sky-600"
+              />
+            </Link>
+            <button
+              className=""
+              onClick={() => console.log(info.row.original)}>
+              <Trash2Icon
+                size={16}
+                className="text-red-500 hover:text-red-600"
+              />
+            </button>
+          </div>
+        ),
       }),
     ],
     [columnHelper]
@@ -111,7 +161,7 @@ function ScoreTable() {
       sorting,
     },
     enableRowSelection: true,
-    getCoreRowModel: getCoreRowModel<ScoreProps>(),
+    getCoreRowModel: getCoreRowModel<StudentProps>(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -138,7 +188,7 @@ function ScoreTable() {
           <div className="relative w-full">
             <input
               type="text"
-              placeholder="Cari berdasarkan nama atau skor..."
+              placeholder="Cari berdasarkan nama..."
               className="w-3/4 pl-10 focus:outline-none focus:ring-0"
               value={filter ?? ''}
               onChange={(e) => setFilter(String(e.target.value))}
@@ -212,9 +262,9 @@ function ScoreTable() {
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className={`whitespace-nowrap text-sm px-3 py-3 text-gray-500 ${
+                      className={`text-sm px-3 py-3 text-gray-500 ${
                         cell.column.id === 'score' ? 'font-semibold' : ''
-                      }`}>
+                      } ${headerClass[cell.column.id] ?? ''}`}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -323,7 +373,7 @@ function ScoreTable() {
               onClick={() => {
                 const selectedIds = Object.keys(rowSelection);
                 const newData = data.filter(
-                  (item) => !selectedIds.includes(item.id)
+                  (item) => !selectedIds.includes(item._id)
                 );
                 console.log('newData', newData);
               }}>
@@ -340,4 +390,4 @@ function ScoreTable() {
   );
 }
 
-export default ScoreTable;
+export default StudentsTable;
