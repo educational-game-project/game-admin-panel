@@ -7,6 +7,10 @@ import StudentsTable from '../../components/Table/StudentsTable';
 function Students() {
   const { setBreadcrumbs } = useBreadcrumbs();
 
+  const handleDelete = (id: string) => {
+    console.log(`delete id:${id} success`);
+  };
+
   useEffect(() => {
     setBreadcrumbs([
       {
@@ -21,6 +25,7 @@ function Students() {
       },
     ]);
   }, [setBreadcrumbs]);
+
   return (
     <div className="">
       <div className="mb-6">
@@ -29,7 +34,7 @@ function Students() {
         <p className="text-gray-500">Lihat daftar siswa yang terdaftar.</p>
       </div>
       <div className="bg-white p-5 rounded-xl">
-        <StudentsTable />
+        <StudentsTable onDelete={handleDelete} />
       </div>
     </div>
   );
