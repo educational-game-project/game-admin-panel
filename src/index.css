@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  @apply font-inter;
+  @apply font-inter leading-normal;
 }
 
 html,
@@ -15,12 +15,18 @@ body {
   @apply antialiased text-sm selection:bg-indigo-500 selection:text-gray-50;
 }
 
-.transition-all-200 {
-  @apply transition-all duration-200 ease-in-out;
+button {
+  @apply leading-normal;
 }
 
+/* form */
 .forms-checkbox {
   @apply form-checkbox h-4 w-4 border-2 border-gray-400 rounded bg-gray-50 focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-indigo-600/20 focus:border-indigo-500/50 focus:ring-offset-0 focus:ring-0 block checked:bg-indigo-500;
+}
+
+/* utilities */
+.transition-all-200 {
+  @apply transition-all duration-200 ease-in-out;
 }
 
 /* react toastify */
