@@ -22,11 +22,7 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import AlertDialog from '../AlertDialog';
-
-interface StudentsTableProps {
-  onDelete: (id: string) => void;
-}
+import AlertDelete from '../AlertDialog/AlertDelete';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -50,12 +46,13 @@ function IndeterminateCheckbox({
   );
 }
 
-function StudentsTable({ onDelete }: StudentsTableProps) {
+function StudentsTable() {
   const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
@@ -191,8 +188,13 @@ function StudentsTable({ onDelete }: StudentsTableProps) {
   };
 
   const handleDelete = () => {
-    onDelete(deleteId);
-    setIsOpenDeleteDialog(false);
+    setIsLoadingDelete(true);
+    console.log(`delete id:${deleteId}...`);
+    setTimeout(() => {
+      console.log('delete success');
+      setIsLoadingDelete(false);
+      setIsOpenDeleteDialog(false);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -409,9 +411,11 @@ function StudentsTable({ onDelete }: StudentsTableProps) {
       </div>
 
       {/* dialog delete */}
-      <AlertDialog
+      <AlertDelete
         isOpen={isOpenDeleteDialog}
-        onClose={closeDeleteDialog}
+        message="siswa"
+        isLoading={isLoadingDelete}
+        onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />
     </div>

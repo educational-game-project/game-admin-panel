@@ -14,8 +14,8 @@ interface LoginFormProps {
 }
 
 const schema = yup.object().shape({
-  email: yup.string().required('Missing email').email('Invalid email'),
-  password: yup.string().required('Missing password'),
+  email: yup.string().required('Email harus diisi').email('Email tidak valid'),
+  password: yup.string().required('Password harus diisi'),
 });
 
 function Login() {
@@ -59,11 +59,11 @@ function Login() {
             </div>
             <div className="w-[26.5rem] mx-auto mt-24 mb-40">
               <h3 className="font-bold text-8 mb-6 text-center">
-                Sign in to Gameon
+                Masuk ke Gameon
               </h3>
               <p className="text-gray-400 text-center mb-8">
-                Send, receive and organize your scores, analysis and
-                preferences.
+                Masuk dengan akun yang telah terdaftar. Kelola siswa dan
+                permainan dengan mudah.
               </p>
               <div className="grid grid-cols-4 gap-4 mb-6">
                 <div className="col-span-2">
@@ -92,7 +92,7 @@ function Login() {
                 </div>
               </div>
               <div className="text-center text-gray-400 relative mb-6">
-                Or with email
+                Atau dengan email
                 <span className="absolute w-1/3 left-0 h-px bg-gray-200 top-1/2" />
                 <span className="absolute w-1/3 right-0 h-px bg-gray-200 top-1/2" />
               </div>
@@ -106,7 +106,7 @@ function Login() {
                         ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
                         : ''
                     }`}
-                    placeholder="Enter your email"
+                    placeholder="Masukkan email Anda"
                     aria-required="true"
                     aria-invalid={errors.email ? 'true' : 'false'}
                     {...register('email')}
@@ -127,7 +127,7 @@ function Login() {
                           ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
                           : ''
                       }`}
-                      placeholder="Enter your password"
+                      placeholder="Masukkan password Anda"
                       aria-required="true"
                       aria-invalid={errors.password ? 'true' : 'false'}
                       {...register('password')}
@@ -181,13 +181,13 @@ function Login() {
                     <label
                       htmlFor="remember"
                       className="ml-2.5">
-                      Remember me
+                      Ingat saya
                     </label>
                   </div>
                   <Link
                     to="/fogot-password"
                     className="text-sky-500 hover:text-indigo-500 hover:underline underline-offset-2">
-                    Forgot Password?
+                    Lupa Password?
                   </Link>
                 </div>
                 <button
@@ -214,7 +214,7 @@ function Login() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   )}
-                  Sign In
+                  Masuk
                 </button>
               </form>
             </div>
