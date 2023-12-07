@@ -5,6 +5,7 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import studentData from '../../data/STUDENT_DATA.json';
 import { StudentProps } from '../../interfaces/api';
 import {
+  ChevronDownIcon,
   Loader2Icon,
   PenBoxIcon,
   UploadCloudIcon,
@@ -171,17 +172,25 @@ function EditStudent() {
                     className="block mb-2 font-medium text-gray-500">
                     Sekolah
                   </label>
-                  <select
-                    id="school"
-                    className={`h-[43.2px] px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    // value={student?.school?.name}
-                    aria-required="true"
-                    aria-invalid="false">
-                    <option value="">Pilih Sekolah</option>
-                    <option value="SMA">SMA</option>
-                    <option value="SMK">SMK</option>
-                    <option value="MA">MA</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      id="school"
+                      className={`h-[43.2px] px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
+                      // value={student?.school?.name}
+                      aria-required="true"
+                      aria-invalid="false">
+                      <option value="">Pilih Sekolah</option>
+                      <option value="SMA">SMA</option>
+                      <option value="SMK">SMK</option>
+                      <option value="MA">MA</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-1 flex items-center px-2 pointer-events-none">
+                      <ChevronDownIcon
+                        size={18}
+                        className="text-gray-400"
+                      />
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
