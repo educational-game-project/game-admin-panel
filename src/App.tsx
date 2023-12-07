@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import ButtonClipboard from './components/ButtonClipboard';
 import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
 import EditStudent from './pages/Students/EditStudent';
+import AddStudent from './pages/Students/AddStudent';
 
 function App() {
   const isDesktopView = useResponsiveLayout();
@@ -48,6 +49,10 @@ function App() {
                   <Route
                     path="/student"
                     element={<Students />}
+                  />
+                  <Route
+                    path="/student/add"
+                    element={<AddStudent />}
                   />
                   <Route
                     path="/student/edit/:studentId"
