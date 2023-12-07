@@ -246,7 +246,7 @@ function ScoreTable() {
                   </option>
                 ))}
               </select>
-              <div className="absolute right-1.5 top-1.5">
+              <div className="absolute right-1.5 top-1.5 pointer-events-none">
                 <label
                   htmlFor="tableScore_paginate"
                   className="block">

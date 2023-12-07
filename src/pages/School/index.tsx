@@ -1,22 +1,22 @@
 import { useEffect } from 'react';
-import { useBreadcrumbs } from '../context/BreadcrumbsContext';
-import Breadcrumbs from '../components/Breadcrumbs';
-import { Headphones } from 'lucide-react';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
+import { SchoolIcon } from 'lucide-react';
 
-function Support() {
+function School() {
   const { setBreadcrumbs } = useBreadcrumbs();
 
   useEffect(() => {
     setBreadcrumbs([
       {
         icon: (
-          <Headphones
+          <SchoolIcon
             size={16}
             className="mr-1.5"
           />
         ),
-        label: 'Support',
-        path: '/support',
+        label: 'School',
+        path: '/school',
       },
     ]);
   }, [setBreadcrumbs]);
@@ -24,14 +24,12 @@ function Support() {
     <div className="">
       <div className="mb-6">
         <Breadcrumbs />
-        <h5 className="font-semibold text-3xl mb-1.5">Support</h5>
-        <p className="text-gray-500">
-          Hubungi kami untuk bantuan lebih lanjut.
-        </p>
+        <h5 className="font-semibold text-3xl mb-1.5">Sekolah</h5>
+        <p className="text-gray-500">Lihat daftar sekolah yang terdaftar.</p>
       </div>
       <div className="h-[1500px] bg-white p-5 rounded-xl"></div>
     </div>
   );
 }
 
-export default Support;
+export default School;

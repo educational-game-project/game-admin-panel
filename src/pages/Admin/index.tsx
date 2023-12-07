@@ -1,22 +1,22 @@
 import { useEffect } from 'react';
-import { useBreadcrumbs } from '../context/BreadcrumbsContext';
-import Breadcrumbs from '../components/Breadcrumbs';
-import { Headphones } from 'lucide-react';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import { UserCogIcon } from 'lucide-react';
+import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
 
-function Support() {
+function Admin() {
   const { setBreadcrumbs } = useBreadcrumbs();
 
   useEffect(() => {
     setBreadcrumbs([
       {
         icon: (
-          <Headphones
+          <UserCogIcon
             size={16}
             className="mr-1.5"
           />
         ),
-        label: 'Support',
-        path: '/support',
+        label: 'Admin',
+        path: '/admin',
       },
     ]);
   }, [setBreadcrumbs]);
@@ -24,9 +24,9 @@ function Support() {
     <div className="">
       <div className="mb-6">
         <Breadcrumbs />
-        <h5 className="font-semibold text-3xl mb-1.5">Support</h5>
+        <h5 className="font-semibold text-3xl mb-1.5">Admin</h5>
         <p className="text-gray-500">
-          Hubungi kami untuk bantuan lebih lanjut.
+          Kelola admin yang dapat mengakses dashboard.
         </p>
       </div>
       <div className="h-[1500px] bg-white p-5 rounded-xl"></div>
@@ -34,4 +34,4 @@ function Support() {
   );
 }
 
-export default Support;
+export default Admin;

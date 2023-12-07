@@ -22,11 +22,12 @@ function Home() {
 
   return (
     <div className="">
-      <div className="mb-5">
+      <div className="mb-6">
         <Breadcrumbs />
-        <h5 className="font-semibold text-3xl">Home</h5>
+        <h5 className="font-semibold text-3xl mb-1.5">Home</h5>
+        <p className="text-gray-500">Selamat datang di Dashboard Gameon.</p>
       </div>
-      <div className="h-[1500px] bg-white py-4 px-5 rounded-xl">
+      <div className="h-[1500px] bg-white p-5 rounded-xl">
         <div className="flex space-x-4 items-center">
           <button
             onClick={notify_1}

@@ -5,7 +5,9 @@ import {
   HomeIcon,
   LineChart,
   MousePointerClick,
+  SchoolIcon,
   Settings,
+  UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
 import { useSidebar } from '../context/SidebarContext';
@@ -51,7 +53,24 @@ function Layout() {
             alert={false}
             active={isCurrentLocation('analysis')}
           />
-          <hr className="my-6" />
+          <div className="mt-5">
+            <SeparateSidebar caption="Advanced" />
+          </div>
+          <SidebarItem
+            icon={<UserCogIcon size={20} />}
+            text="Admin"
+            path="/admin"
+            alert={false}
+            active={isCurrentLocation('admin')}
+          />
+          <SidebarItem
+            icon={<SchoolIcon size={20} />}
+            text="School"
+            path="/school"
+            alert={false}
+            active={isCurrentLocation('school')}
+          />
+          <hr className="mb-6 mt-5" />
           <SeparateSidebar caption="Settings" />
           <SidebarItem
             icon={<Settings size={20} />}

@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import studentData from '../../data/STUDENT_DATA.json';
-import { StudentProps } from '../../interfaces/api';
 import {
   ChevronDownIcon,
   Loader2Icon,
-  PenBoxIcon,
   UploadCloudIcon,
   UserSquare2,
+  UserPlusIcon,
 } from 'lucide-react';
 
-function EditStudent() {
-  const { studentId } = useParams();
+function AddStudent() {
   const { setBreadcrumbs } = useBreadcrumbs();
-  const [student, setStudent] = useState<StudentProps | undefined>();
   const [isLoadingSave, setIsLoadingSave] = useState(false);
 
   const handleSubmit = () => {
@@ -39,28 +35,27 @@ function EditStudent() {
       },
       {
         icon: (
-          <PenBoxIcon
+          <UserPlusIcon
             size={16}
             className="mr-1.5"
           />
         ),
-        label: 'Edit Student',
-        path: `/student/edit/${studentId}`,
+        label: 'Add Student',
+        path: '/student/add',
       },
     ]);
-  }, [setBreadcrumbs, studentId]);
-  useEffect(() => {
-    const foundStudent = studentData.find((user) => user._id === studentId);
-    setStudent(foundStudent);
-  }, [studentId]);
+  }, [setBreadcrumbs]);
+
   return (
     <div>
       <div className="mb-6">
         <Breadcrumbs />
         <div className="flex items-center justify-between">
           <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5">Edit Siswa</h5>
-            <p className="text-gray-500">Edit data siswa.</p>
+            <h5 className="font-semibold text-3xl mb-1.5">Tambah Siswa</h5>
+            <p className="text-gray-500">
+              Tambahkan siswa baru ke dalam sistem.
+            </p>
           </div>
           <div className="flex justify-end">
             <Link
@@ -119,7 +114,6 @@ function EditStudent() {
                     id="name"
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={student?.name}
                     placeholder="Masukkan nama siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -136,7 +130,6 @@ function EditStudent() {
                     id="email"
                     type="email"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    // value={student?.email}
                     placeholder="Masukkan email siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -153,7 +146,6 @@ function EditStudent() {
                     id="phone"
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    // value={student?.phoneNumber}
                     placeholder="Masukkan nomor telepon siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -170,7 +162,6 @@ function EditStudent() {
                     <select
                       id="school"
                       className={`h-[43.2px] px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                      // value={student?.school?.name}
                       aria-required="true"
                       aria-invalid="false">
                       <option value="">Pilih Sekolah</option>
@@ -202,21 +193,21 @@ function EditStudent() {
               <div className="flex items-center mb-4">
                 <figure className="flex items-center justify-center overflow-hidden w-14 h-14 rounded-full mr-3">
                   <img
-                    src={student?.images?.fileLink}
-                    alt={`${student?.name} Profile`}
+                    src="https://ui-avatars.com/api/?name=Gameon"
+                    alt="Profile Placeholder"
                     className="w-full h-full object-cover object-center"
                   />
                 </figure>
                 <div className="">
                   <h5 className="font-medium text-base mb-0.5">
-                    Ubah Foto Profil
+                    Tambah Foto Profil
                   </h5>
                   <div className="flex items-center space-x-3">
                     <p className="text-gray-400 hover:text-red-500 cursor-pointer">
                       Hapus
                     </p>
                     <p className="text-violet-600 hover:text-violet-500 cursor-pointer">
-                      Update
+                      Terapkan
                     </p>
                   </div>
                 </div>
@@ -258,4 +249,4 @@ function EditStudent() {
   );
 }
 
-export default EditStudent;
+export default AddStudent;
