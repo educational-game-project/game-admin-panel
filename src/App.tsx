@@ -21,6 +21,8 @@ import ButtonClipboard from './components/ButtonClipboard';
 import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
 import EditStudent from './pages/Students/EditStudent';
 import AddStudent from './pages/Students/AddStudent';
+import Admin from './pages/Admin';
+import School from './pages/School';
 
 function App() {
   const isDesktopView = useResponsiveLayout();
@@ -45,6 +47,14 @@ function App() {
                   <Route
                     index
                     element={<Home />}
+                  />
+                  <Route
+                    path="/admin"
+                    element={<Admin />}
+                  />
+                  <Route
+                    path="/school"
+                    element={<School />}
                   />
                   <Route
                     path="/student"
