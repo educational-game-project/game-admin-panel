@@ -1,17 +1,35 @@
-interface UserMockProps {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  gender: string;
-  dob: string;
+interface BaseImageProps {
+  originalname: string;
+  filename: string;
+  fileLink: string;
+  mimeType: string;
+  isDefault: boolean;
+  deletedAt: string | null;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  size?: number;
 }
-
-interface MoviewMockProps {
-  id: string;
+interface BaseAdminSchoolProps {
+  _id: string;
   name: string;
-  genre: string;
-  rating: number;
+  role: string;
+  images: BaseImageProps[];
+  email: string;
+  phoneNumber: string;
+}
+interface BaseSchoolAdminProps {
+  _id: string;
+  name: string;
+  address: string;
+  images: string | BaseImageProps[];
+  adminsCount: number;
+  studentsCount: number;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  createdAtString: string;
+  updatedAtString: string;
 }
 
 interface ScoreProps {
@@ -19,41 +37,44 @@ interface ScoreProps {
   name: string;
   score: number;
 }
-
 interface StudentProps {
   _id: string;
   name: string;
   role: string;
-  images: {
-    _id: string;
-    originalname: string;
-    filename: string;
-    fileLink: string;
-    mimeType: string;
-    size: number;
-    isDefault: boolean;
-    deletedAt: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  images: BaseImageProps;
   email: string;
   phoneNumber: string;
   password: string;
   deletedAt: string;
-  school: {
-    _id: string;
-    name: string;
-    address: string;
-    images: string;
-    adminsCount: number;
-    studentsCount: number;
-    deletedAt: string;
-    createdAt: string;
-    updatedAt: string;
-    createdAtString: string;
-    updatedAtString: string;
-  };
+  school: BaseSchoolAdminProps;
   createdAt: string;
+  createdAtString: string;
+  updatedAtString: string;
+}
+interface SchoolProps {
+  _id: string;
+  name: string;
+  address: string;
+  images: BaseImageProps[];
+  adminsCount: number;
+  studentsCount: number;
+  deletedAt: string | null;
+  admins: BaseAdminSchoolProps[];
+  createdAt: string;
+  updatedAt: string;
+}
+interface AdminProps {
+  _id: string;
+  name: string;
+  role: string;
+  images: BaseImageProps[];
+  email: string;
+  phoneNumber: string;
+  password: string;
+  deletedAt: string | null;
+  school: BaseSchoolAdminProps;
+  createdAt: string;
+  updatedAt: string;
   createdAtString: string;
   updatedAtString: string;
 }
@@ -61,26 +82,25 @@ interface StudentProps {
 interface ScoreResponse {
   data: ScoreProps[];
 }
-
 interface StudentResponse {
   data: StudentProps[];
 }
-
-interface UserMockResponse {
-  data: UserMockProps[];
+interface AdminResponse {
+  data: AdminProps[];
+}
+interface SchoolResponse {
+  data: SchoolProps[];
 }
 
-interface MoviewMockResponse {
-  data: MoviewMockProps[];
-}
+// ====================
 
 export type {
-  UserMockProps,
-  UserMockResponse,
-  MoviewMockProps,
-  MoviewMockResponse,
   ScoreProps,
   ScoreResponse,
   StudentProps,
   StudentResponse,
+  AdminProps,
+  AdminResponse,
+  SchoolProps,
+  SchoolResponse,
 };

@@ -12,7 +12,15 @@ import {
 import { DateTime } from 'luxon';
 
 import userData from '../../data/MOCK_USER.json';
-import { UserMockProps } from '../../interfaces/api';
+
+interface UserMockProps {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  gender: string;
+  dob: string;
+}
 
 function IndeterminateCheckbox({
   indeterminate,
