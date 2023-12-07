@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -17,12 +17,6 @@ function EditStudent() {
   const { setBreadcrumbs } = useBreadcrumbs();
   const [student, setStudent] = useState<StudentProps | undefined>();
   const [isLoadingSave, setIsLoadingSave] = useState(false);
-
-  const randomAvatarGithubImg = useMemo(() => {
-    const randomId = Math.floor(Math.random() * 1000);
-    console.log(randomId);
-    return `https://avatars.githubusercontent.com/u/${randomId}?v=4`;
-  }, []);
 
   const handleSubmit = () => {
     setIsLoadingSave(true);
@@ -208,7 +202,7 @@ function EditStudent() {
               <div className="flex items-center mb-4">
                 <figure className="flex items-center justify-center overflow-hidden w-14 h-14 rounded-full mr-3">
                   <img
-                    src={randomAvatarGithubImg}
+                    src={student?.images?.fileLink}
                     alt={`${student?.name} Profile`}
                     className="w-full h-full object-cover object-center"
                   />
