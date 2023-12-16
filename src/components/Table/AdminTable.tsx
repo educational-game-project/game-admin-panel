@@ -95,7 +95,16 @@ function AdminTable() {
       }),
       columnHelper.accessor('name', {
         header: 'Nama Lengkap',
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <div className="flex items-center">
+            <img
+              src={info.row.original.images[0].fileLink}
+              alt={`${info.getValue()} Profile`}
+              className="mr-3 w-6 h-6 object-cover object-center rounded-full"
+            />
+            <p className="pr-3">{info.getValue()}</p>
+          </div>
+        ),
       }),
       columnHelper.accessor('email', {
         header: 'Email',
