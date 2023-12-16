@@ -23,6 +23,11 @@ import EditStudent from './pages/Students/EditStudent';
 import AddStudent from './pages/Students/AddStudent';
 import Admin from './pages/Admin';
 import School from './pages/School';
+import AddSchool from './pages/School/AddSchool';
+import EditSchool from './pages/School/EditSchool';
+import DetailSchool from './pages/School/DetailSchool';
+import AddAdmin from './pages/Admin/AddAdmin';
+import EditAdmin from './pages/Admin/EditAdmin';
 
 function App() {
   const isDesktopView = useResponsiveLayout();
@@ -53,8 +58,28 @@ function App() {
                     element={<Admin />}
                   />
                   <Route
+                    path="/admin/add"
+                    element={<AddAdmin />}
+                  />
+                  <Route
+                    path="/admin/edit/:adminId"
+                    element={<EditAdmin />}
+                  />
+                  <Route
                     path="/school"
                     element={<School />}
+                  />
+                  <Route
+                    path="/school/add"
+                    element={<AddSchool />}
+                  />
+                  <Route
+                    path="/school/edit/:schoolId"
+                    element={<EditSchool />}
+                  />
+                  <Route
+                    path="/school/:schoolId"
+                    element={<DetailSchool />}
                   />
                   <Route
                     path="/student"
