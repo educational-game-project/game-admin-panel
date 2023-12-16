@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
-import Breadcrumbs from '../../components/Breadcrumbs';
-import studentData from '../../data/STUDENT_DATA.json';
-import { StudentProps } from '../../interfaces/api';
+import { AdminProps } from '../../interfaces/api';
 import {
   ChevronDownIcon,
   Loader2Icon,
   PenBoxIcon,
   UploadCloudIcon,
-  UserSquare2,
+  UserCogIcon,
 } from 'lucide-react';
+import adminData from '../../data/ADMIN_DATA.json';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
-function EditStudent() {
-  const { studentId } = useParams();
+function EditAdmin() {
+  const { adminId } = useParams();
   const { setBreadcrumbs } = useBreadcrumbs();
-  const [student, setStudent] = useState<StudentProps | undefined>();
+  const [admin, setAdmin] = useState<AdminProps | undefined>();
   const [isLoadingSave, setIsLoadingSave] = useState(false);
 
   const handleSubmit = () => {
@@ -29,13 +29,13 @@ function EditStudent() {
     setBreadcrumbs([
       {
         icon: (
-          <UserSquare2
+          <UserCogIcon
             size={16}
             className="mr-1.5"
           />
         ),
-        label: 'Students',
-        path: '/student',
+        label: 'Admin',
+        path: '/admin',
       },
       {
         icon: (
@@ -44,23 +44,24 @@ function EditStudent() {
             className="mr-1.5"
           />
         ),
-        label: 'Edit Student',
-        path: `/student/edit/${studentId}`,
+        label: 'Edit Admin',
+        path: `/admin/edit/${adminId}`,
       },
     ]);
-  }, [setBreadcrumbs, studentId]);
+  }, [setBreadcrumbs, adminId]);
   useEffect(() => {
-    const foundStudent = studentData.find((user) => user._id === studentId);
-    setStudent(foundStudent);
-  }, [studentId]);
+    const foundAdmin = adminData.find((user) => user._id === adminId);
+    setAdmin(foundAdmin);
+  }, [adminId]);
+
   return (
     <div>
       <div className="mb-6">
         <Breadcrumbs />
         <div className="flex items-center justify-between">
           <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5">Edit Siswa</h5>
-            <p className="text-gray-500">Edit data siswa.</p>
+            <h5 className="font-semibold text-3xl mb-1.5">Edit Admin</h5>
+            <p className="text-gray-500">Edit data admin.</p>
           </div>
           <div className="flex justify-end">
             <Link
@@ -70,7 +71,7 @@ function EditStudent() {
                   ? 'opacity-50 cursor-not-allowed bg-gray-200'
                   : 'bg-gray-50 hover:bg-gray-100'
               }`}
-              to="/student">
+              to="/admin">
               Kembali
             </Link>
             <button
@@ -119,7 +120,7 @@ function EditStudent() {
                     id="name"
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={student?.name}
+                    value={admin?.name}
                     placeholder="Masukkan nama siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -136,7 +137,7 @@ function EditStudent() {
                     id="email"
                     type="email"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={student?.email}
+                    value={admin?.email}
                     placeholder="Masukkan email siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -153,7 +154,7 @@ function EditStudent() {
                     id="phone"
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={student?.phoneNumber}
+                    value={admin?.phoneNumber}
                     placeholder="Masukkan nomor telepon siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -170,7 +171,7 @@ function EditStudent() {
                     <select
                       id="school"
                       className={`h-[43.2px] px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                      // value={student?.school?.name}
+                      // value={admin?.school?.name}
                       aria-required="true"
                       aria-invalid="false">
                       <option value="">Pilih Sekolah</option>
@@ -202,8 +203,8 @@ function EditStudent() {
               <div className="flex items-center mb-4">
                 <figure className="flex items-center justify-center overflow-hidden w-14 h-14 rounded-full mr-3">
                   <img
-                    src={student?.images?.fileLink}
-                    alt={`${student?.name} Profile`}
+                    src={admin?.images[0]?.fileLink}
+                    alt={`${admin?.name} Profile`}
                     className="w-full h-full object-cover object-center"
                   />
                 </figure>
@@ -258,4 +259,4 @@ function EditStudent() {
   );
 }
 
-export default EditStudent;
+export default EditAdmin;
