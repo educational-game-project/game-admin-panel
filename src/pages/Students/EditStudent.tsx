@@ -136,7 +136,7 @@ function EditStudent() {
                     id="email"
                     type="email"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    // value={student?.email}
+                    value={student?.email}
                     placeholder="Masukkan email siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -153,7 +153,7 @@ function EditStudent() {
                     id="phone"
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    // value={student?.phoneNumber}
+                    value={student?.phoneNumber}
                     placeholder="Masukkan nomor telepon siswa"
                     aria-required="true"
                     aria-invalid="false"
