@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import Breadcrumbs from '../components/Breadcrumbs';
-import { useBreadcrumbs } from '../context/BreadcrumbsContext';
-import { UserCircle2Icon } from 'lucide-react';
+import { useEffect } from "react";
+import Breadcrumbs from "../components/Breadcrumbs";
+import { useBreadcrumbs } from "../context/BreadcrumbsContext";
+import { UserCircle2Icon } from "lucide-react";
 
 function Profile() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -9,14 +9,9 @@ function Profile() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: (
-          <UserCircle2Icon
-            size={16}
-            className="mr-1.5"
-          />
-        ),
-        label: 'Iwan Suryaningrat',
-        path: '/profile',
+        icon: <UserCircle2Icon size={16} className="mr-1.5" />,
+        label: "Iwan Suryaningrat",
+        path: "/profile",
       },
     ]);
   }, [setBreadcrumbs]);
