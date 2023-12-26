@@ -1,0 +1,70 @@
+name: Game Admin Panel
+# test
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+    branches:
+    - main
+    - game-admin-panel 
+    
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.head_commit.message, '#build') }}
+    steps:
+      - name: Get Short SHA
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - id: qemu
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - id: buildx
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - id: auth
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - id: env-url
+        name: get api url from secret
+        run: echo ${{ secrets.API_URL }} > .env
+      - id: build
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          # context: .
+          push: true
+          tags: thelogoreng/api:game-panel-${{ steps.vars.outputs.sha_short }}
+
+  Deploy-to-VM:
+    runs-on: ubuntu-latest
+    needs: build-image
+    steps:
+      - name: Deploy in VM
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+            HOSTNAME : ${{ secrets.VM_HOST }}
+            USER_NAME : ${{ secrets.VM_USERNAME }}
+            port: ${{ secrets.VM_PORT }}
+            DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            # passphrase: ${{ secrets.SSH_PASSPHRASE }}
+            
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} -p $port '
+            cd /home/${{ secrets.VM_USERNAME }}/game &&
+            ls -al &&
+            echo ${{ secrets.DOCKER_TOKEN }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin &&
+            docker pull thelogoreng/api:game-panel-${{ steps.vars.outputs.sha_short }} &&
+            docker tag thelogoreng/api:game-panel-${{ steps.vars.outputs.sha_short }} thelogoreng/api:game-panel
+            docker compose up -d &&
+            docker image prune --force
+            '
