@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
+import { Link, useParams } from 'react-router-dom';
 import {
   Loader2Icon,
   PenBoxIcon,
@@ -7,10 +7,11 @@ import {
   TrashIcon,
   UploadCloudIcon,
 } from 'lucide-react';
-import { SchoolProps } from '../../interfaces/api';
-import schoolData from '../../data/SCHOOL_DATA.json';
-import { Link, useParams } from 'react-router-dom';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { SchoolProps } from '../../types/api';
+
+import schoolData from '../../data/SCHOOL_DATA.json';
 
 function EditSchool() {
   const { schoolId } = useParams();

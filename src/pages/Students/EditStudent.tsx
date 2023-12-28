@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
-import Breadcrumbs from '../../components/Breadcrumbs';
-import studentData from '../../data/STUDENT_DATA.json';
-import { StudentProps } from '../../interfaces/api';
 import {
   ChevronDownIcon,
   Loader2Icon,
@@ -11,6 +7,11 @@ import {
   UploadCloudIcon,
   UserSquare2,
 } from 'lucide-react';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import { StudentProps } from '../../types/api';
+
+import studentData from '../../data/STUDENT_DATA.json';
 
 function EditStudent() {
   const { studentId } = useParams();

@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { useBreadcrumbs } from "../context/BreadcrumbsContext";
-import Breadcrumbs from "../components/Breadcrumbs";
-import { LineChart } from "lucide-react";
+import { useEffect } from 'react';
+import { LineChart } from 'lucide-react';
+import { useBreadcrumbs } from '../hook/breadcrumbHooks';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 function Analysis() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -9,9 +9,14 @@ function Analysis() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: <LineChart size={16} className="mr-1.5" />,
-        label: "Analysis",
-        path: "/analysis",
+        icon: (
+          <LineChart
+            size={16}
+            className="mr-1.5"
+          />
+        ),
+        label: 'Analysis',
+        path: '/analysis',
       },
     ]);
   }, [setBreadcrumbs]);

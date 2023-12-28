@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
-import { AdminProps } from '../../interfaces/api';
 import {
   ChevronDownIcon,
   Loader2Icon,
@@ -9,8 +7,11 @@ import {
   UploadCloudIcon,
   UserCogIcon,
 } from 'lucide-react';
-import adminData from '../../data/ADMIN_DATA.json';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { AdminProps } from '../../types/api';
+
+import adminData from '../../data/ADMIN_DATA.json';
 
 function EditAdmin() {
   const { adminId } = useParams();

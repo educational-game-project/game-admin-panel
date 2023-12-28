@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
-import { SchoolProps } from '../../interfaces/api';
 import { MousePointerSquareIcon, SchoolIcon } from 'lucide-react';
-import schoolData from '../../data/SCHOOL_DATA.json';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { SchoolProps } from '../../types/api';
+
+import schoolData from '../../data/SCHOOL_DATA.json';
 
 function DetailSchool() {
   const { schoolId } = useParams();

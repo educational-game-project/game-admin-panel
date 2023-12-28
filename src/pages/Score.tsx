@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import Breadcrumbs from "../components/Breadcrumbs";
-import { useBreadcrumbs } from "../context/BreadcrumbsContext";
-import ScoreTable from "../components/Table/ScoreTable";
-import { MousePointerClick } from "lucide-react";
+import { useEffect } from 'react';
+import { MousePointerClick } from 'lucide-react';
+import { useBreadcrumbs } from '../hook/breadcrumbHooks';
+import Breadcrumbs from '../components/Breadcrumbs';
+import ScoreTable from '../components/Table/ScoreTable';
 
 function Score() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -10,9 +10,14 @@ function Score() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: <MousePointerClick size={16} className="mr-1.5" />,
-        label: "Skor",
-        path: "/score",
+        icon: (
+          <MousePointerClick
+            size={16}
+            className="mr-1.5"
+          />
+        ),
+        label: 'Skor',
+        path: '/score',
       },
     ]);
   }, [setBreadcrumbs]);

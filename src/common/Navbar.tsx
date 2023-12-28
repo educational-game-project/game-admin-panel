@@ -1,7 +1,7 @@
+import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { BellRingIcon, CommandIcon, SearchIcon } from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
-import { useSidebar } from '../context/SidebarContext';
+import { useSidebar } from '../hook/sidebarHooks';
 
 function Navbar() {
   const { expanded } = useSidebar();

@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
 import { Share2Icon } from 'lucide-react';
-import { useResponsiveLayout } from './context/ResponsiveContext';
+import { useResponsiveLayout } from './hook/responsiveHoks';
 import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
 import { desktopIcon } from './assets/img';
 

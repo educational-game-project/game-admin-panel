@@ -1,5 +1,5 @@
 import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
-import schoolData from '../../data/SCHOOL_DATA.json';
+import { Link } from 'react-router-dom';
 import {
   SortingState,
   createColumnHelper,
@@ -10,20 +10,20 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Link } from 'react-router-dom';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
-  EyeIcon,
   PenSquareIcon,
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { SchoolProps } from '../../interfaces/api';
-import AlertDelete from '../AlertDialog/AlertDelete';
+import AlertDelete from '../../../components/AlertDialog/AlertDelete';
+import { AdminProps } from '../../../types/api';
+
+import adminData from '../../../data/ADMIN_DATA.json';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -47,7 +47,7 @@ function IndeterminateCheckbox({
   );
 }
 
-function SchoolTable() {
+function AdminTable() {
   const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -57,13 +57,13 @@ function SchoolTable() {
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const data = useMemo(() => schoolData, []);
+  const data = useMemo(() => adminData, []);
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
   };
 
-  const columnHelper = createColumnHelper<SchoolProps>();
+  const columnHelper = createColumnHelper<AdminProps>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -95,19 +95,28 @@ function SchoolTable() {
         cell: (info) => info.row.index + 1,
       }),
       columnHelper.accessor('name', {
-        header: 'Nama Sekolah',
+        header: 'Nama Lengkap',
+        cell: (info) => (
+          <div className="flex items-center">
+            <img
+              src={info.row.original.images[0].fileLink}
+              alt={`${info.getValue()} Profile`}
+              className="mr-3 w-6 h-6 object-cover object-center rounded-full"
+            />
+            <p className="pr-3">{info.getValue()}</p>
+          </div>
+        ),
+      }),
+      columnHelper.accessor('email', {
+        header: 'Email',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('adminsCount', {
-        header: 'Admin',
+      columnHelper.accessor('phoneNumber', {
+        header: 'Telepon',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('studentsCount', {
-        header: 'Siswa',
-        cell: (info) => info.getValue(),
-      }),
-      columnHelper.accessor('address', {
-        header: 'Alamat',
+      columnHelper.accessor('school.name', {
+        header: 'Sekolah',
         cell: (info) => info.getValue(),
       }),
       // action edit and delete
@@ -118,15 +127,7 @@ function SchoolTable() {
           <div className="flex space-x-4 px-2">
             <Link
               className=""
-              to={`/school/${info.row.original._id}`}>
-              <EyeIcon
-                size={18}
-                className="text-violet-500 hover:text-violet-600"
-              />
-            </Link>
-            <Link
-              className=""
-              to={`/school/edit/${info.row.original._id}`}>
+              to={`/admin/edit/${info.row.original._id}`}>
               <PenSquareIcon
                 size={16}
                 className="text-sky-500 hover:text-sky-600"
@@ -156,7 +157,7 @@ function SchoolTable() {
       sorting,
     },
     enableRowSelection: true,
-    getCoreRowModel: getCoreRowModel<SchoolProps>(),
+    getCoreRowModel: getCoreRowModel<AdminProps>(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -404,7 +405,7 @@ function SchoolTable() {
       {/* dialog delete */}
       <AlertDelete
         isOpen={isOpenDeleteDialog}
-        message="sekolah"
+        message="admin"
         isLoading={isLoadingDelete}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
@@ -413,4 +414,4 @@ function SchoolTable() {
   );
 }
 
-export default SchoolTable;
+export default AdminTable;

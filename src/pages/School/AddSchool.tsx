@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import Breadcrumbs from '../../components/Breadcrumbs';
 import { Link } from 'react-router-dom';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
 import {
   CopyPlusIcon,
   Loader2Icon,
   SchoolIcon,
   UploadCloudIcon,
 } from 'lucide-react';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 function AddSchool() {
   const { setBreadcrumbs } = useBreadcrumbs();

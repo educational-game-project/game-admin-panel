@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
+import { Link } from 'react-router-dom';
 import {
   ChevronDownIcon,
   Loader2Icon,
@@ -7,8 +7,8 @@ import {
   UserCogIcon,
   UserPlusIcon,
 } from 'lucide-react';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import { Link } from 'react-router-dom';
 
 function AddAdmin() {
   const { setBreadcrumbs } = useBreadcrumbs();

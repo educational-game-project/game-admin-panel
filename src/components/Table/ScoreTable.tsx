@@ -9,9 +9,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-
-import scoreData from '../../data/SCORE_DATA.json';
-import { ScoreProps } from '../../interfaces/api';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -21,6 +18,10 @@ import {
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
+
+import { ScoreProps } from '../../types/api';
+
+import scoreData from '../../data/SCORE_DATA.json';
 
 function IndeterminateCheckbox({
   indeterminate,
