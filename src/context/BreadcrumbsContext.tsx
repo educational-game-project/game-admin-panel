@@ -5,7 +5,7 @@ import {
   useState,
   ReactNode,
   SetStateAction,
-} from 'react';
+} from "react";
 
 type BreadcrumbsProviderProps = {
   children: ReactNode;
@@ -37,7 +37,7 @@ export const BreadcrumbsProvider = ({ children }: BreadcrumbsProviderProps) => {
 export const useBreadcrumbs = () => {
   const context = useContext(BreadcrumbsContext);
   if (context === undefined) {
-    throw new Error('useBreadcrumbs must be used within a BreadcrumbsProvider');
+    throw new Error("useBreadcrumbs must be used within a BreadcrumbsProvider");
   }
   return context;
 };
