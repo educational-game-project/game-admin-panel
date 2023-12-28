@@ -1,3 +1,4 @@
+import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
 import {
   SortingState,
   createColumnHelper,
@@ -8,7 +9,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import React, { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
 import adminData from '../../data/ADMIN_DATA.json';
 import { AdminProps } from '../../interfaces/api';
 import { Link } from 'react-router-dom';

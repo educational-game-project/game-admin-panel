@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
 import { SchoolProps } from '../../interfaces/api';
@@ -122,19 +122,19 @@ function DetailSchool() {
               </p>
             </div>
             <div className="p-5">
-              <div className="w-full flex flex-col gap-4">
+              <div className="w-full flex flex-col gap-3">
                 {school?.admins.map((admin) => (
-                  <div className="w-full flex items-center p-3 rounded-md">
-                    <figure className="">
+                  <div className="w-full flex items-center p-3 rounded-md bg-gray-100">
+                    <figure className="w-9 h-9 rounded-full overflow-hidden mr-2">
                       <img
                         src={admin.images[0].fileLink}
                         alt={`${admin.name} Profile`}
-                        className=""
+                        className="w-full h-full object-cover object-center"
                       />
                     </figure>
                     <div className="">
-                      <p className="">{admin.name}</p>
-                      <p className="">{admin.email}</p>
+                      <p className="font-medium">{admin.name}</p>
+                      <p className="text-xs text-gray-500">{admin.email}</p>
                     </div>
                   </div>
                 ))}

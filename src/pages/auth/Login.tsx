@@ -49,13 +49,13 @@ function Login() {
         <div className="col-span-full lg:col-span-6">
           <div className="">
             <div className="mx-10 mt-10">
-              <Link to="/">
+              <div>
                 <img
                   src="https://img.logoipsum.com/243.svg"
                   className="w-36"
                   alt="logo admin panel"
                 />
-              </Link>
+              </div>
             </div>
             <div className="w-[26.5rem] mx-auto mt-24 mb-40">
               <h3 className="font-bold text-8 mb-6 text-center">
