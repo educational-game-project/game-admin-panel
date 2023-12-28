@@ -1,7 +1,17 @@
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
 import { Share2Icon } from 'lucide-react';
+import { useResponsiveLayout } from './context/ResponsiveContext';
+import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
+import { desktopIcon } from './assets/img';
+
 import Layout from './common/Layout';
+import AuthMiddleware from './common/middleware/AuthMiddleware';
+import ProtectedMiddleware from './common/middleware/ProtectedMiddleware';
+import AutoTopProvider from './components/AutoTopProvider';
+import ToastProvider from './components/ToastProvider';
+import ButtonClipboard from './components/ButtonClipboard';
+
 import Home from './pages/Home';
 import Students from './pages/Students';
 import Score from './pages/Score';
@@ -11,14 +21,6 @@ import Support from './pages/Support';
 import Profile from './pages/Profile';
 import ErrorPage from './pages/Error';
 import Login from './pages/Auth/Login';
-import AutoTopProvider from './components/AutoTopProvider';
-import ToastProvider from './components/ToastProvider';
-import { useResponsiveLayout } from './context/ResponsiveContext';
-import { desktopIcon } from './assets/img';
-
-import 'react-toastify/dist/ReactToastify.min.css';
-import ButtonClipboard from './components/ButtonClipboard';
-import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
 import EditStudent from './pages/Students/EditStudent';
 import AddStudent from './pages/Students/AddStudent';
 import Admin from './pages/Admin';
@@ -28,6 +30,8 @@ import EditSchool from './pages/School/EditSchool';
 import DetailSchool from './pages/School/DetailSchool';
 import AddAdmin from './pages/Admin/AddAdmin';
 import EditAdmin from './pages/Admin/EditAdmin';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function App() {
   const isDesktopView = useResponsiveLayout();
@@ -49,76 +53,80 @@ function App() {
                 <Route
                   path="/"
                   element={<Layout />}>
-                  <Route
-                    index
-                    element={<Home />}
-                  />
-                  <Route
-                    path="/admin"
-                    element={<Admin />}
-                  />
-                  <Route
-                    path="/admin/add"
-                    element={<AddAdmin />}
-                  />
-                  <Route
-                    path="/admin/edit/:adminId"
-                    element={<EditAdmin />}
-                  />
-                  <Route
-                    path="/school"
-                    element={<School />}
-                  />
-                  <Route
-                    path="/school/add"
-                    element={<AddSchool />}
-                  />
-                  <Route
-                    path="/school/edit/:schoolId"
-                    element={<EditSchool />}
-                  />
-                  <Route
-                    path="/school/:schoolId"
-                    element={<DetailSchool />}
-                  />
-                  <Route
-                    path="/student"
-                    element={<Students />}
-                  />
-                  <Route
-                    path="/student/add"
-                    element={<AddStudent />}
-                  />
-                  <Route
-                    path="/student/edit/:studentId"
-                    element={<EditStudent />}
-                  />
-                  <Route
-                    path="/score"
-                    element={<Score />}
-                  />
-                  <Route
-                    path="/analysis"
-                    element={<Analysis />}
-                  />
-                  <Route
-                    path="/preferences"
-                    element={<Preferences />}
-                  />
-                  <Route
-                    path="/support"
-                    element={<Support />}
-                  />
-                  <Route
-                    path="/profile"
-                    element={<Profile />}
-                  />
+                  <Route element={<ProtectedMiddleware />}>
+                    <Route
+                      index
+                      element={<Home />}
+                    />
+                    <Route
+                      path="/admin"
+                      element={<Admin />}
+                    />
+                    <Route
+                      path="/admin/add"
+                      element={<AddAdmin />}
+                    />
+                    <Route
+                      path="/admin/edit/:adminId"
+                      element={<EditAdmin />}
+                    />
+                    <Route
+                      path="/school"
+                      element={<School />}
+                    />
+                    <Route
+                      path="/school/add"
+                      element={<AddSchool />}
+                    />
+                    <Route
+                      path="/school/edit/:schoolId"
+                      element={<EditSchool />}
+                    />
+                    <Route
+                      path="/school/:schoolId"
+                      element={<DetailSchool />}
+                    />
+                    <Route
+                      path="/student"
+                      element={<Students />}
+                    />
+                    <Route
+                      path="/student/add"
+                      element={<AddStudent />}
+                    />
+                    <Route
+                      path="/student/edit/:studentId"
+                      element={<EditStudent />}
+                    />
+                    <Route
+                      path="/score"
+                      element={<Score />}
+                    />
+                    <Route
+                      path="/analysis"
+                      element={<Analysis />}
+                    />
+                    <Route
+                      path="/preferences"
+                      element={<Preferences />}
+                    />
+                    <Route
+                      path="/support"
+                      element={<Support />}
+                    />
+                    <Route
+                      path="/profile"
+                      element={<Profile />}
+                    />
+                  </Route>
                 </Route>
                 {/* routes without layout */}
-                <Route
-                  path="/login"
-                  element={<Login />}
-                />
+                <Route element={<AuthMiddleware />}>
+                  <Route
+                    path="/login"
+                    element={<Login />}
+                  />
+                </Route>
                 {/* not exist routes */}
                 <Route
                   path="*"
