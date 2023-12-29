@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
-import { showDefaultToast } from '../../components/Toast';
+import { showDefaultToast, showErrorToast } from '../../components/Toast';
 
 import { appleIcon, googleIcon } from '../../assets/img';
+import { useLoginMutation } from '../../services/auth';
+import { setAuth } from './features/authSlice';
 
 interface LoginFormProps {
   email: string;
@@ -22,6 +24,7 @@ const schema = yup.object().shape({
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [login] = useLoginMutation();
 
   const {
     register,
@@ -38,10 +41,22 @@ function Login() {
 
   const onLogin: SubmitHandler<LoginFormProps> = async (data) => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    console.log(data);
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    // console.log(data);
+
+    try {
+      console.log(data);
+      const result = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+      setAuth(result.data);
+      showDefaultToast('Login success!');
+    } catch (error) {
+      console.error('Login failed:', error);
+      showErrorToast('Login failed!');
+    }
     setIsLoading(false);
-    showDefaultToast('Login success!');
   };
 
   return (
