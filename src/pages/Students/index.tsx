@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import Breadcrumbs from '../../components/Breadcrumbs';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
-import { PlusIcon, UserSquare2 } from 'lucide-react';
-import StudentsTable from '../../components/Table/StudentsTable';
 import { Link } from 'react-router-dom';
+import { PlusIcon, UserSquare2 } from 'lucide-react';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import StudentsTable from './components/StudentsTable';
 
 function Students() {
   const { setBreadcrumbs } = useBreadcrumbs();

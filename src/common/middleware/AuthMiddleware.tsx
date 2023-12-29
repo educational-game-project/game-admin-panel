@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
 function AuthMiddleware() {
-  const token = true;
+  const token = import.meta.env.VITE_AUTH_TOKEN ? true : false;
 
   return (
     <>

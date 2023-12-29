@@ -1,5 +1,4 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import {
   Headphones,
   HomeIcon,
@@ -10,7 +9,8 @@ import {
   UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
-import { useSidebar } from '../context/SidebarContext';
+import { useSidebar } from '../hook/sidebarHooks';
+import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
 
 function Layout() {

@@ -1,3 +1,5 @@
+import { ReactNode, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   MoreVertical,
   ChevronLast,
@@ -6,9 +8,7 @@ import {
   Activity,
   LogOut,
 } from 'lucide-react';
-import { ReactNode, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSidebar } from '../context/SidebarContext';
+import { useSidebar } from '../hook/sidebarHooks';
 
 type SidebarItemProps = {
   icon: ReactNode;

@@ -1,11 +1,10 @@
 import {
   Dispatch,
   createContext,
-  useContext,
   useState,
   ReactNode,
   SetStateAction,
-} from "react";
+} from 'react';
 
 type BreadcrumbsProviderProps = {
   children: ReactNode;
@@ -20,9 +19,9 @@ interface BreadcrumbsContextProps {
   setBreadcrumbs: Dispatch<SetStateAction<BreadcrumbsProps[]>>;
 }
 
-const BreadcrumbsContext = createContext<BreadcrumbsContextProps | undefined>(
-  undefined
-);
+export const BreadcrumbsContext = createContext<
+  BreadcrumbsContextProps | undefined
+>(undefined);
 
 export const BreadcrumbsProvider = ({ children }: BreadcrumbsProviderProps) => {
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbsProps[]>([]);
@@ -32,12 +31,4 @@ export const BreadcrumbsProvider = ({ children }: BreadcrumbsProviderProps) => {
       {children}
     </BreadcrumbsContext.Provider>
   );
-};
-
-export const useBreadcrumbs = () => {
-  const context = useContext(BreadcrumbsContext);
-  if (context === undefined) {
-    throw new Error("useBreadcrumbs must be used within a BreadcrumbsProvider");
-  }
-  return context;
 };

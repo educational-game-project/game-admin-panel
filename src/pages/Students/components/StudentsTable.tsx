@@ -1,6 +1,5 @@
 import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
-import studentData from '../../data/STUDENT_DATA.json';
-import { StudentProps } from '../../interfaces/api';
+import { Link } from 'react-router-dom';
 import {
   SortingState,
   createColumnHelper,
@@ -21,8 +20,10 @@ import {
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import AlertDelete from '../AlertDialog/AlertDelete';
+import AlertDelete from '../../../components/AlertDialog/AlertDelete';
+import { StudentProps } from '../../../types/api';
+
+import studentData from '../../../data/STUDENT_DATA.json';
 
 function IndeterminateCheckbox({
   indeterminate,

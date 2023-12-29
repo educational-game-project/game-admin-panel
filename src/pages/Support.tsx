@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { useBreadcrumbs } from "../context/BreadcrumbsContext";
-import Breadcrumbs from "../components/Breadcrumbs";
-import { Headphones } from "lucide-react";
+import { useEffect } from 'react';
+import { Headphones } from 'lucide-react';
+import { useBreadcrumbs } from '../hook/breadcrumbHooks';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 function Support() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -9,9 +9,14 @@ function Support() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: <Headphones size={16} className="mr-1.5" />,
-        label: "Support",
-        path: "/support",
+        icon: (
+          <Headphones
+            size={16}
+            className="mr-1.5"
+          />
+        ),
+        label: 'Support',
+        path: '/support',
       },
     ]);
   }, [setBreadcrumbs]);

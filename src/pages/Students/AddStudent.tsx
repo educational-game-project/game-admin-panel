@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useBreadcrumbs } from '../../context/BreadcrumbsContext';
-import Breadcrumbs from '../../components/Breadcrumbs';
 import {
   ChevronDownIcon,
   Loader2Icon,
@@ -9,6 +7,8 @@ import {
   UserSquare2,
   UserPlusIcon,
 } from 'lucide-react';
+import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 function AddStudent() {
   const { setBreadcrumbs } = useBreadcrumbs();

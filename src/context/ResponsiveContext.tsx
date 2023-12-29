@@ -1,15 +1,9 @@
-import {
-  createContext,
-  useEffect,
-  useState,
-  useContext,
-  ReactNode,
-} from "react";
+import { createContext, useEffect, useState, ReactNode } from 'react';
 
 type ResponsiveProviderProps = {
   children: ReactNode;
 };
-const ResponsiveContext = createContext<boolean | undefined>(undefined);
+export const ResponsiveContext = createContext<boolean | undefined>(undefined);
 
 export const ResponsiveProvider = ({ children }: ResponsiveProviderProps) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
@@ -21,10 +15,10 @@ export const ResponsiveProvider = ({ children }: ResponsiveProviderProps) => {
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     // Clean up the event listener when the component unmounts
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -34,13 +28,3 @@ export const ResponsiveProvider = ({ children }: ResponsiveProviderProps) => {
     </ResponsiveContext.Provider>
   );
 };
-
-export function useResponsiveLayout() {
-  const context = useContext(ResponsiveContext);
-  if (context === undefined) {
-    throw new Error(
-      "useResponsiveLayout must be used within a ResponsiveProvider"
-    );
-  }
-  return context;
-}
