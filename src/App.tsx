@@ -20,7 +20,7 @@ import Preferences from "./pages/Preferences";
 import Support from "./pages/Support";
 import Profile from "./pages/Profile";
 import ErrorPage from "./pages/Error";
-import Login from "./pages/auth1/Login";
+import Login from "./pages/Auth/Login";
 import EditStudent from "./pages/Students/EditStudent";
 import AddStudent from "./pages/Students/AddStudent";
 import Admin from "./pages/Admin";
