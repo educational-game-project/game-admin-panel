@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from '../pages/Auth/features/authSlice';
+import authSlice from '../pages/Ats/features/authSlice';
 import { authApi } from '../services/auth';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
