@@ -1,35 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { LoginSuccessResponse } from '../types/api';
 
 interface LoginCredential {
   email: string;
   password: string;
-}
-
-interface UserProps {
-  _id: string;
-  name: string;
-  role: string;
-  email: string;
-  phoneNumber: string;
-  images: string[];
-  school: string;
-}
-
-interface TokenProps {
-  accessToken: string;
-  refreshToken: string;
-}
-
-interface LoginSuccessResponse {
-  status_code: number;
-  success: true;
-  status: 'success';
-  message: 'auth_login_success';
-  server_time: string;
-  data: {
-    user: UserProps;
-    tokens: TokenProps;
-  };
 }
 
 export const authApi = createApi({
