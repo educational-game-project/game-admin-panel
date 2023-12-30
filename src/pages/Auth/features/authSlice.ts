@@ -11,11 +11,11 @@ export const authSlice = createSlice({
     setAuth: (state, action) => {
       state.user = action.payload;
     },
-    setUnauth: (state) => {
+    setUnAuth: (state) => {
       state.user = null;
     },
   },
 });
 
-export const { setAuth, setUnauth } = authSlice.actions;
+export const { setAuth, setUnAuth } = authSlice.actions;
 export default authSlice.reducer;

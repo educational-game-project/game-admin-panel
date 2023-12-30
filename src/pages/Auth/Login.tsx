@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
+import { useLoginMutation } from '../../services/auth';
+import { setAuth } from './features/authSlice';
 import { showDefaultToast, showErrorToast } from '../../components/Toast';
 
 import { appleIcon, googleIcon } from '../../assets/img';
-import { useLoginMutation } from '../../services/auth';
-import { setAuth } from './features/authSlice';
 
 interface LoginFormProps {
   email: string;
