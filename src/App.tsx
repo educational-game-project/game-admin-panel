@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
 import { Share2Icon } from 'lucide-react';
 import { useResponsiveLayout } from './hook/responsiveHoks';
@@ -130,6 +130,15 @@ function App() {
                 {/* not exist routes */}
                 <Route
                   path="*"
+                  element={
+                    <Navigate
+                      to="/404"
+                      replace
+                    />
+                  }
+                />
+                <Route
+                  path="/404"
                   element={<ErrorPage />}
                 />
               </Routes>
