@@ -2,7 +2,7 @@
 FROM node:18.18.2-alpine AS builder
 
 # Declaring env
-ENV NODE_ENV production
+ENV NODE_ENV development
 
 # Setting up the work directory
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN yarn build
 
 FROM nginx
 
-ENV NODE_ENV production
+ENV NODE_ENV development
 # Copying built assets from builder
 COPY --from=builder /app/build /usr/share/nginx/html
 
