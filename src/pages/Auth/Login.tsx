@@ -8,7 +8,7 @@ import { useLoginMutation } from "../../services/auth";
 import { setAuth } from "./features/authSlice";
 import { showDefaultToast, showErrorToast } from "../../components/Toast";
 
-import { appleIcon, googleIcon } from "../../assets/img";
+// import { appleIcon, googleIcon } from "../../assets/img";
 
 interface LoginFormProps {
   email: string;
@@ -81,31 +81,6 @@ function Login() {
                 Masuk dengan akun yang telah terdaftar. Kelola siswa dan
                 permainan dengan mudah.
               </p>
-              <div className="grid grid-cols-4 gap-4 mb-6">
-                <div className="col-span-2">
-                  <button
-                    className="flex items-center px-4 py-3 rounded-lg border border-gray-300 text-left w-full transition-all-200 hover:bg-indigo-50 hover:border-indigo-400 cursor-not-allowed"
-                    title="with Google account"
-                  >
-                    <img src={googleIcon} alt="google logo" className="h-5" />
-                    <p className="ml-2">Sign In with Google</p>
-                  </button>
-                </div>
-                <div className="col-span-2">
-                  <button
-                    className="flex items-center px-4 py-3 rounded-lg border border-gray-300 text-left w-full transition-all-200 hover:bg-indigo-50 hover:border-indigo-400 cursor-not-allowed"
-                    title="with Apple account"
-                  >
-                    <img src={appleIcon} alt="apple logo" className="h-5" />
-                    <p className="ml-2">Sign In with Apple</p>
-                  </button>
-                </div>
-              </div>
-              <div className="text-center text-gray-400 relative mb-6">
-                Atau dengan email
-                <span className="absolute w-1/3 left-0 h-px bg-gray-200 top-1/2" />
-                <span className="absolute w-1/3 right-0 h-px bg-gray-200 top-1/2" />
-              </div>
               <form onSubmit={handleSubmit(onLogin)}>
                 <div className="mb-4">
                   <input
