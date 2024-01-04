@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useEffect, useState, ReactNode } from "react";
 
 type ResponsiveProviderProps = {
   children: ReactNode;
@@ -15,10 +15,10 @@ export const ResponsiveProvider = ({ children }: ResponsiveProviderProps) => {
   };
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     // Clean up the event listener when the component unmounts
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 

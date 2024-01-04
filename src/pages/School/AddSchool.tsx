@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   CopyPlusIcon,
   Loader2Icon,
   SchoolIcon,
   UploadCloudIcon,
-} from 'lucide-react';
-import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
-import Breadcrumbs from '../../components/Breadcrumbs';
+} from "lucide-react";
+import { useBreadcrumbs } from "../../hook/breadcrumbHooks";
+import Breadcrumbs from "../../components/Breadcrumbs";
 
 function AddSchool() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -23,24 +23,14 @@ function AddSchool() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: (
-          <SchoolIcon
-            size={16}
-            className="mr-1.5"
-          />
-        ),
-        label: 'School',
-        path: '/school',
+        icon: <SchoolIcon size={16} className="mr-1.5" />,
+        label: "School",
+        path: "/school",
       },
       {
-        icon: (
-          <CopyPlusIcon
-            size={16}
-            className="mr-1.5"
-          />
-        ),
-        label: 'Add School',
-        path: '/school/add',
+        icon: <CopyPlusIcon size={16} className="mr-1.5" />,
+        label: "Add School",
+        path: "/school/add",
       },
     ]);
   }, [setBreadcrumbs]);
@@ -61,17 +51,19 @@ function AddSchool() {
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 ${
                 isLoadingSave
-                  ? 'opacity-50 cursor-not-allowed bg-gray-200'
-                  : 'bg-gray-50 hover:bg-gray-100'
+                  ? "opacity-50 cursor-not-allowed bg-gray-200"
+                  : "bg-gray-50 hover:bg-gray-100"
               }`}
-              to="/school">
+              to="/school"
+            >
               Kembali
             </Link>
             <button
               type="button"
               className="leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent bg-violet-600 px-6 py-3 text-sm font-medium text-gray-100 hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2"
               disabled={isLoadingSave}
-              onClick={handleSubmit}>
+              onClick={handleSubmit}
+            >
               {isLoadingSave ? (
                 <>
                   <span className="translate-y-[1px]">
@@ -83,7 +75,7 @@ function AddSchool() {
                   <span>Menyimpan...</span>
                 </>
               ) : (
-                'Simpan'
+                "Simpan"
               )}
             </button>
           </div>
@@ -101,14 +93,13 @@ function AddSchool() {
               </p>
             </div>
             <div className="p-5">
-              <form
-                action=""
-                className="block">
+              <form action="" className="block">
                 {/* name */}
                 <div className="mb-4">
                   <label
                     htmlFor="name"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500"
+                  >
                     Nama Sekolah
                   </label>
                   <input
@@ -124,7 +115,8 @@ function AddSchool() {
                 <div className="mb-4">
                   <label
                     htmlFor="address"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500"
+                  >
                     Alamat
                   </label>
                   <textarea
@@ -148,9 +140,7 @@ function AddSchool() {
               </p>
             </div>
             <div className="p-5">
-              <form
-                action=""
-                className="block">
+              <form action="" className="block">
                 <input
                   id="profileImg"
                   name="profileImg"
@@ -159,17 +149,15 @@ function AddSchool() {
                 />
                 <div className="cursor-pointer w-full p-4 border-2 border-dashed border-gray-300 rounded-md flex flex-col justify-center items-center">
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-50 mt-1 mb-4">
-                    <UploadCloudIcon
-                      size={24}
-                      className="text-gray-500"
-                    />
+                    <UploadCloudIcon size={24} className="text-gray-500" />
                   </div>
                   <p className="text-gray-500">
                     <label
                       className="inline-block text-violet-500 cursor-pointer hover:underline underline-offset-2"
-                      htmlFor="profileImg">
+                      htmlFor="profileImg"
+                    >
                       Click to upload
-                    </label>{' '}
+                    </label>{" "}
                     or drag and drop
                   </p>
                   <p className="text-gray-500">

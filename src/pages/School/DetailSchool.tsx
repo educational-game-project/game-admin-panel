@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { MousePointerSquareIcon, SchoolIcon } from 'lucide-react';
-import { useBreadcrumbs } from '../../hook/breadcrumbHooks';
-import Breadcrumbs from '../../components/Breadcrumbs';
-import { SchoolProps } from '../../types/api';
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { MousePointerSquareIcon, SchoolIcon } from "lucide-react";
+import { useBreadcrumbs } from "../../hook/breadcrumbHooks";
+import Breadcrumbs from "../../components/Breadcrumbs";
+import { SchoolProps } from "../../types/api";
 
-import schoolData from '../../data/SCHOOL_DATA.json';
+import schoolData from "../../data/SCHOOL_DATA.json";
 
 function DetailSchool() {
   const { schoolId } = useParams();
@@ -15,23 +15,13 @@ function DetailSchool() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: (
-          <SchoolIcon
-            size={16}
-            className="mr-1.5"
-          />
-        ),
-        label: 'School',
-        path: '/school',
+        icon: <SchoolIcon size={16} className="mr-1.5" />,
+        label: "School",
+        path: "/school",
       },
       {
-        icon: (
-          <MousePointerSquareIcon
-            size={16}
-            className="mr-1.5"
-          />
-        ),
-        label: 'Detail School',
+        icon: <MousePointerSquareIcon size={16} className="mr-1.5" />,
+        label: "Detail School",
         path: `/school/${schoolId}`,
       },
     ]);
@@ -54,7 +44,8 @@ function DetailSchool() {
             <Link
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 `}
-              to="/school">
+              to="/school"
+            >
               Kembali
             </Link>
           </div>
@@ -72,14 +63,13 @@ function DetailSchool() {
               </p>
             </div>
             <div className="p-5">
-              <form
-                action=""
-                className="block">
+              <form action="" className="block">
                 {/* name */}
                 <div className="mb-4">
                   <label
                     htmlFor="name"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500"
+                  >
                     Nama Sekolah
                   </label>
                   <input
@@ -97,7 +87,8 @@ function DetailSchool() {
                 <div className="mb-4">
                   <label
                     htmlFor="address"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500"
+                  >
                     Alamat
                   </label>
                   <textarea

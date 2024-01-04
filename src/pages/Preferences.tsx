@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { Settings } from 'lucide-react';
-import { useBreadcrumbs } from '../hook/breadcrumbHooks';
-import Breadcrumbs from '../components/Breadcrumbs';
+import { useEffect } from "react";
+import { Settings } from "lucide-react";
+import { useBreadcrumbs } from "../hook/breadcrumbHooks";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 function Preferences() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -9,14 +9,9 @@ function Preferences() {
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: (
-          <Settings
-            size={16}
-            className="mr-1.5"
-          />
-        ),
-        label: 'Preferences',
-        path: '/preferences',
+        icon: <Settings size={16} className="mr-1.5" />,
+        label: "Preferences",
+        path: "/preferences",
       },
     ]);
   }, [setBreadcrumbs]);
