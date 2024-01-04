@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.head_commit.message, '#build') }}
     steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        
       - name: Get Short SHA
         id: vars
         shell: bash
