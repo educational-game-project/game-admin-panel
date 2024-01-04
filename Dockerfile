@@ -17,7 +17,7 @@ RUN yarn build
 FROM nginx
 
 ENV NODE_ENV development
-# Copying built assets from builderR
+# Copying built assets from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copying our nginx.conf
