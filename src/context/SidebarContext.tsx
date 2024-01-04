@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext, useState } from "react";
 
 type SidebarProviderProps = {
   children: ReactNode;
@@ -22,7 +22,8 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
       value={{
         expanded,
         sidebarToggle,
-      }}>
+      }}
+    >
       {children}
     </SidebarContext.Provider>
   );

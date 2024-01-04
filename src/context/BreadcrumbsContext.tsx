@@ -4,7 +4,7 @@ import {
   useState,
   ReactNode,
   SetStateAction,
-} from 'react';
+} from "react";
 
 type BreadcrumbsProviderProps = {
   children: ReactNode;
