@@ -34,7 +34,10 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       - id: env-url
         name: get api url from secret
-        run: echo ${{ secrets.API_URL }} > .env
+        run: |
+          echo ${{ secrets.API_URL }} > .env
+          echo ${{ secrets.VITE_AUTH_TOKEN }} >> .env
+        
       - id: build
         name: Build and push
         uses: docker/build-push-action@v5
