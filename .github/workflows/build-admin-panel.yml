@@ -3,12 +3,12 @@ name: Game Admin Panel
 on:
   push:
     branches:
-    - main
+      - main
   workflow_dispatch:
     branches:
-    - main
-    - game-admin-panel 
-    
+      - main
+      - game-admin-panel
+
 jobs:
   build-image:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
         run: |
           calculatedSha=$(git rev-parse --short ${{ github.sha }})
           echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
-    
+
       - name: Confirm git commit SHA output
         run: echo ${{ env.COMMIT_SHORT_SHA }}
 
@@ -44,7 +44,7 @@ jobs:
         run: |
           echo ${{ secrets.API_URL }} > .env
           echo ${{ secrets.VITE_AUTH_TOKEN }} >> .env
-        
+
       - id: build
         name: Build and push
         uses: docker/build-push-action@v5
@@ -59,7 +59,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-        
+
       - name: Get Short SHA
         id: vars
         shell: bash
@@ -69,19 +69,19 @@ jobs:
 
       - name: Deploy in VM
         env:
-            PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-            HOSTNAME : ${{ secrets.VM_HOST }}
-            USER_NAME : ${{ secrets.VM_USERNAME }}
-            port: ${{ secrets.VM_PORT }}
-            DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-            SHORT_SHA: ${{ env.COMMIT_SHORT_SHA }}
-            # passphrase: ${{ secrets.SSH_PASSPHRASE }}
-            
+          PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+          HOSTNAME: ${{ secrets.VM_HOST }}
+          USER_NAME: ${{ secrets.VM_USERNAME }}
+          port: ${{ secrets.VM_PORT }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          SHORT_SHA: ${{ env.COMMIT_SHORT_SHA }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
+
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} -p $port '
-            cd /home/${USER_NAME}/game &&
+            cd /home/${{ secrets.VM_USERNAME }}/game &&
             ls -al &&
             echo ${{ secrets.DOCKER_TOKEN }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin &&
             docker pull thelogoreng/api:game-panel-${{ env.COMMIT_SHORT_SHA }} &&
