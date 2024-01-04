@@ -87,7 +87,19 @@ function App() {
                   <Route path="/login" element={<Login />} />
                 </Route>
                 {/* not exist routes */}
-                <Route path="*" element={<ErrorPage />} />
+                <Route
+                  path="*"
+                  element={
+                    <Navigate
+                      to="/404"
+                      replace
+                    />
+                  }
+                />
+                <Route
+                  path="/404"
+                  element={<ErrorPage />}
+                />
               </Routes>
             </ToastProvider>
           </BreadcrumbsProvider>
