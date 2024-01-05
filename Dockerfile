@@ -14,7 +14,7 @@ RUN yarn install
 COPY . .
 RUN yarn build
 
-CMD ["yarn", "build"]
+CMD ["yarn", "dev"]
 # FROM nginx
 
 # ENV NODE_ENV development
