@@ -42,8 +42,8 @@ jobs:
       - id: env-url
         name: get api url from secret
         run: |
-          echo ${{ secrets.API_URL }} > .env
-          echo ${{ secrets.VITE_AUTH_TOKEN }} >> .env
+          echo "VITE_API_URL=${{ secrets.API_URL }}" > .env
+          echo "VITE_AUTH_TOKEN=${{ secrets.VITE_AUTH_TOKEN }}" >> .env
           cat .env
 
       - id: build
