@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
+import images from '../assets/img';
 
 function ErrorPage() {
   return (
-    <div className="w-full container max-w-7xl mx-auto h-full min-h-screen">
+    <div
+      className="w-full container max-w-7xl mx-auto h-full min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${images.bgError})` }}>
       <div className="w-full flex justify-center pt-24 pb-4">
         <img
           src="https://img.logoipsum.com/243.svg"
@@ -11,7 +14,7 @@ function ErrorPage() {
         />
       </div>
       <div className="w-full h-full min-h-[calc(100vh-153px)] flex items-center justify-center">
-        <div className="text-center max-w-[450px] mb-6">
+        <div className="text-center max-w-[450px] mb-12">
           <p className="text-3xl mb-5">😞</p>
           <h5 className="font-bold text-4xl mb-6">Ooups, page not found</h5>
           <p className="text-gray-600 mb-6">
