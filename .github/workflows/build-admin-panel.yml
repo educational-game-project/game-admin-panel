@@ -1,5 +1,5 @@
 name: Game Admin Panel
-# test
+# testot
 on:
   push:
     branches:
