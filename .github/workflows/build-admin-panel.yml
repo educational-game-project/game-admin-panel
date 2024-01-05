@@ -44,6 +44,7 @@ jobs:
         run: |
           echo ${{ secrets.API_URL }} > .env
           echo ${{ secrets.VITE_AUTH_TOKEN }} >> .env
+          cat .env
 
       - id: build
         name: Build and push
