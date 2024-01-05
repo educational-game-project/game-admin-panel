@@ -81,7 +81,7 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} -p $port '
-            cd /home/${{ secrets.VM_USERNAME }}/game &&
+            cd /home/${{ secrets.VM_USERNAME }}/panel &&
             ls -al &&
             echo ${{ secrets.DOCKER_TOKEN }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin &&
             docker pull thelogoreng/api:game-panel-${{ env.COMMIT_SHORT_SHA }} &&
