@@ -1,4 +1,4 @@
-# Fetching the latest node image on apline linux
+# Fetching the latest node image on apline linuxx
 FROM node:18.18.2-alpine AS builder
 
 # Declaring env
