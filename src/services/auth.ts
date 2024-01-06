@@ -1,6 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { LoginSuccessResponse } from '../types/api';
 
+const BASE_URL =
+  import.meta.env.VITE_MODE === 'development'
+    ? import.meta.env.VITE_API_DEV_URL
+    : import.meta.env.VITE_API_URL;
+
 interface LoginCredential {
   email: string;
   password: string;
@@ -9,8 +14,7 @@ interface LoginCredential {
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
-    // baseUrl: 'http://34.87.161.233:3000/admin',
+    baseUrl: BASE_URL,
   }),
   endpoints: (builder) => ({
     login: builder.mutation<LoginSuccessResponse, LoginCredential>({
