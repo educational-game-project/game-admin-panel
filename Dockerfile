@@ -14,11 +14,12 @@ RUN yarn install
 COPY . .
 RUN yarn build
 
-FROM nginx
+CMD ["yarn", "dev"]
+# FROM nginx
 
-ENV NODE_ENV development
-# Copying built assets from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
+# ENV NODE_ENV development
+# # Copying built assets from builder
+# COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copying our nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# # Copying our nginx.conf
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
