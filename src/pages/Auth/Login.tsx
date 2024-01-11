@@ -7,7 +7,7 @@ import { CheckIcon, Eye, EyeOff } from "lucide-react";
 import { useLoginMutation } from "../../services/auth";
 import { setAuth } from "./features/authSlice";
 import { showDefaultToast, showErrorToast } from "../../components/Toast";
-import axios from "axios";
+// import axios from 'axios';
 
 interface LoginFormProps {
   email: string;
@@ -15,10 +15,10 @@ interface LoginFormProps {
   remember?: boolean;
 }
 
-const BASE_URL =
-  import.meta.env.VITE_MODE === "development"
-    ? import.meta.env.VITE_API_DEV_URL
-    : import.meta.env.VITE_API_URL;
+// const BASE_URL =
+//   import.meta.env.VITE_MODE === 'development'
+//     ? import.meta.env.VITE_API_DEV_URL
+//     : import.meta.env.VITE_API_URL;
 
 const schema = yup.object().shape({
   email: yup.string().required("Email harus diisi").email("Email tidak valid"),
@@ -45,20 +45,20 @@ function Login() {
 
   const onLogin: SubmitHandler<LoginFormProps> = async (data) => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    console.log(data);
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    // console.log(data);
 
-    try {
-      const result = await axios.post(`${BASE_URL}/auth/login`, {
-        email: data.email,
-        password: data.password,
-      });
-      showDefaultToast("Login success!");
-      console.log(result.data);
-    } catch (error) {
-      console.log(error);
-      showErrorToast("Login failed!");
-    }
+    // try {
+    //   const result = await axios.post(`${BASE_URL}/auth/login`, {
+    //     email: data.email,
+    //     password: data.password,
+    //   });
+    //   showDefaultToast('Login success!');
+    //   console.log(result.data);
+    // } catch (error) {
+    //   console.log(error);
+    //   showErrorToast('Login failed!');
+    // }
 
     try {
       console.log(data);
