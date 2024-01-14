@@ -45,7 +45,6 @@ jobs:
           echo "VITE_MODE=development" >> .env
           echo "VITE_API_URL=http://34.87.161.233:3000/admin" > .env
           echo "VITE_API_DEV_URL=http://localhost:3000/admin" >> .env
-          echo "VITE_AUTH_TOKEN=" >> .env
           cat .env
 
       - id: build
