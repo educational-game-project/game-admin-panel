@@ -1,7 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useToken } from '../../hook/authHooks';
 
 function ProtectedMiddleware() {
-  const token = import.meta.env.VITE_AUTH_TOKEN ? true : false;
+  const { token } = useToken();
 
   return (
     <>

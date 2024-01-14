@@ -1,9 +1,21 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from 'react-router-dom';
+import { useToken } from '../../hook/authHooks';
 
 function AuthMiddleware() {
-  const token = import.meta.env.VITE_AUTH_TOKEN ? true : false;
+  const { token } = useToken();
 
-  return <>{token ? <Navigate to="/" replace /> : <Outlet />}</>;
+  return (
+    <>
+      {token ? (
+        <Navigate
+          to="/"
+          replace
+        />
+      ) : (
+        <Outlet />
+      )}
+    </>
+  );
 }
 
 export default AuthMiddleware;

@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
 import { useLoginMutation } from '../../services/auth';
 import { setAuth } from './features/authSlice';
-import { showDefaultToast, showErrorToast } from '../../components/Toast';
+import { showErrorToast } from '../../components/Toast';
 
-import { LoginFormProps } from './type';
+import { LoginRequest } from '../../types';
+import { useAppDispatch } from '../../app/hooks';
 
 const schema = yup.object().shape({
   email: yup.string().required('Email harus diisi').email('Email tidak valid'),
@@ -17,6 +18,8 @@ const schema = yup.object().shape({
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
 
   const {
@@ -25,32 +28,21 @@ function Login() {
     handleSubmit,
     setValue,
     watch,
-  } = useForm<LoginFormProps>({
+  } = useForm<LoginRequest>({
     mode: 'onTouched',
     resolver: yupResolver(schema),
   });
 
   const rememberVal = watch('remember', false);
 
-  const onLogin: SubmitHandler<LoginFormProps> = async (data) => {
+  const onLogin: SubmitHandler<LoginRequest> = async (data) => {
     try {
-      const result = await login({
-        email: data.email,
-        password: data.password,
-      }).unwrap();
-      console.log(
-        '🚀 ~ constonLogin:SubmitHandler<LoginFormProps>= ~ result:',
-        result
-      );
-      setAuth(result.data);
-      showDefaultToast('Login sukses!');
+      const result = await login(data).unwrap();
+      dispatch(setAuth(result.data));
+      navigate('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(
-        '🚀 ~ constonLogin:SubmitHandler<LoginFormProps>= ~ error:',
-        error
-      );
-      if (error.data.message) {
+      if (error?.data?.message) {
         showErrorToast(error.data.message);
       } else {
         showErrorToast('Login gagal!');
@@ -117,13 +109,13 @@ function Login() {
                       {...register('password')}
                     />
                     {showPassword ? (
-                      <Eye
+                      <EyeOff
                         size={18}
                         className="absolute top-0 right-0 mt-4.5 mr-4 text-gray-400 cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
                       />
                     ) : (
-                      <EyeOff
+                      <Eye
                         size={18}
                         className="absolute top-0 right-0 mt-4.5 mr-4 text-gray-400 cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
