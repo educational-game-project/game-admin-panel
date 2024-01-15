@@ -4,14 +4,14 @@ import {
   useState,
   ReactNode,
   SetStateAction,
-} from "react";
+} from 'react';
 
 type BreadcrumbsProviderProps = {
   children: ReactNode;
 };
 interface BreadcrumbsProps {
   icon: ReactNode;
-  label: string;
+  label: string | undefined;
   path: string;
 }
 interface BreadcrumbsContextProps {

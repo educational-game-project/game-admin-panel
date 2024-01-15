@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   MoreVertical,
@@ -11,26 +11,15 @@ import {
 import { useSidebar } from '../hook/sidebarHooks';
 import { useAppDispatch } from '../app/hooks';
 import { setUnAuth } from '../pages/Auth/features/authSlice';
-
-type SidebarItemProps = {
-  icon: ReactNode;
-  text: string;
-  path: string;
-  active: boolean;
-  alert: boolean;
-};
-type SidebarProps = {
-  children: ReactNode;
-  currentPath: string;
-};
-type SeparateSidebarProps = {
-  caption: string;
-};
+import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
+import { useAuth } from '../hook/authHooks';
+import { transformStringPlus } from '../utilities/stringUtils';
 
 export default function Sidebar({ children, currentPath }: SidebarProps) {
   const { expanded, sidebarToggle } = useSidebar();
   const [profileToggle, setProfileToggle] = useState(false);
   const dispatch = useAppDispatch();
+  const { user } = useAuth();
 
   const handleLogout = () => {
     setProfileToggle(false);
@@ -68,8 +57,10 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             className="flex p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-all-200 text-left group"
             onClick={() => setProfileToggle((curr) => !curr)}>
             <img
-              src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=Iwan+Suryaningrat"
-              alt="iwan suryaningrat profile"
+              src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
+                user?.name
+              )}`}
+              alt={`${user?.name} profile`}
               className={`${
                 expanded ? 'w-10 h-10' : 'w-9 h-9'
               } rounded-full object-cover object-center`}
@@ -81,10 +72,10 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           `}>
               <div className="leading-4 max-w-[10rem]">
                 <h4 className="font-semibold mb-0.5 text-sm line-clamp-1 text-ellipsis">
-                  Iwan Suryaningrat
+                  {user?.name}
                 </h4>
                 <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis">
-                  iwansuryaningrat@gmail.com
+                  {user?.email}
                 </span>
               </div>
               <div title="Profile Preference">
@@ -101,7 +92,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             profileToggle ? 'hidden' : 'block'
           }
       `}>
-                Iwan Suryaningrat
+                {user?.name}
                 <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent" />
               </div>
             )}
@@ -117,14 +108,16 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-100">
             <div className="flex">
               <img
-                src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=Iwan+Suryaningrat"
-                alt="iwan suryaningrat profile"
+                src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
+                  user?.name
+                )}`}
+                alt={`${user?.name} profile`}
                 className="w-9 h-9 rounded-full object-cover object-center"
               />
               <div className="flex justify-between items-center overflow-hidden transition-all ml-2">
                 <div className="leading-4">
                   <h4 className="font-semibold mb-0.5 text-3.25xs line-clamp-1 text-ellipsis">
-                    Iwan Suryaningrat
+                    {user?.name}
                   </h4>
                   <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis">
                     Administrator

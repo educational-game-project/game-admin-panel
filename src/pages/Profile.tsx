@@ -1,20 +1,27 @@
-import { useEffect } from "react";
-import { UserCircle2Icon } from "lucide-react";
-import Breadcrumbs from "../components/Breadcrumbs";
-import { useBreadcrumbs } from "../hook/breadcrumbHooks";
+import { useEffect } from 'react';
+import { UserCircle2Icon } from 'lucide-react';
+import Breadcrumbs from '../components/Breadcrumbs';
+import { useBreadcrumbs } from '../hook/breadcrumbHooks';
+import { useAuth } from '../hook/authHooks';
 
 function Profile() {
   const { setBreadcrumbs } = useBreadcrumbs();
+  const { user } = useAuth();
 
   useEffect(() => {
     setBreadcrumbs([
       {
-        icon: <UserCircle2Icon size={16} className="mr-1.5" />,
-        label: "Iwan Suryaningrat",
-        path: "/profile",
+        icon: (
+          <UserCircle2Icon
+            size={16}
+            className="mr-1.5"
+          />
+        ),
+        label: user?.name,
+        path: '/profile',
       },
     ]);
-  }, [setBreadcrumbs]);
+  }, [setBreadcrumbs, user]);
   return (
     <div className="">
       <div className="mb-6">
