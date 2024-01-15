@@ -3,7 +3,6 @@ import { useToken } from '../../hook/authHooks';
 
 function ProtectedMiddleware() {
   const { token } = useToken();
-
   return (
     <>
       {token ? (

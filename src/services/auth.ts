@@ -16,6 +16,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 export const authApi = createApi({
+  reducerPath: 'authApi',
   baseQuery,
   endpoints: (builder) => ({
     login: builder.mutation<LoginSuccessResponse, LoginRequest>({
