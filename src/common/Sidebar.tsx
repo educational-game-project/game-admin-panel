@@ -208,14 +208,14 @@ export function SidebarItem({
             className={`absolute right-2 text-2xs rounded-full text-center ${
               isExpanded
                 ? 'py-px px-1.5 min-w-[26px] bg-red-400 text-slate-50'
-                : 'w-2.5 h-2.5 top-2'
+                : 'w-2.5 h-2.5 top-1.5'
             }`}>
             {isExpanded ? (
               '10'
             ) : (
               <>
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-[4.6px] translate-x-[0.5px]"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 translate-x-px -translate-y-0.75"></span>
               </>
             )}
           </div>

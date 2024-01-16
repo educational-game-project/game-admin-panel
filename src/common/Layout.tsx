@@ -39,7 +39,7 @@ function Layout() {
             icon={<UserSquare2 size={20} />}
             text="Students"
             path="/student"
-            alert={false}
+            alert={true}
             active={isCurrentLocation('student')}
           />
           <SidebarItem
