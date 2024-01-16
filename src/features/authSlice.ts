@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
+
 import { AuthState, Token, User } from '../types';
 
 const authCredential = JSON.parse(

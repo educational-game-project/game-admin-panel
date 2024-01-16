@@ -1,10 +1,8 @@
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
-type ToastProviderProps = {
-  children: ReactNode;
-};
+import { ToastProviderProps } from "../types";
 
 const ToastProvider = ({ children }: ToastProviderProps) => {
   const location = useLocation();

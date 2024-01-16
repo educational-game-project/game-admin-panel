@@ -19,6 +19,7 @@ function School() {
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
   }, [dispatch]);
+
   return (
     <div className="">
       <div className="mb-6">

@@ -13,7 +13,8 @@ import {
   UserPlusIcon,
   UserSquare2Icon,
 } from 'lucide-react';
-import { BreadcrumbIconProps } from '../../types/component';
+
+import { BreadcrumbIconProps } from '../../types';
 
 function BreadcumbIcon({ name }: BreadcrumbIconProps) {
   const breadcrumbConfig = [

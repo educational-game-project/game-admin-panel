@@ -6,8 +6,8 @@ import { selectBreadcrumb } from '../../features/breadcrumbSlice';
 import BreadcumbIcon from './BreadcumbIcon';
 
 function Breadcrumb() {
-  const breadcrumbs = useAppSelector(selectBreadcrumb);
   const [isOnTop, setIsOnTop] = useState(true);
+  const breadcrumbs = useAppSelector(selectBreadcrumb);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ChevronDownIcon, Loader2Icon, UploadCloudIcon } from 'lucide-react';
-import { StudentProps } from '../../types/api';
-
-import studentData from '../../data/STUDENT_DATA.json';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
+import { StudentProps } from '../../types';
+import studentData from '../../data/STUDENT_DATA.json';
+
 function EditStudent() {
-  const { studentId } = useParams();
   const [student, setStudent] = useState<StudentProps | undefined>();
   const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const { studentId } = useParams();
   const dispatch = useAppDispatch();
 
   const handleSubmit = () => {

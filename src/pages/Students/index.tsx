@@ -8,6 +8,7 @@ import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
 function Students() {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const newBreadcrumb = [
       {

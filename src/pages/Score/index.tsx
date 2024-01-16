@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import ScoreTable from '../components/Table/ScoreTable';
-import Breadcrumb from '../components/Breadcrumb';
-import { useAppDispatch } from '../app/hooks';
-import { setBreadcrumb } from '../features/breadcrumbSlice';
+import ScoreTable from './components/ScoreTable';
+import Breadcrumb from '../../components/Breadcrumb';
+import { useAppDispatch } from '../../app/hooks';
+import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
 function Score() {
   const dispatch = useAppDispatch();
@@ -17,6 +17,7 @@ function Score() {
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
   }, [dispatch]);
+
   return (
     <div className="">
       <div className="mb-6">

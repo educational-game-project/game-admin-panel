@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ChevronDownIcon, Loader2Icon, UploadCloudIcon } from 'lucide-react';
-import { AdminProps } from '../../types/api';
-
-import adminData from '../../data/ADMIN_DATA.json';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
+import { AdminProps } from '../../types';
+import adminData from '../../data/ADMIN_DATA.json';
+
 function EditAdmin() {
-  const { adminId } = useParams();
-  const dispatch = useAppDispatch();
   const [admin, setAdmin] = useState<AdminProps | undefined>();
   const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const { adminId } = useParams();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = () => {
     setIsLoadingSave(true);

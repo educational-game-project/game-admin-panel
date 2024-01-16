@@ -5,8 +5,8 @@ import { setBreadcrumb } from '../features/breadcrumbSlice';
 import Breadcrumb from '../components/Breadcrumb';
 
 function Profile() {
-  const dispatch = useAppDispatch();
   const { user } = useAuth();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const newBreadcrumb = [
@@ -18,6 +18,7 @@ function Profile() {
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
   }, [dispatch, user]);
+
   return (
     <div className="">
       <div className="mb-6">

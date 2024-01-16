@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Loader2Icon, TrashIcon, UploadCloudIcon } from 'lucide-react';
-import { SchoolProps } from '../../types/api';
-
-import schoolData from '../../data/SCHOOL_DATA.json';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
+import { SchoolProps } from '../../types';
+import schoolData from '../../data/SCHOOL_DATA.json';
+
 function EditSchool() {
-  const { schoolId } = useParams();
-  const dispatch = useAppDispatch();
   const [school, setSchool] = useState<SchoolProps | undefined>();
   const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const { schoolId } = useParams();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = () => {
     setIsLoadingSave(true);

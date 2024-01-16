@@ -5,11 +5,11 @@ import {
   showSuccessToast,
   showWarningToast,
 } from '../components/Toast';
-
-import 'react-toastify/dist/ReactToastify.min.css';
 import { useAppDispatch } from '../app/hooks';
 import { setBreadcrumb } from '../features/breadcrumbSlice';
 import Breadcrumb from '../components/Breadcrumb';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function Home() {
   const dispatch = useAppDispatch();

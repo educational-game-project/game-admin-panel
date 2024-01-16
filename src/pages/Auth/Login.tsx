@@ -4,12 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
+import { useAppDispatch } from '../../app/hooks';
 import { useLoginMutation } from '../../services/auth';
 import { setAuth } from '../../features/authSlice';
 import { showErrorToast } from '../../components/Toast';
 
 import { LoginRequest } from '../../types';
-import { useAppDispatch } from '../../app/hooks';
 
 const schema = yup.object().shape({
   email: yup.string().required('Email harus diisi').email('Email tidak valid'),

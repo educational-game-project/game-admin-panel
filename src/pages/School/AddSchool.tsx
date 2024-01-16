@@ -6,8 +6,8 @@ import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
 function AddSchool() {
-  const dispatch = useAppDispatch();
   const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleSubmit = () => {
     setIsLoadingSave(true);

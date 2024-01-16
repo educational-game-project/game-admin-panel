@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { Breadcrumb, BreadcrumbState } from '../types/component';
+
+import { Breadcrumb, BreadcrumbState } from '../types';
 
 const initialState: BreadcrumbState = {
   breadcrumbs: [],
