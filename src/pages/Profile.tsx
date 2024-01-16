@@ -1,31 +1,27 @@
 import { useEffect } from 'react';
-import { UserCircle2Icon } from 'lucide-react';
-import Breadcrumbs from '../components/Breadcrumbs';
-import { useBreadcrumbs } from '../hook/breadcrumbHooks';
+import { useAppDispatch } from '../app/hooks';
 import { useAuth } from '../hook/authHooks';
+import { setBreadcrumb } from '../features/breadcrumbSlice';
+import Breadcrumb from '../components/Breadcrumb';
 
 function Profile() {
-  const { setBreadcrumbs } = useBreadcrumbs();
+  const dispatch = useAppDispatch();
   const { user } = useAuth();
 
   useEffect(() => {
-    setBreadcrumbs([
+    const newBreadcrumb = [
       {
-        icon: (
-          <UserCircle2Icon
-            size={16}
-            className="mr-1.5"
-          />
-        ),
+        icon: 'profile',
         label: user?.name,
         path: '/profile',
       },
-    ]);
-  }, [setBreadcrumbs, user]);
+    ];
+    dispatch(setBreadcrumb(newBreadcrumb));
+  }, [dispatch, user]);
   return (
     <div className="">
       <div className="mb-6">
-        <Breadcrumbs />
+        <Breadcrumb />
         <h5 className="font-semibold text-3xl mb-1.5">Profil</h5>
         <p className="text-gray-500">Lihat dan ubah profil pengguna.</p>
       </div>

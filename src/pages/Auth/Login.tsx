@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
 import { useLoginMutation } from '../../services/auth';
-import { setAuth } from './features/authSlice';
+import { setAuth } from '../../features/authSlice';
 import { showErrorToast } from '../../components/Toast';
 
 import { LoginRequest } from '../../types';
