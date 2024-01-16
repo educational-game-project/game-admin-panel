@@ -9,10 +9,10 @@ import {
   UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
+import { useAuth } from '../hook/authHooks';
 import { useSidebar } from '../hook/sidebarHooks';
 import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
-import { useAuth } from '../hook/authHooks';
 
 function Layout() {
   const currentLocation: string = useLocation()?.pathname;

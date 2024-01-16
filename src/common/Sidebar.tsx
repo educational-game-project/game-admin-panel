@@ -8,18 +8,19 @@ import {
   Activity,
   LogOut,
 } from 'lucide-react';
-import { useSidebar } from '../hook/sidebarHooks';
 import { useAppDispatch } from '../app/hooks';
-import { setUnAuth } from '../pages/Auth/features/authSlice';
-import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
+import { setUnAuth } from '../features/authSlice';
 import { useAuth } from '../hook/authHooks';
+import { useSidebar } from '../hook/sidebarHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
 
+import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
+
 export default function Sidebar({ children, currentPath }: SidebarProps) {
-  const { expanded, sidebarToggle } = useSidebar();
   const [profileToggle, setProfileToggle] = useState(false);
   const dispatch = useAppDispatch();
   const { user } = useAuth();
+  const { expanded, sidebarToggle } = useSidebar();
 
   const handleLogout = () => {
     setProfileToggle(false);

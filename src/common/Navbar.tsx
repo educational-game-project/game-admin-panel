@@ -6,8 +6,8 @@ import { useAuth } from '../hook/authHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
 
 function Navbar() {
-  const { expanded } = useSidebar();
   const [isOpenGlobalSearch, setIsOpenGlobalSearch] = useState(false);
+  const { expanded } = useSidebar();
   const { user } = useAuth();
 
   const closeGlobalSearch = () => {
