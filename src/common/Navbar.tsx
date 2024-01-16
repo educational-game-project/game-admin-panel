@@ -1,13 +1,14 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { BellRingIcon, CommandIcon, SearchIcon } from 'lucide-react';
-import { useSidebar } from '../hook/sidebarHooks';
 import { useAuth } from '../hook/authHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
+import { useAppSelector } from '../app/hooks';
+import { selectExpanded } from '../features/sidebarSlice';
 
 function Navbar() {
   const [isOpenGlobalSearch, setIsOpenGlobalSearch] = useState(false);
-  const { expanded } = useSidebar();
+  const isExpanded = useAppSelector(selectExpanded);
   const { user } = useAuth();
 
   const closeGlobalSearch = () => {
@@ -38,7 +39,7 @@ function Navbar() {
   return (
     <div
       className={`fixed pt-3 pb-6 top-0 z-10 bg-slate-100 ${
-        expanded ? 'w-[calc(100%-328px)]' : 'w-[calc(100%-116px)]'
+        isExpanded ? 'w-[calc(100%-328px)]' : 'w-[calc(100%-116px)]'
       }`}>
       <nav className="py-4 px-5 rounded-xl bg-white w-full before:content-[''] before:absolute before:bg-transparent before:left-0 before:-bottom-12 before:h-12 before:w-full before:rounded-t-xl before:shadow-[0_-12px_0_0_rgb(241,245,249)]">
         <div className="grid items-center grid-cols-12 gap-2">

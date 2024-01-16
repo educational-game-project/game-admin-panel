@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import { store } from './app/store.ts';
 
-import { SidebarProvider } from './context/SidebarContext.tsx';
 import { ResponsiveProvider } from './context/ResponsiveContext.tsx';
 
 import './index.css';
@@ -15,9 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <BrowserRouter>
         <ResponsiveProvider>
-          <SidebarProvider>
-            <App />
-          </SidebarProvider>
+          <App />
         </ResponsiveProvider>
       </BrowserRouter>
     </Provider>

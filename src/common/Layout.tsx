@@ -9,8 +9,9 @@ import {
   UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
+import { useAppSelector } from '../app/hooks';
+import { selectExpanded } from '../features/sidebarSlice';
 import { useAuth } from '../hook/authHooks';
-import { useSidebar } from '../hook/sidebarHooks';
 import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
 
@@ -18,7 +19,7 @@ function Layout() {
   const currentLocation: string = useLocation()?.pathname;
   const firstPath: string = currentLocation?.split('/')[1];
   const isCurrentLocation = (path: string) => path === firstPath;
-  const { expanded } = useSidebar();
+  const isExpanded = useAppSelector(selectExpanded);
   const { user } = useAuth();
 
   return (
@@ -96,7 +97,7 @@ function Layout() {
         {/* main content */}
         <section
           className={`pl-4 ml-auto transition-all-200 ${
-            expanded ? 'w-[calc(100%-288px)]' : 'w-[calc(100%-76px)]'
+            isExpanded ? 'w-[calc(100%-288px)]' : 'w-[calc(100%-76px)]'
           }`}>
           <div className="relative w-full">
             <Navbar />

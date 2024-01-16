@@ -8,10 +8,10 @@ import {
   Activity,
   LogOut,
 } from 'lucide-react';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setUnAuth } from '../features/authSlice';
+import { selectExpanded, toggleSidebar } from '../features/sidebarSlice';
 import { useAuth } from '../hook/authHooks';
-import { useSidebar } from '../hook/sidebarHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
 
 import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
@@ -19,8 +19,12 @@ import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
 export default function Sidebar({ children, currentPath }: SidebarProps) {
   const [profileToggle, setProfileToggle] = useState(false);
   const dispatch = useAppDispatch();
+  const isExpanded = useAppSelector(selectExpanded);
   const { user } = useAuth();
-  const { expanded, sidebarToggle } = useSidebar();
+
+  const handleSidebarToggle = () => {
+    dispatch(toggleSidebar());
+  };
 
   const handleLogout = () => {
     setProfileToggle(false);
@@ -36,18 +40,18 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             <img
               src="https://img.logoipsum.com/243.svg"
               className={`overflow-hidden transition-all ${
-                expanded ? 'w-32' : 'w-0'
+                isExpanded ? 'w-32' : 'w-0'
               }`}
               alt="logo admin panel"
             />
           </Link>
           <button
-            onClick={() => sidebarToggle()}
+            onClick={handleSidebarToggle}
             className={`p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ${
-              expanded ? 'm-0' : 'mx-auto'
+              isExpanded ? 'm-0' : 'mx-auto'
             }`}
-            title={`${expanded ? 'Sidebar Close' : 'Sidebar Open'}`}>
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
+            title={`${isExpanded ? 'Sidebar Close' : 'Sidebar Open'}`}>
+            {isExpanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
         {/* sidebar list */}
@@ -63,13 +67,13 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               )}`}
               alt={`${user?.name} profile`}
               className={`${
-                expanded ? 'w-10 h-10' : 'w-9 h-9'
+                isExpanded ? 'w-10 h-10' : 'w-9 h-9'
               } rounded-full object-cover object-center`}
             />
             <div
               className={`
               flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? 'w-48 ml-3' : 'w-0'}
+              overflow-hidden transition-all ${isExpanded ? 'w-48 ml-3' : 'w-0'}
           `}>
               <div className="leading-4 max-w-[10rem]">
                 <h4 className="font-semibold mb-0.5 text-sm line-clamp-1 text-ellipsis">
@@ -83,7 +87,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                 <MoreVertical size={20} />
               </div>
             </div>
-            {!expanded && (
+            {!isExpanded && (
               <div
                 className={`
           absolute left-full rounded-md px-2 py-1 ml-2 whitespace-nowrap
@@ -176,7 +180,7 @@ export function SidebarItem({
   active,
   alert,
 }: SidebarItemProps) {
-  const { expanded } = useSidebar();
+  const isExpanded = useAppSelector(selectExpanded);
 
   return (
     <li className="relative">
@@ -195,18 +199,18 @@ export function SidebarItem({
         {icon}
         <span
           className={`overflow-hidden transition-all ${
-            expanded ? 'w-48 ml-3' : 'w-0'
+            isExpanded ? 'w-48 ml-3' : 'w-0'
           }`}>
           {text}
         </span>
         {alert && (
           <div
             className={`absolute right-2 text-2xs rounded-full text-center ${
-              expanded
+              isExpanded
                 ? 'py-px px-1.5 min-w-[26px] bg-red-400 text-slate-50'
                 : 'w-2.5 h-2.5 top-2'
             }`}>
-            {expanded ? (
+            {isExpanded ? (
               '10'
             ) : (
               <>
@@ -217,7 +221,7 @@ export function SidebarItem({
           </div>
         )}
 
-        {!expanded && (
+        {!isExpanded && (
           <div
             className={`
           absolute left-full rounded-md px-2 py-1 ml-6
@@ -243,11 +247,11 @@ export function SidebarItem({
 }
 
 export function SeparateSidebar({ caption }: SeparateSidebarProps) {
-  const { expanded } = useSidebar();
+  const isExpanded = useAppSelector(selectExpanded);
   return (
     <p
       className={`transition-all text-xs uppercase tracking-wide font-medium text-slate-500 mb-3 ${
-        expanded ? 'w-full' : 'w-11 line-clamp-1 break-words'
+        isExpanded ? 'w-full' : 'w-11 line-clamp-1 break-words'
       }`}>
       {caption}
     </p>
