@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   MoreVertical,
@@ -18,6 +18,8 @@ import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
 
 export default function Sidebar({ children, currentPath }: SidebarProps) {
   const [profileToggle, setProfileToggle] = useState(false);
+  const toggleProfileRef = useRef<HTMLButtonElement>(null);
+  const modalProfileRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const isExpanded = useAppSelector(selectExpanded);
   const { user } = useAuth();
@@ -30,6 +32,25 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
     setProfileToggle(false);
     dispatch(setUnAuth());
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        toggleProfileRef.current &&
+        !toggleProfileRef.current.contains(event.target as Node) &&
+        modalProfileRef.current &&
+        !modalProfileRef.current.contains(event.target as Node)
+      ) {
+        setProfileToggle(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <aside className="h-full fixed z-10">
@@ -59,6 +80,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
         {/* bottom */}
         <div className="border-t p-3">
           <button
+            ref={toggleProfileRef}
             className="flex p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-all-200 text-left group"
             onClick={() => setProfileToggle((curr) => !curr)}>
             <img
@@ -105,6 +127,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
         </div>
         {/* modal profile preference */}
         <div
+          ref={modalProfileRef}
           className={`absolute bottom-0 -right-60 transition-all-200 -translate-x-3 ${
             profileToggle
               ? 'visible opacity-100 z-10 translate-x-0'

@@ -7,7 +7,8 @@ import { CheckIcon, Eye, EyeOff } from 'lucide-react';
 import { useAppDispatch } from '../../app/hooks';
 import { useLoginMutation } from '../../services/auth';
 import { setAuth } from '../../features/authSlice';
-import { showErrorToast } from '../../components/Toast';
+import { setAllowedToast } from '../../features/toastSlice';
+import { showDefaultToast, showErrorToast } from '../../components/Toast';
 
 import { LoginRequest } from '../../types';
 
@@ -40,6 +41,8 @@ function Login() {
       const result = await login(data).unwrap();
       dispatch(setAuth(result.data));
       navigate('/');
+      dispatch(setAllowedToast());
+      showDefaultToast('Login berhasil!');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.data?.message) {

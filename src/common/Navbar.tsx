@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
 import { BellRingIcon, CommandIcon, SearchIcon } from 'lucide-react';
 import { useAuth } from '../hook/authHooks';
@@ -47,7 +48,7 @@ function Navbar() {
             <button
               type="button"
               onClick={openGlobalSearch}
-              className="flex items-center justify-between rounded-md bg-gray-50 border border-gray-200 pl-3 pr-4 py-2 text-gray-400 transition-all-200 hover:border-gray-300 w-full">
+              className="flex items-center justify-between rounded-md bg-gray-50 border border-gray-200 pl-3 pr-4 py-2 text-gray-400 transition-all-200 hover:border-gray-300 w-full cursor-text">
               <span className="flex items-center">
                 <SearchIcon
                   className="inline-block mr-2"
@@ -77,8 +78,8 @@ function Navbar() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-[6.55px] translate-x-[0.5px]"></span>
                   </div>
                 </button>
-                <button
-                  className=""
+                <Link
+                  to="/profile"
                   title="Profile">
                   <img
                     src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
@@ -87,7 +88,7 @@ function Navbar() {
                     alt={`${user?.name} profile`}
                     className="w-9 h-9 rounded-full object-cover object-center"
                   />
-                </button>
+                </Link>
               </div>
             </div>
           </div>
