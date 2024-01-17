@@ -4,6 +4,7 @@ import { authApi } from '../services/auth';
 import authReducer from '../features/authSlice';
 import breadcrumbReducer from './../features/breadcrumbSlice';
 import sidebarReducer from './../features/sidebarSlice';
+import toastReducer from './../features/toastSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     breadcrumb: breadcrumbReducer,
     sidebar: sidebarReducer,
+    toast: toastReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(authApi.middleware),

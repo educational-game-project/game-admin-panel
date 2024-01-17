@@ -29,6 +29,9 @@ interface BreadcrumbIconProps {
 }
 
 // toast
+interface ToastState {
+  isAllowed: boolean;
+}
 interface ToastProviderProps {
   children: ReactNode;
 }
@@ -39,5 +42,6 @@ export type {
   Breadcrumb,
   BreadcrumbState,
   BreadcrumbIconProps,
+  ToastState,
   ToastProviderProps,
 };
