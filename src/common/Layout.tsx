@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useAppSelector } from '../app/hooks';
 import { selectExpanded } from '../features/sidebarSlice';
-import { useAuth } from '../hook/authHooks';
+import { useUser } from '../hook/authHooks';
 import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
 
@@ -20,7 +20,7 @@ function Layout() {
   const firstPath: string = currentLocation?.split('/')[1];
   const isCurrentLocation = (path: string) => path === firstPath;
   const isExpanded = useAppSelector(selectExpanded);
-  const { user } = useAuth();
+  const { user } = useUser();
 
   return (
     <main className="w-full p-3">

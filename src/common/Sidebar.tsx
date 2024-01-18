@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   MoreVertical,
   ChevronLast,
@@ -9,10 +9,13 @@ import {
   LogOut,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useLogoutMutation } from '../services/authApi';
 import { setUnAuth } from '../features/authSlice';
 import { selectExpanded, toggleSidebar } from '../features/sidebarSlice';
-import { useAuth } from '../hook/authHooks';
+import { useUser } from '../hook/authHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
+import { showDefaultToast, showErrorToast } from '../components/Toast';
+import { setAllowedToast } from '../features/toastSlice';
 
 import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
 
@@ -20,17 +23,33 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
   const [profileToggle, setProfileToggle] = useState(false);
   const toggleProfileRef = useRef<HTMLButtonElement>(null);
   const modalProfileRef = useRef<HTMLDivElement>(null);
+  const currentLocation: string = useLocation()?.pathname;
+  const firstPath: string = currentLocation?.split('/')[1];
+  const isProfileLocation = firstPath === 'profile';
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isExpanded = useAppSelector(selectExpanded);
-  const { user } = useAuth();
+  const [logout, { isLoading }] = useLogoutMutation();
+  const { user } = useUser();
 
   const handleSidebarToggle = () => {
     dispatch(toggleSidebar());
   };
 
-  const handleLogout = () => {
-    setProfileToggle(false);
-    dispatch(setUnAuth());
+  const handleLogout = async () => {
+    try {
+      const result = await logout().unwrap();
+      dispatch(setUnAuth());
+      setProfileToggle(false);
+      navigate('/login');
+      if (result.success) {
+        dispatch(setAllowedToast());
+        showDefaultToast('Logout berhasil!');
+      }
+    } catch (error) {
+      setProfileToggle(false);
+      showErrorToast('Logout gagal!');
+    }
   };
 
   useEffect(() => {
@@ -81,7 +100,11 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
         <div className="border-t p-3">
           <button
             ref={toggleProfileRef}
-            className="flex p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-all-200 text-left group"
+            className={`flex p-2 rounded-md transition-all-200 text-left group ${
+              isProfileLocation
+                ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
             onClick={() => setProfileToggle((curr) => !curr)}>
             <img
               src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
@@ -90,7 +113,9 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               alt={`${user?.name} profile`}
               className={`${
                 isExpanded ? 'w-10 h-10' : 'w-9 h-9'
-              } rounded-full object-cover object-center`}
+              } rounded-full object-cover object-center ${
+                isProfileLocation && 'border-[3px] border-indigo-700'
+              }`}
             />
             <div
               className={`
@@ -182,11 +207,31 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             </div>
             <hr className="mt-2 mb-1.5" />
             <button
-              className="relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors group hover:bg-red-50 hover:text-red-500 text-gray-600 w-full"
+              className="group profile-logout relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors group hover:bg-red-50 hover:text-red-500 text-gray-600 w-full"
               title="Logout"
               onClick={handleLogout}
               role="button">
-              <LogOut size={17} />
+              {isLoading ? (
+                <svg
+                  className="animate-spin-fast h-4.5 w-4.5 group-hover-[.profile-logout]:text-red-500 text-gray-600 inline-block"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <LogOut size={17} />
+              )}
               <span className="ml-2.5 text-sm">Logout</span>
             </button>
           </div>
