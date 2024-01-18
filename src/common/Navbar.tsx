@@ -1,14 +1,16 @@
 import { Fragment, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
 import { BellRingIcon, CommandIcon, SearchIcon } from 'lucide-react';
-import { useSidebar } from '../hook/sidebarHooks';
-import { useAuth } from '../hook/authHooks';
+import { useUser } from '../hook/authHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
+import { useAppSelector } from '../app/hooks';
+import { selectExpanded } from '../features/sidebarSlice';
 
 function Navbar() {
-  const { expanded } = useSidebar();
   const [isOpenGlobalSearch, setIsOpenGlobalSearch] = useState(false);
-  const { user } = useAuth();
+  const isExpanded = useAppSelector(selectExpanded);
+  const { user } = useUser();
 
   const closeGlobalSearch = () => {
     setIsOpenGlobalSearch(false);
@@ -38,7 +40,7 @@ function Navbar() {
   return (
     <div
       className={`fixed pt-3 pb-6 top-0 z-10 bg-slate-100 ${
-        expanded ? 'w-[calc(100%-328px)]' : 'w-[calc(100%-116px)]'
+        isExpanded ? 'w-[calc(100%-328px)]' : 'w-[calc(100%-116px)]'
       }`}>
       <nav className="py-4 px-5 rounded-xl bg-white w-full before:content-[''] before:absolute before:bg-transparent before:left-0 before:-bottom-12 before:h-12 before:w-full before:rounded-t-xl before:shadow-[0_-12px_0_0_rgb(241,245,249)]">
         <div className="grid items-center grid-cols-12 gap-2">
@@ -46,7 +48,7 @@ function Navbar() {
             <button
               type="button"
               onClick={openGlobalSearch}
-              className="flex items-center justify-between rounded-md bg-gray-50 border border-gray-200 pl-3 pr-4 py-2 text-gray-400 transition-all-200 hover:border-gray-300 w-full">
+              className="flex items-center justify-between rounded-md bg-gray-50 border border-gray-200 pl-3 pr-4 py-2 text-gray-400 transition-all-200 hover:border-gray-300 w-full cursor-text">
               <span className="flex items-center">
                 <SearchIcon
                   className="inline-block mr-2"
@@ -76,8 +78,8 @@ function Navbar() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-[6.55px] translate-x-[0.5px]"></span>
                   </div>
                 </button>
-                <button
-                  className=""
+                <Link
+                  to="/profile"
                   title="Profile">
                   <img
                     src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
@@ -86,7 +88,7 @@ function Navbar() {
                     alt={`${user?.name} profile`}
                     className="w-9 h-9 rounded-full object-cover object-center"
                   />
-                </button>
+                </Link>
               </div>
             </div>
           </div>

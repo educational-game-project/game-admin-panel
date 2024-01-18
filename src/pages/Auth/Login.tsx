@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
-import { useLoginMutation } from '../../services/auth';
-import { setAuth } from './features/authSlice';
-import { showErrorToast } from '../../components/Toast';
+import { useAppDispatch } from '../../app/hooks';
+import { useLoginMutation } from '../../services/authApi';
+import { setAuth } from '../../features/authSlice';
+import { setAllowedToast } from '../../features/toastSlice';
+import { showDefaultToast, showErrorToast } from '../../components/Toast';
 
 import { LoginRequest } from '../../types';
-import { useAppDispatch } from '../../app/hooks';
 
 const schema = yup.object().shape({
   email: yup.string().required('Email harus diisi').email('Email tidak valid'),
@@ -20,6 +21,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [login, { isLoading }] = useLoginMutation();
 
   const {
@@ -38,8 +40,11 @@ function Login() {
   const onLogin: SubmitHandler<LoginRequest> = async (data) => {
     try {
       const result = await login(data).unwrap();
+      const prevPath = location.state?.from || '/';
       dispatch(setAuth(result.data));
-      navigate('/');
+      navigate(prevPath);
+      dispatch(setAllowedToast());
+      showDefaultToast('Login berhasil!');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.data?.message) {
@@ -160,11 +165,6 @@ function Login() {
                       Ingat saya
                     </label>
                   </div>
-                  <Link
-                    to="/fogot-password"
-                    className="text-sky-500 hover:text-indigo-500 hover:underline underline-offset-2">
-                    Lupa Password?
-                  </Link>
                 </div>
                 <button
                   title="Signin"

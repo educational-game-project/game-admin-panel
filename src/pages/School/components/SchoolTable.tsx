@@ -1,5 +1,5 @@
-import { HTMLProps, useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   SortingState,
   createColumnHelper,
@@ -9,7 +9,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -20,11 +20,11 @@ import {
   PenSquareIcon,
   SearchIcon,
   Trash2Icon,
-} from "lucide-react";
-import AlertDelete from "../../../components/AlertDialog/AlertDelete";
-import { SchoolProps } from "../../../types/api";
+} from 'lucide-react';
+import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 
-import schoolData from "../../../data/SCHOOL_DATA.json";
+import { SchoolProps } from '../../../types';
+import schoolData from '../../../data/SCHOOL_DATA.json';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -33,7 +33,7 @@ function IndeterminateCheckbox({
   const ref = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
-    if (typeof indeterminate === "boolean") {
+    if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate;
     }
   }, [ref, indeterminate, rest.checked]);
@@ -49,26 +49,26 @@ function IndeterminateCheckbox({
 }
 
 function SchoolTable() {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const [deleteId, setDeleteId] = useState<string>("");
+  const [deleteId, setDeleteId] = useState<string>('');
   const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
   const data = useMemo(() => schoolData, []);
   const headerClass: Record<string, string> = {
-    checkboxs: "w-14 text-center",
-    row_number: "w-12",
+    checkboxs: 'w-14 text-center',
+    row_number: 'w-12',
   };
 
   const columnHelper = createColumnHelper<SchoolProps>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
-        id: "checkboxs",
+        id: 'checkboxs',
         header: ({ table }) => (
           <IndeterminateCheckbox
             {...{
@@ -91,39 +91,43 @@ function SchoolTable() {
         ),
       }),
       columnHelper.display({
-        id: "row_number",
-        header: "#",
+        id: 'row_number',
+        header: '#',
         cell: (info) => info.row.index + 1,
       }),
-      columnHelper.accessor("name", {
-        header: "Nama Sekolah",
+      columnHelper.accessor('name', {
+        header: 'Nama Sekolah',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor("adminsCount", {
-        header: "Admin",
+      columnHelper.accessor('adminsCount', {
+        header: 'Admin',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor("studentsCount", {
-        header: "Siswa",
+      columnHelper.accessor('studentsCount', {
+        header: 'Siswa',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor("address", {
-        header: "Alamat",
+      columnHelper.accessor('address', {
+        header: 'Alamat',
         cell: (info) => info.getValue(),
       }),
       // action edit and delete
       columnHelper.display({
-        id: "action",
-        header: "",
+        id: 'action',
+        header: '',
         cell: (info) => (
           <div className="flex space-x-4 px-2">
-            <Link className="" to={`/school/${info.row.original._id}`}>
+            <Link
+              className=""
+              to={`/school/${info.row.original._id}`}>
               <EyeIcon
                 size={18}
                 className="text-violet-500 hover:text-violet-600"
               />
             </Link>
-            <Link className="" to={`/school/edit/${info.row.original._id}`}>
+            <Link
+              className=""
+              to={`/school/edit/${info.row.original._id}`}>
               <PenSquareIcon
                 size={16}
                 className="text-sky-500 hover:text-sky-600"
@@ -131,8 +135,7 @@ function SchoolTable() {
             </Link>
             <button
               className=""
-              onClick={() => openDeleteDialog(info.row.original._id)}
-            >
+              onClick={() => openDeleteDialog(info.row.original._id)}>
               <Trash2Icon
                 size={16}
                 className="text-red-500 hover:text-red-600"
@@ -180,16 +183,16 @@ function SchoolTable() {
     setIsLoadingDelete(true);
     console.log(`delete id:${deleteId}...`);
     setTimeout(() => {
-      console.log("delete success");
+      console.log('delete success');
       setIsLoadingDelete(false);
       setIsOpenDeleteDialog(false);
     }, 3000);
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -202,11 +205,14 @@ function SchoolTable() {
               type="text"
               placeholder="Cari berdasarkan nama..."
               className="w-3/4 pl-10 focus:outline-none focus:ring-0"
-              value={filter ?? ""}
+              value={filter ?? ''}
               onChange={(e) => setFilter(String(e.target.value))}
             />
             <div className="absolute left-0 top-0">
-              <SearchIcon size={20} className="text-gray-500" />
+              <SearchIcon
+                size={20}
+                className="text-gray-500"
+              />
             </div>
           </div>
           <div className="">
@@ -221,33 +227,40 @@ function SchoolTable() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr
                   key={headerGroup.id}
-                  className="border-y border-gray-200 bg-indigo-50/50"
-                >
+                  className="border-y border-gray-200 bg-indigo-50/50">
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       className={`font-bold text-xs text-gray-500 tracking-wide px-3 py-3 text-left ${
-                        headerClass[header.id] ?? ""
-                      }`}
-                    >
+                        headerClass[header.id] ?? ''
+                      }`}>
                       {header.isPlaceholder ? null : (
                         <div
                           {...{
                             className: header.column.getCanSort()
-                              ? "cursor-pointer select-none flex items-center"
-                              : header.id === "checkboxs"
-                              ? "flex justify-center"
-                              : "",
+                              ? 'cursor-pointer select-none flex items-center'
+                              : header.id === 'checkboxs'
+                              ? 'flex justify-center'
+                              : '',
                             onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
+                          }}>
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
                           {{
-                            asc: <ArrowUpIcon size={16} className="ml-1" />,
-                            desc: <ArrowDownIcon size={16} className="ml-1" />,
+                            asc: (
+                              <ArrowUpIcon
+                                size={16}
+                                className="ml-1"
+                              />
+                            ),
+                            desc: (
+                              <ArrowDownIcon
+                                size={16}
+                                className="ml-1"
+                              />
+                            ),
                           }[header.column.getIsSorted() as string] ?? null}
                         </div>
                       )}
@@ -260,15 +273,13 @@ function SchoolTable() {
               {table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="border-b border-gray-200 hover:bg-gray-100"
-                >
+                  className="border-b border-gray-200 hover:bg-gray-100">
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
                       className={`text-sm px-3 py-3 text-gray-500 ${
-                        cell.column.id === "score" ? "font-semibold" : ""
-                      } ${headerClass[cell.column.id] ?? ""}`}
-                    >
+                        cell.column.id === 'score' ? 'font-semibold' : ''
+                      } ${headerClass[cell.column.id] ?? ''}`}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -291,17 +302,23 @@ function SchoolTable() {
                 value={table.getState().pagination.pageSize}
                 onChange={(e) => {
                   table.setPageSize(Number(e.target.value));
-                }}
-              >
+                }}>
                 {[10, 20, 50, 100].map((pageSize) => (
-                  <option key={pageSize} value={pageSize}>
+                  <option
+                    key={pageSize}
+                    value={pageSize}>
                     {pageSize}
                   </option>
                 ))}
               </select>
               <div className="absolute right-1.5 top-1.5 pointer-events-none">
-                <label htmlFor="tableScore_paginate" className="block">
-                  <ChevronDownIcon size={20} className="text-gray-500" />
+                <label
+                  htmlFor="tableScore_paginate"
+                  className="block">
+                  <ChevronDownIcon
+                    size={20}
+                    className="text-gray-500"
+                  />
                 </label>
               </div>
             </div>
@@ -313,33 +330,35 @@ function SchoolTable() {
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
                 onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
+                disabled={!table.getCanPreviousPage()}>
                 First
               </button>
             )}
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ArrowLeftIcon size={16} className={isLargeView ? "mr-1" : ""} />
-              {isLargeView ? "Previous" : ""}
+              disabled={!table.getCanPreviousPage()}>
+              <ArrowLeftIcon
+                size={16}
+                className={isLargeView ? 'mr-1' : ''}
+              />
+              {isLargeView ? 'Previous' : ''}
             </button>
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              {isLargeView ? "Next" : ""}
-              <ArrowRightIcon size={16} className={isLargeView ? "ml-1" : ""} />
+              disabled={!table.getCanNextPage()}>
+              {isLargeView ? 'Next' : ''}
+              <ArrowRightIcon
+                size={16}
+                className={isLargeView ? 'ml-1' : ''}
+              />
             </button>
             {isLargeView && (
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
+                disabled={!table.getCanNextPage()}>
                 Last
               </button>
             )}
@@ -349,10 +368,9 @@ function SchoolTable() {
       <div
         className={`fixed transform -translate-x-1/2 left-1/2 transition-all-200 bottom-12 ${
           Object.keys(rowSelection).length > 0
-            ? "z-50 opacity-100 scale-100"
-            : "-z-10 opacity-0 scale-50"
-        }`}
-      >
+            ? 'z-50 opacity-100 scale-100'
+            : '-z-10 opacity-0 scale-50'
+        }`}>
         <div className="rounded-full px-12 py-4 shadow-lg bg-gray-900">
           <div className="flex items-center space-x-4">
             <p className="text-gray-100">
@@ -361,8 +379,7 @@ function SchoolTable() {
             {/* log */}
             <button
               className="px-3 py-1 font-medium rounded-full border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() => console.log("rowSelection", rowSelection)}
-            >
+              onClick={() => console.log('rowSelection', rowSelection)}>
               Log
             </button>
             {/* hapus */}
@@ -373,10 +390,12 @@ function SchoolTable() {
                 const newData = data.filter(
                   (item) => !selectedIds.includes(item._id)
                 );
-                console.log("newData", newData);
-              }}
-            >
-              <Trash2Icon size={16} className="mr-1" />
+                console.log('newData', newData);
+              }}>
+              <Trash2Icon
+                size={16}
+                className="mr-1"
+              />
               Hapus
             </button>
           </div>

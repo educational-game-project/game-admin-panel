@@ -2,12 +2,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
 import { Share2Icon } from 'lucide-react';
 import { useResponsiveLayout } from './hook/responsiveHoks';
-import { BreadcrumbsProvider } from './context/BreadcrumbsContext';
-import images from './assets/img';
 
 import Layout from './common/Layout';
 import AuthMiddleware from './common/middleware/AuthMiddleware';
 import ProtectedMiddleware from './common/middleware/ProtectedMiddleware';
+import SecureGuardMiddleware from './common/middleware/SecureGuardMiddleware';
 import AutoTopProvider from './components/AutoTopProvider';
 import ToastProvider from './components/ToastProvider';
 import ButtonClipboard from './components/ButtonClipboard';
@@ -31,8 +30,8 @@ import DetailSchool from './pages/School/DetailSchool';
 import AddAdmin from './pages/Admin/AddAdmin';
 import EditAdmin from './pages/Admin/EditAdmin';
 
+import images from './assets/img';
 import 'react-toastify/dist/ReactToastify.min.css';
-import SecureGuardMiddleware from './common/middleware/SecureGuardMiddleware';
 
 function App() {
   const isDesktopView = useResponsiveLayout();
@@ -40,113 +39,111 @@ function App() {
     <>
       {isDesktopView ? (
         <>
-          <BreadcrumbsProvider>
-            <AutoTopProvider />
-            <ToastProvider>
-              <ToastContainer
-                limit={3}
-                transition={Slide}
-                draggable={false}
-                closeOnClick={true}
-              />
-              <Routes>
-                {/* routes with layout */}
-                <Route
-                  path="/"
-                  element={<Layout />}>
-                  <Route element={<ProtectedMiddleware />}>
+          <AutoTopProvider />
+          <ToastProvider>
+            <ToastContainer
+              limit={3}
+              transition={Slide}
+              draggable={false}
+              closeOnClick={true}
+            />
+            <Routes>
+              {/* routes with layout */}
+              <Route
+                path="/"
+                element={<Layout />}>
+                <Route element={<ProtectedMiddleware />}>
+                  <Route
+                    index
+                    element={<Home />}
+                  />
+                  <Route element={<SecureGuardMiddleware />}>
                     <Route
-                      index
-                      element={<Home />}
-                    />
-                    <Route element={<SecureGuardMiddleware />}>
-                      <Route
-                        path="/admin"
-                        element={<Admin />}
-                      />
-                      <Route
-                        path="/admin/add"
-                        element={<AddAdmin />}
-                      />
-                      <Route
-                        path="/admin/edit/:adminId"
-                        element={<EditAdmin />}
-                      />
-                      <Route
-                        path="/school"
-                        element={<School />}
-                      />
-                      <Route
-                        path="/school/add"
-                        element={<AddSchool />}
-                      />
-                      <Route
-                        path="/school/edit/:schoolId"
-                        element={<EditSchool />}
-                      />
-                      <Route
-                        path="/school/:schoolId"
-                        element={<DetailSchool />}
-                      />
-                    </Route>
-                    <Route
-                      path="/student"
-                      element={<Students />}
+                      path="/admin"
+                      element={<Admin />}
                     />
                     <Route
-                      path="/student/add"
-                      element={<AddStudent />}
+                      path="/admin/add"
+                      element={<AddAdmin />}
                     />
                     <Route
-                      path="/student/edit/:studentId"
-                      element={<EditStudent />}
+                      path="/admin/edit/:adminId"
+                      element={<EditAdmin />}
                     />
                     <Route
-                      path="/score"
-                      element={<Score />}
+                      path="/school"
+                      element={<School />}
                     />
                     <Route
-                      path="/analysis"
-                      element={<Analysis />}
+                      path="/school/add"
+                      element={<AddSchool />}
                     />
                     <Route
-                      path="/preferences"
-                      element={<Preferences />}
+                      path="/school/edit/:schoolId"
+                      element={<EditSchool />}
                     />
                     <Route
-                      path="/support"
-                      element={<Support />}
-                    />
-                    <Route
-                      path="/profile"
-                      element={<Profile />}
+                      path="/school/:schoolId"
+                      element={<DetailSchool />}
                     />
                   </Route>
-                </Route>
-                {/* routes without layout */}
-                <Route element={<AuthMiddleware />}>
                   <Route
-                    path="/login"
-                    element={<Login />}
+                    path="/student"
+                    element={<Students />}
+                  />
+                  <Route
+                    path="/student/add"
+                    element={<AddStudent />}
+                  />
+                  <Route
+                    path="/student/edit/:studentId"
+                    element={<EditStudent />}
+                  />
+                  <Route
+                    path="/score"
+                    element={<Score />}
+                  />
+                  <Route
+                    path="/analysis"
+                    element={<Analysis />}
+                  />
+                  <Route
+                    path="/preferences"
+                    element={<Preferences />}
+                  />
+                  <Route
+                    path="/support"
+                    element={<Support />}
+                  />
+                  <Route
+                    path="/profile"
+                    element={<Profile />}
                   />
                 </Route>
-                {/* not exist routes */}
+              </Route>
+              {/* routes without layout */}
+              <Route element={<AuthMiddleware />}>
                 <Route
-                  path="*"
-                  element={
-                    <Navigate
-                      to="/404"
-                      replace
-                    />
-                  }
+                  path="/login"
+                  element={<Login />}
                 />
-                <Route
-                  path="/404"
-                  element={<ErrorPage />}
-                />
-              </Routes>
-            </ToastProvider>
-          </BreadcrumbsProvider>
+              </Route>
+              {/* not exist routes */}
+              <Route
+                path="*"
+                element={
+                  <Navigate
+                    to="/404"
+                    replace
+                  />
+                }
+              />
+              <Route
+                path="/404"
+                element={<ErrorPage />}
+              />
+            </Routes>
+          </ToastProvider>
         </>
       ) : (
         <ToastProvider>

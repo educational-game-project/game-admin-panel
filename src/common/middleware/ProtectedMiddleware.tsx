@@ -1,15 +1,18 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useToken } from '../../hook/authHooks';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../../hook/authHooks';
 
 function ProtectedMiddleware() {
-  const { token } = useToken();
+  const { isAuth } = useAuth();
+  const location = useLocation();
+
   return (
     <>
-      {token ? (
+      {isAuth ? (
         <Outlet />
       ) : (
         <Navigate
           to="/login"
+          state={{ from: location.pathname }}
           replace
         />
       )}

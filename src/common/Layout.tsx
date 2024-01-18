@@ -9,17 +9,18 @@ import {
   UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
-import { useSidebar } from '../hook/sidebarHooks';
+import { useAppSelector } from '../app/hooks';
+import { selectExpanded } from '../features/sidebarSlice';
+import { useUser } from '../hook/authHooks';
 import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
-import { useAuth } from '../hook/authHooks';
 
 function Layout() {
   const currentLocation: string = useLocation()?.pathname;
   const firstPath: string = currentLocation?.split('/')[1];
   const isCurrentLocation = (path: string) => path === firstPath;
-  const { expanded } = useSidebar();
-  const { user } = useAuth();
+  const isExpanded = useAppSelector(selectExpanded);
+  const { user } = useUser();
 
   return (
     <main className="w-full p-3">
@@ -38,7 +39,7 @@ function Layout() {
             icon={<UserSquare2 size={20} />}
             text="Students"
             path="/student"
-            alert={false}
+            alert={true}
             active={isCurrentLocation('student')}
           />
           <SidebarItem
@@ -96,7 +97,7 @@ function Layout() {
         {/* main content */}
         <section
           className={`pl-4 ml-auto transition-all-200 ${
-            expanded ? 'w-[calc(100%-288px)]' : 'w-[calc(100%-76px)]'
+            isExpanded ? 'w-[calc(100%-288px)]' : 'w-[calc(100%-76px)]'
           }`}>
           <div className="relative w-full">
             <Navbar />
