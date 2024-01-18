@@ -6,14 +6,11 @@ import { AuthState, Token, User } from '../types';
 
 const authCredential = JSON.parse(
   localStorage.getItem('userKogGame') || 'null'
-) as {
-  user: User | null;
-  token: Token | null;
-};
+) as AuthState;
 
 const initialState: AuthState = authCredential
   ? authCredential
-  : { user: null, token: null };
+  : { user: null, token: null, isAuth: null };
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -26,15 +23,18 @@ export const authSlice = createSlice({
         JSON.stringify({
           user: user,
           token: tokens,
+          isAuth: true,
         })
       );
       state.user = user;
       state.token = tokens;
+      state.isAuth = true;
     },
     setUnAuth: (state) => {
       localStorage.removeItem('userKogGame');
       state.user = null;
       state.token = null;
+      state.isAuth = false;
     },
   },
 });
@@ -44,3 +44,4 @@ export default authSlice.reducer;
 
 export const selectCurrentUser = (state: RootState) => state.auth.user;
 export const selectCurrentToken = (state: RootState) => state.auth.token;
+export const isAuthenticated = (state: RootState) => state.auth.isAuth;

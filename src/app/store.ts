@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { authApi } from '../services/auth';
+import { coreApi } from '../api/coreApi';
 import authReducer from '../features/authSlice';
 import breadcrumbReducer from './../features/breadcrumbSlice';
 import sidebarReducer from './../features/sidebarSlice';
@@ -8,14 +8,15 @@ import toastReducer from './../features/toastSlice';
 
 export const store = configureStore({
   reducer: {
+    [coreApi.reducerPath]: coreApi.reducer,
     auth: authReducer,
-    [authApi.reducerPath]: authApi.reducer,
     breadcrumb: breadcrumbReducer,
     sidebar: sidebarReducer,
     toast: toastReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware),
+    getDefaultMiddleware().concat(coreApi.middleware),
+  devTools: import.meta.env.VITE_MODE !== 'production',
 });
 
 setupListeners(store.dispatch);
