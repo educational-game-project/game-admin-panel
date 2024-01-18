@@ -30,10 +30,10 @@ function Breadcrumb() {
       className={`flex items-center space-x-2 pt-2 mb-5 relative ${
         isOnTop ? 'z-10' : 'z-0'
       }`}>
-      <li className="flex items-center">
+      <li className="flex items-center group/breadcrumb">
         <Link
           to="/"
-          className="flex items-center text-gray-500 mr-2 font-medium">
+          className="flex items-center text-gray-500 mr-2 font-medium group-hover/breadcrumb:text-violet-700">
           <HomeIcon
             size={16}
             className="mr-1.5"
@@ -50,7 +50,7 @@ function Breadcrumb() {
       </li>
       {breadcrumbs?.map((breadcrumb, index) => (
         <li
-          className="flex items-center"
+          className="flex items-center group/breadcrumb"
           key={index}>
           <Link
             to={breadcrumb?.path}
@@ -58,7 +58,7 @@ function Breadcrumb() {
               index + 1 === breadcrumbs.length
                 ? 'text-indigo-800 font-medium'
                 : 'text-gray-500'
-            }`}>
+            } group-hover/breadcrumb:text-violet-700`}>
             <BreadcumbIcon name={breadcrumb?.icon} />
             <span className="leading-none">{breadcrumb?.label}</span>
           </Link>
