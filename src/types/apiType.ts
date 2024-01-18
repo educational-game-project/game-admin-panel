@@ -1,3 +1,28 @@
+interface User {
+  _id: string;
+  name: string;
+  role: string;
+  email: string;
+  phoneNumber: string;
+  deletedAt: null;
+  addedBy: string | null;
+  image: string | null;
+  school: string | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+interface ProfileSuccessData {
+  status_code: number;
+  success: true;
+  status: string;
+  message: string;
+  server_time: string;
+  data: User;
+}
+
+// ========================================
 interface BaseImageProps {
   originalname: string;
   filename: string;
@@ -95,6 +120,8 @@ interface SchoolResponse {
 // ====================
 
 export type {
+  ProfileSuccessData,
+  // =================
   ScoreProps,
   ScoreResponse,
   StudentProps,
