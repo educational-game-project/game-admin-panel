@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Student } from '.';
 
 // alert dialog
 interface AlertDialogProps {
@@ -36,6 +37,12 @@ interface ToastProviderProps {
   children: ReactNode;
 }
 
+// student
+interface StudentTable {
+  student: Student[];
+  refetchStudent: () => void;
+}
+
 export type {
   AlertDialogProps,
   ButtonClipboardProps,
@@ -44,4 +51,5 @@ export type {
   BreadcrumbIconProps,
   ToastState,
   ToastProviderProps,
+  StudentTable,
 };
