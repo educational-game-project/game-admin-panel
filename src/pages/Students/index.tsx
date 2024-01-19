@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { PlusIcon } from 'lucide-react';
 import StudentsTable from './components/StudentsTable';
 import Breadcrumb from '../../components/Breadcrumb';
-import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
+import { useAppDispatch } from '../../app/hooks';
 
 function Students() {
   const dispatch = useAppDispatch();

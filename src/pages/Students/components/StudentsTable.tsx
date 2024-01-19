@@ -1,11 +1,11 @@
-import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { HTMLProps, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { useDebounce } from 'use-debounce';
 import {
   SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -22,8 +22,9 @@ import {
 } from 'lucide-react';
 import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 
-import { StudentProps } from '../../../types';
-import studentData from '../../../data/STUDENT_DATA.json';
+import useFetchHook from "../../../hook/useFetchHook";
+import { SearchQueryType } from "../../../types/search_query";
+import { StudentProps } from "../../../types";
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -48,19 +49,38 @@ function IndeterminateCheckbox({
 }
 
 function StudentsTable() {
-  const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
-  const [sorting, setSorting] = useState<SortingState>([]);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
   const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const data: StudentProps[] = useMemo(
-    () => studentData.filter((ele) => ele.role === 'user'),
-    []
-  );
+  const [query, setQuery] = useState<SearchQueryType>({ limit: 10 });
+
+  const { data: datastd, setStartFetching } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student/find", payload: query });
+  const { setStartFetching: setStartFetchingDelete, loading } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student/find", payload: query, method: "DELETE" });
+
+  const response = useMemo<IResponse<StudentProps[]> | null>(() => datastd, [datastd] );
+  const dataStudent = useMemo<StudentProps[]>(() => response?.data?.filter((data) => data?.role === "User") ?? [], [response?.data]);
+
+  useEffect(() => setStartFetching(true), []);
+
+  // handle Search
+  const [text] = useDebounce(query.search, 500);
+
+  useMemo(() => {
+    setQuery((e) => ({ ...e, page: 1 }))
+
+    setStartFetching(true);
+  }, [text]);
+
+  // handle pagination
+  useMemo(() => {
+    setStartFetching(true);
+    
+  }, [query.limit, query.page]);
+
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
@@ -104,7 +124,7 @@ function StudentsTable() {
         cell: (info) => (
           <div className="flex items-center">
             <img
-              src={info.row.original.images.fileLink}
+              src={info?.row?.original?.image?.fileLink}
               alt={`${info.getValue()} Profile`}
               className="mr-3 w-6 h-6 object-cover object-center rounded-full"
             />
@@ -158,21 +178,21 @@ function StudentsTable() {
   );
 
   const table = useReactTable({
-    data,
+    data: dataStudent,
     columns: defaultColumns,
     state: {
-      globalFilter: filter,
+      globalFilter: query.search,
       rowSelection,
-      sorting,
+      pagination: {
+        pageIndex: 0,
+        pageSize: query.limit ?? 10
+      }
     },
-    enableRowSelection: true,
+
     getCoreRowModel: getCoreRowModel<StudentProps>(),
-    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onGlobalFilterChange: setFilter,
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
   });
 
   const handleResize = () => {
@@ -189,11 +209,7 @@ function StudentsTable() {
   };
 
   const handleDelete = () => {
-    setIsLoadingDelete(true);
-    console.log(`delete id:${deleteId}...`);
     setTimeout(() => {
-      console.log('delete success');
-      setIsLoadingDelete(false);
       setIsOpenDeleteDialog(false);
     }, 3000);
   };
@@ -214,8 +230,8 @@ function StudentsTable() {
               type="text"
               placeholder="Cari berdasarkan nama..."
               className="w-3/4 pl-10 focus:outline-none focus:ring-0"
-              value={filter ?? ''}
-              onChange={(e) => setFilter(String(e.target.value))}
+              value={query.search ?? ""}
+              onChange={(e) => setQuery({ ...query, search: e.target.value })}
             />
             <div className="absolute left-0 top-0">
               <SearchIcon
@@ -223,11 +239,6 @@ function StudentsTable() {
                 className="text-gray-500"
               />
             </div>
-          </div>
-          <div className="">
-            <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs">
-              {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
-            </p>
           </div>
         </div>
         <div className="pb-3 overflow-x-auto">
@@ -308,10 +319,8 @@ function StudentsTable() {
                 id="tableScore_paginate"
                 name="tableScore_paginate"
                 className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none"
-                value={table.getState().pagination.pageSize}
-                onChange={(e) => {
-                  table.setPageSize(Number(e.target.value));
-                }}>
+                value={query.limit}
+                onChange={(e) => setQuery(query => ({ ...query, limit: Number(e.target.value) }))}>
                 {[10, 20, 50, 100].map((pageSize) => (
                   <option
                     key={pageSize}
@@ -332,42 +341,40 @@ function StudentsTable() {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">dari {data.length} data</p>
+            <p className="text-gray-500 ml-3">dari {response?.page?.totalData} data</p>
           </div>
           <div className="flex space-x-3">
             {isLargeView && (
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}>
+                onClick={() => setQuery( e => ({ ...e, page: 1 }))}
+                disabled={Number(response?.page.currentPage) <= 1}
+              >
                 First
               </button>
             )}
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}>
-              <ArrowLeftIcon
-                size={16}
-                className={isLargeView ? 'mr-1' : ''}
-              />
-              {isLargeView ? 'Previous' : ''}
+              onClick={() => setQuery( e => ({ ...e, page: Number(Number(response?.page.currentPage) - 1)}))}
+              disabled={Number(response?.page.currentPage) <= 1}
+            >
+              <ArrowLeftIcon size={16} className={isLargeView ? "mr-1" : ""} />
+              {isLargeView ? "Previous" : ""}
             </button>
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}>
-              {isLargeView ? 'Next' : ''}
-              <ArrowRightIcon
-                size={16}
-                className={isLargeView ? 'ml-1' : ''}
-              />
+              onClick={() => setQuery( e => ({ ...e, page: Number(Number(response?.page.currentPage) + 1)}))}
+              disabled={Number(response?.page.currentPage) >= Number(response?.page.totalPage)}
+            >
+              {isLargeView ? "Next" : ""}
+              <ArrowRightIcon size={16} className={isLargeView ? "ml-1" : ""} />
             </button>
             {isLargeView && (
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}>
+                onClick={() => setQuery(e => ({ ...e, page: response?.page.totalPage }))}
+                disabled={Number(response?.page.currentPage) >= Number(response?.page.totalPage)}
+              >
                 Last
               </button>
             )}
@@ -396,7 +403,7 @@ function StudentsTable() {
               className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
               onClick={() => {
                 const selectedIds = Object.keys(rowSelection);
-                const newData = data.filter(
+                const newData = dataStudent.filter(
                   (item) => !selectedIds.includes(item._id)
                 );
                 console.log('newData', newData);
@@ -415,7 +422,7 @@ function StudentsTable() {
       <AlertDelete
         isOpen={isOpenDeleteDialog}
         message="siswa"
-        isLoading={isLoadingDelete}
+        isLoading={loading}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />

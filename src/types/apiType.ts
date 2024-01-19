@@ -66,7 +66,7 @@ interface StudentProps {
   _id: string;
   name: string;
   role: string;
-  images: BaseImageProps;
+  image: BaseImageProps;
   email: string;
   phoneNumber: string;
   password: string;
