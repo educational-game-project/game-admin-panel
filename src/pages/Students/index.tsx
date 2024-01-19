@@ -7,7 +7,6 @@ import StudentsTable from "./components/StudentsTable";
 
 function Students() {
   const { setBreadcrumbs } = useBreadcrumbs();
-
   useEffect(() => {
     setBreadcrumbs([
       {
