@@ -67,12 +67,19 @@ function StudentsTable() {
   useEffect(() => setStartFetching(true), []);
 
   // handle Search
-  const [text] = useDebounce(query.search, 750);
+  const [text] = useDebounce(query.search, 500);
 
+  useMemo(() => {
+    setQuery((e) => ({ ...e, page: 1 }))
+
+    setStartFetching(true);
+  }, [text]);
+
+  // handle pagination
   useMemo(() => {
     setStartFetching(true);
     
-  }, [text, query.limit, query.page, query.search]);
+  }, [query.limit, query.page]);
 
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',

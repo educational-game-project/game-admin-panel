@@ -2,7 +2,7 @@ import { useState, useEffect, SetStateAction, Dispatch } from 'react';
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { AuthState } from '../types';
-import { getBaseUrl } from '../utilities/api';
+import { getBaseUrl } from '../utilities/apiUtils';
 
 interface IPropUseFetchHook {
   url: string;
