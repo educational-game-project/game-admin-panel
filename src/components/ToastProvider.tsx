@@ -1,18 +1,29 @@
-import { ReactNode, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import {
+  selectIsAllowedToast,
+  setNotAllowedToast,
+} from '../features/toastSlice';
 
-type ToastProviderProps = {
-  children: ReactNode;
-};
+import { ToastProviderProps } from '../types';
 
 const ToastProvider = ({ children }: ToastProviderProps) => {
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const isAllowed = useAppSelector(selectIsAllowedToast);
 
   useEffect(() => {
-    toast.clearWaitingQueue();
-    toast.dismiss();
-  }, [location.key]);
+    if (!isAllowed) {
+      toast.clearWaitingQueue();
+      toast.dismiss();
+    } else {
+      setTimeout(() => {
+        dispatch(setNotAllowedToast());
+      }, 3000);
+    }
+  }, [dispatch, isAllowed, location.key]);
 
   return <>{children}</>;
 };

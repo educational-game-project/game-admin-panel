@@ -2,13 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Loader2Icon } from 'lucide-react';
 
-interface AlertDialogProps {
-  isOpen: boolean;
-  message: string;
-  isLoading: boolean;
-  onCancel: () => void;
-  onConfirm: () => void;
-}
+import { AlertDialogProps } from '../../types';
 
 function AlertDelete({
   isOpen,

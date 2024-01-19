@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   MoreVertical,
   ChevronLast,
@@ -8,23 +8,68 @@ import {
   Activity,
   LogOut,
 } from 'lucide-react';
-import { useSidebar } from '../hook/sidebarHooks';
-import { useAppDispatch } from '../app/hooks';
-import { setUnAuth } from '../pages/Auth/features/authSlice';
-import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
-import { useAuth } from '../hook/authHooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useLogoutMutation } from '../services/authApi';
+import { setUnAuth } from '../features/authSlice';
+import { selectExpanded, toggleSidebar } from '../features/sidebarSlice';
+import { useUser } from '../hook/authHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
+import { showDefaultToast, showErrorToast } from '../components/Toast';
+import { setAllowedToast } from '../features/toastSlice';
+
+import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
 
 export default function Sidebar({ children, currentPath }: SidebarProps) {
-  const { expanded, sidebarToggle } = useSidebar();
   const [profileToggle, setProfileToggle] = useState(false);
+  const toggleProfileRef = useRef<HTMLButtonElement>(null);
+  const modalProfileRef = useRef<HTMLDivElement>(null);
+  const currentLocation: string = useLocation()?.pathname;
+  const firstPath: string = currentLocation?.split('/')[1];
+  const isProfileLocation = firstPath === 'profile';
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useAuth();
+  const isExpanded = useAppSelector(selectExpanded);
+  const [logout, { isLoading }] = useLogoutMutation();
+  const { user } = useUser();
 
-  const handleLogout = () => {
-    setProfileToggle(false);
-    dispatch(setUnAuth());
+  const handleSidebarToggle = () => {
+    dispatch(toggleSidebar());
   };
+
+  const handleLogout = async () => {
+    try {
+      const result = await logout().unwrap();
+      dispatch(setUnAuth());
+      setProfileToggle(false);
+      navigate('/login');
+      if (result.success) {
+        dispatch(setAllowedToast());
+        showDefaultToast('Logout berhasil!');
+      }
+    } catch (error) {
+      setProfileToggle(false);
+      showErrorToast('Logout gagal!');
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        toggleProfileRef.current &&
+        !toggleProfileRef.current.contains(event.target as Node) &&
+        modalProfileRef.current &&
+        !modalProfileRef.current.contains(event.target as Node)
+      ) {
+        setProfileToggle(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <aside className="h-full fixed z-10">
@@ -35,18 +80,18 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             <img
               src="https://img.logoipsum.com/243.svg"
               className={`overflow-hidden transition-all ${
-                expanded ? 'w-32' : 'w-0'
+                isExpanded ? 'w-32' : 'w-0'
               }`}
               alt="logo admin panel"
             />
           </Link>
           <button
-            onClick={() => sidebarToggle()}
+            onClick={handleSidebarToggle}
             className={`p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ${
-              expanded ? 'm-0' : 'mx-auto'
+              isExpanded ? 'm-0' : 'mx-auto'
             }`}
-            title={`${expanded ? 'Sidebar Close' : 'Sidebar Open'}`}>
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
+            title={`${isExpanded ? 'Sidebar Close' : 'Sidebar Open'}`}>
+            {isExpanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
         {/* sidebar list */}
@@ -54,7 +99,12 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
         {/* bottom */}
         <div className="border-t p-3">
           <button
-            className="flex p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-all-200 text-left group"
+            ref={toggleProfileRef}
+            className={`flex p-2 rounded-md transition-all-200 text-left group ${
+              isProfileLocation
+                ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
             onClick={() => setProfileToggle((curr) => !curr)}>
             <img
               src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
@@ -62,13 +112,15 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               )}`}
               alt={`${user?.name} profile`}
               className={`${
-                expanded ? 'w-10 h-10' : 'w-9 h-9'
-              } rounded-full object-cover object-center`}
+                isExpanded ? 'w-10 h-10' : 'w-9 h-9'
+              } rounded-full object-cover object-center ${
+                isProfileLocation && 'border-[3px] border-indigo-700'
+              }`}
             />
             <div
               className={`
               flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? 'w-48 ml-3' : 'w-0'}
+              overflow-hidden transition-all ${isExpanded ? 'w-48 ml-3' : 'w-0'}
           `}>
               <div className="leading-4 max-w-[10rem]">
                 <h4 className="font-semibold mb-0.5 text-sm line-clamp-1 text-ellipsis">
@@ -82,7 +134,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                 <MoreVertical size={20} />
               </div>
             </div>
-            {!expanded && (
+            {!isExpanded && (
               <div
                 className={`
           absolute left-full rounded-md px-2 py-1 ml-2 whitespace-nowrap
@@ -100,6 +152,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
         </div>
         {/* modal profile preference */}
         <div
+          ref={modalProfileRef}
           className={`absolute bottom-0 -right-60 transition-all-200 -translate-x-3 ${
             profileToggle
               ? 'visible opacity-100 z-10 translate-x-0'
@@ -154,11 +207,31 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             </div>
             <hr className="mt-2 mb-1.5" />
             <button
-              className="relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors group hover:bg-red-50 hover:text-red-500 text-gray-600 w-full"
+              className="group profile-logout relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors group hover:bg-red-50 hover:text-red-500 text-gray-600 w-full"
               title="Logout"
               onClick={handleLogout}
               role="button">
-              <LogOut size={17} />
+              {isLoading ? (
+                <svg
+                  className="animate-spin-fast h-4.5 w-4.5 group-hover-[.profile-logout]:text-red-500 text-gray-600 inline-block"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <LogOut size={17} />
+              )}
               <span className="ml-2.5 text-sm">Logout</span>
             </button>
           </div>
@@ -175,7 +248,7 @@ export function SidebarItem({
   active,
   alert,
 }: SidebarItemProps) {
-  const { expanded } = useSidebar();
+  const isExpanded = useAppSelector(selectExpanded);
 
   return (
     <li className="relative">
@@ -194,29 +267,29 @@ export function SidebarItem({
         {icon}
         <span
           className={`overflow-hidden transition-all ${
-            expanded ? 'w-48 ml-3' : 'w-0'
+            isExpanded ? 'w-48 ml-3' : 'w-0'
           }`}>
           {text}
         </span>
         {alert && (
           <div
             className={`absolute right-2 text-2xs rounded-full text-center ${
-              expanded
+              isExpanded
                 ? 'py-px px-1.5 min-w-[26px] bg-red-400 text-slate-50'
-                : 'w-2.5 h-2.5 top-2'
+                : 'w-2.5 h-2.5 top-1.5'
             }`}>
-            {expanded ? (
+            {isExpanded ? (
               '10'
             ) : (
               <>
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-[4.6px] translate-x-[0.5px]"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 translate-x-px -translate-y-0.75"></span>
               </>
             )}
           </div>
         )}
 
-        {!expanded && (
+        {!isExpanded && (
           <div
             className={`
           absolute left-full rounded-md px-2 py-1 ml-6
@@ -242,11 +315,11 @@ export function SidebarItem({
 }
 
 export function SeparateSidebar({ caption }: SeparateSidebarProps) {
-  const { expanded } = useSidebar();
+  const isExpanded = useAppSelector(selectExpanded);
   return (
     <p
       className={`transition-all text-xs uppercase tracking-wide font-medium text-slate-500 mb-3 ${
-        expanded ? 'w-full' : 'w-11 line-clamp-1 break-words'
+        isExpanded ? 'w-full' : 'w-11 line-clamp-1 break-words'
       }`}>
       {caption}
     </p>

@@ -1,4 +1,4 @@
-import { HTMLProps, useEffect, useMemo, useRef, useState } from "react";
+import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
 import {
   SortingState,
   createColumnHelper,
@@ -8,7 +8,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -17,11 +17,10 @@ import {
   ChevronDownIcon,
   SearchIcon,
   Trash2Icon,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { ScoreProps } from "../../types/api";
-
-import scoreData from "../../data/SCORE_DATA.json";
+import { ScoreProps } from '../../../types';
+import scoreData from '../../../data/SCORE_DATA.json';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -30,7 +29,7 @@ function IndeterminateCheckbox({
   const ref = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
-    if (typeof indeterminate === "boolean") {
+    if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate;
     }
   }, [ref, indeterminate, rest.checked]);
@@ -46,7 +45,7 @@ function IndeterminateCheckbox({
 }
 
 function ScoreTable() {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLargeView, setIsLargeView] = useState<boolean>(
@@ -54,17 +53,17 @@ function ScoreTable() {
   );
   const data = useMemo(() => scoreData, []);
   const headerClass: Record<string, string> = {
-    checkboxs: "w-14 text-center",
-    row_number: "w-12",
-    name: "",
-    score: "",
+    checkboxs: 'w-14 text-center',
+    row_number: 'w-12',
+    name: '',
+    score: '',
   };
 
   const columnHelper = createColumnHelper<ScoreProps>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
-        id: "checkboxs",
+        id: 'checkboxs',
         header: ({ table }) => (
           <IndeterminateCheckbox
             {...{
@@ -87,16 +86,16 @@ function ScoreTable() {
         ),
       }),
       columnHelper.display({
-        id: "row_number",
-        header: "#",
+        id: 'row_number',
+        header: '#',
         cell: (info) => info.row.index + 1,
       }),
-      columnHelper.accessor("name", {
-        header: "Nama Lengkap",
+      columnHelper.accessor('name', {
+        header: 'Nama Lengkap',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor("score", {
-        header: "Skor",
+      columnHelper.accessor('score', {
+        header: 'Skor',
         cell: (info) => info.getValue(),
       }),
     ],
@@ -126,9 +125,9 @@ function ScoreTable() {
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -141,11 +140,14 @@ function ScoreTable() {
               type="text"
               placeholder="Cari berdasarkan nama atau skor..."
               className="w-3/4 pl-10 focus:outline-none focus:ring-0"
-              value={filter ?? ""}
+              value={filter ?? ''}
               onChange={(e) => setFilter(String(e.target.value))}
             />
             <div className="absolute left-0 top-0">
-              <SearchIcon size={20} className="text-gray-500" />
+              <SearchIcon
+                size={20}
+                className="text-gray-500"
+              />
             </div>
           </div>
           <div className="">
@@ -160,33 +162,40 @@ function ScoreTable() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr
                   key={headerGroup.id}
-                  className="border-y border-gray-200 bg-indigo-50/50"
-                >
+                  className="border-y border-gray-200 bg-indigo-50/50">
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       className={`font-bold text-xs text-gray-500 tracking-wide px-3 py-3 text-left ${
-                        headerClass[header.id] ?? ""
-                      }`}
-                    >
+                        headerClass[header.id] ?? ''
+                      }`}>
                       {header.isPlaceholder ? null : (
                         <div
                           {...{
                             className: header.column.getCanSort()
-                              ? "cursor-pointer select-none flex items-center"
-                              : header.id === "checkboxs"
-                              ? "flex justify-center"
-                              : "",
+                              ? 'cursor-pointer select-none flex items-center'
+                              : header.id === 'checkboxs'
+                              ? 'flex justify-center'
+                              : '',
                             onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
+                          }}>
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
                           {{
-                            asc: <ArrowUpIcon size={16} className="ml-1" />,
-                            desc: <ArrowDownIcon size={16} className="ml-1" />,
+                            asc: (
+                              <ArrowUpIcon
+                                size={16}
+                                className="ml-1"
+                              />
+                            ),
+                            desc: (
+                              <ArrowDownIcon
+                                size={16}
+                                className="ml-1"
+                              />
+                            ),
                           }[header.column.getIsSorted() as string] ?? null}
                         </div>
                       )}
@@ -199,15 +208,13 @@ function ScoreTable() {
               {table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="border-b border-gray-200 hover:bg-gray-100"
-                >
+                  className="border-b border-gray-200 hover:bg-gray-100">
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
                       className={`whitespace-nowrap text-sm px-3 py-3 text-gray-500 ${
-                        cell.column.id === "score" ? "font-semibold" : ""
-                      }`}
-                    >
+                        cell.column.id === 'score' ? 'font-semibold' : ''
+                      }`}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -230,17 +237,23 @@ function ScoreTable() {
                 value={table.getState().pagination.pageSize}
                 onChange={(e) => {
                   table.setPageSize(Number(e.target.value));
-                }}
-              >
+                }}>
                 {[10, 20, 50, 100].map((pageSize) => (
-                  <option key={pageSize} value={pageSize}>
+                  <option
+                    key={pageSize}
+                    value={pageSize}>
                     {pageSize}
                   </option>
                 ))}
               </select>
               <div className="absolute right-1.5 top-1.5 pointer-events-none">
-                <label htmlFor="tableScore_paginate" className="block">
-                  <ChevronDownIcon size={20} className="text-gray-500" />
+                <label
+                  htmlFor="tableScore_paginate"
+                  className="block">
+                  <ChevronDownIcon
+                    size={20}
+                    className="text-gray-500"
+                  />
                 </label>
               </div>
             </div>
@@ -252,33 +265,35 @@ function ScoreTable() {
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
                 onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
+                disabled={!table.getCanPreviousPage()}>
                 First
               </button>
             )}
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ArrowLeftIcon size={16} className={isLargeView ? "mr-1" : ""} />
-              {isLargeView ? "Previous" : ""}
+              disabled={!table.getCanPreviousPage()}>
+              <ArrowLeftIcon
+                size={16}
+                className={isLargeView ? 'mr-1' : ''}
+              />
+              {isLargeView ? 'Previous' : ''}
             </button>
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
               onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              {isLargeView ? "Next" : ""}
-              <ArrowRightIcon size={16} className={isLargeView ? "ml-1" : ""} />
+              disabled={!table.getCanNextPage()}>
+              {isLargeView ? 'Next' : ''}
+              <ArrowRightIcon
+                size={16}
+                className={isLargeView ? 'ml-1' : ''}
+              />
             </button>
             {isLargeView && (
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
+                disabled={!table.getCanNextPage()}>
                 Last
               </button>
             )}
@@ -288,10 +303,9 @@ function ScoreTable() {
       <div
         className={`fixed transform -translate-x-1/2 left-1/2 transition-all-200 bottom-12 ${
           Object.keys(rowSelection).length > 0
-            ? "z-50 opacity-100 scale-100"
-            : "-z-10 opacity-0 scale-50"
-        }`}
-      >
+            ? 'z-50 opacity-100 scale-100'
+            : '-z-10 opacity-0 scale-50'
+        }`}>
         <div className="rounded-full px-12 py-4 shadow-lg bg-gray-900">
           <div className="flex items-center space-x-4">
             <p className="text-gray-100">
@@ -300,8 +314,7 @@ function ScoreTable() {
             {/* log */}
             <button
               className="px-3 py-1 font-medium rounded-full border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() => console.log("rowSelection", rowSelection)}
-            >
+              onClick={() => console.log('rowSelection', rowSelection)}>
               Log
             </button>
             {/* hapus */}
@@ -312,10 +325,12 @@ function ScoreTable() {
                 const newData = data.filter(
                   (item) => !selectedIds.includes(item.id)
                 );
-                console.log("newData", newData);
-              }}
-            >
-              <Trash2Icon size={16} className="mr-1" />
+                console.log('newData', newData);
+              }}>
+              <Trash2Icon
+                size={16}
+                className="mr-1"
+              />
               Hapus
             </button>
           </div>
