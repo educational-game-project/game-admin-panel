@@ -64,6 +64,8 @@ const baseQueryWithReauth: BaseQueryFn<
 };
 
 export const coreApi = createApi({
+  reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
+  tagTypes: ['Auth', 'Profile', 'Student'],
   endpoints: () => ({}),
 });
