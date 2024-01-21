@@ -15,6 +15,11 @@ const baseQuery = fetchBaseQuery({
   baseUrl: getBaseUrl(),
   credentials: 'same-origin',
   prepareHeaders: (headers, { getState }) => {
+    // if (headers.get('Content-Type') === 'multipart/form-data') {
+    //   return headers;
+    // } else {
+    //   headers.set('Content-Type', 'application/json');
+    // }
     const token = (getState() as RootState).auth.token;
     if (token) {
       headers.set('Authorization', `Bearer ${token.accessToken}`);
