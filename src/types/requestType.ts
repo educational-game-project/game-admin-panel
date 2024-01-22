@@ -8,7 +8,8 @@ interface StudentAddRequest {
   email: string;
   phoneNumber: string;
   schoolId: string;
-  media?: File | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: File | Blob | any;
 }
 interface StudentDeleteRequest {
   id: string;
