@@ -4,6 +4,8 @@ import { useUser } from '../../hook/authHooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useGetProfileQuery } from '../../services/profileApi';
+import ProfileUser from './components/ProfileUser';
+import ChangePassword from './components/ChangePassword';
 
 function Profile() {
   const { user: currentUser } = useUser();
@@ -64,7 +66,11 @@ function Profile() {
         <h5 className="font-semibold text-3xl mb-1.5">Profil</h5>
         <p className="text-gray-500">Lihat dan ubah profil pengguna.</p>
       </div>
-      <div className="bg-white p-5 rounded-xl">{content}</div>
+      <div className="bg-white p-5 rounded-xl">
+        {content}
+        <ProfileUser />
+        <ChangePassword />
+      </div>
     </div>
   );
 }
