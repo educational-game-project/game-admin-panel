@@ -1,9 +1,5 @@
 import { coreApi } from '../api/coreApi';
-import {
-  LoginRequest,
-  LoginSuccessResponse,
-  LogoutSuccessResponse,
-} from '../types';
+import { LoginRequest, LoginSuccessResponse, SuccessResponse } from '../types';
 
 export const authApi = coreApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -14,13 +10,24 @@ export const authApi = coreApi.injectEndpoints({
         body: credentials,
       }),
     }),
-    logout: builder.mutation<LogoutSuccessResponse, void>({
+    logout: builder.mutation<SuccessResponse, void>({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
       }),
     }),
+    changePassword: builder.mutation<SuccessResponse, void>({
+      query: (data) => ({
+        url: '/auth/change-password',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useChangePasswordMutation,
+} = authApi;

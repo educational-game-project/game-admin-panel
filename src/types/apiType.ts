@@ -1,10 +1,11 @@
+// BASE
 interface User {
   _id: string;
   name: string;
   role: string;
   email: string;
   phoneNumber: string;
-  deletedAt: null;
+  deletedAt: string | null;
   addedBy: string | null;
   image: string | null;
   school: string | null;
@@ -12,17 +13,109 @@ interface User {
   updatedAt: string;
   __v: number;
 }
-
-interface ProfileSuccessData {
-  status_code: number;
-  success: true;
-  status: string;
-  message: string;
-  server_time: string;
-  data: User;
+interface Image {
+  _id: string;
+  originalName: string;
+  fileName: string;
+  fileLink: string;
+  mimeType: string;
+  size: number;
+  isDefault: boolean;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: 0;
+}
+interface Student {
+  _id: string;
+  name: string;
+  role: string;
+  email: string;
+  phoneNumber: string;
+  password?: string;
+  addedBy?: {
+    _id: string;
+    name: string;
+    role: string;
+    email: string;
+    phoneNumber: string;
+    deletedAt: string | null;
+    image: Image | null;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  image: Image | null;
+  school: {
+    _id: string;
+    name: string;
+    address: string;
+    adminsCount: number;
+    studentsCount: number;
+    deletedAt?: string | null;
+    images: Image[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+    createdAtString?: string;
+    updatedAtString?: string;
+  };
+  createdAt: string;
+  deletedAt: string | null;
+  __v: number;
+  createdAtString?: string;
+  updatedAtString?: string;
+}
+interface School {
+  _id: string;
+  name: string;
+  address: string;
+  adminsCount: number;
+  studentsCount: number;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  lastUpdatedBy: string | null;
+  images: Image[];
+  addedBy: string | null;
+  createdAtString: string;
+  updatedAtString: string;
 }
 
-// ========================================
+// RESPONSE
+interface DefaultResponse {
+  statusCode: number;
+  status?: string;
+  server_time: string;
+  message: string;
+}
+interface PageResponse {
+  totalData: number;
+  perPage: number;
+  currentPage: number;
+  totalPage: number;
+}
+interface SuccessResponse extends DefaultResponse {
+  success: true;
+}
+interface ErrorResponse extends DefaultResponse {}
+interface ProfileSuccessResponse extends SuccessResponse {
+  data: User;
+}
+interface StudentListSuccessResponse extends SuccessResponse {
+  data: Student[];
+  page: PageResponse;
+}
+interface StudentSuccessResponse extends SuccessResponse {
+  data: Student;
+}
+interface SchoolSuccessResponse extends SuccessResponse {
+  data: School[];
+  page: PageResponse;
+}
+
+// CHECK DULU ========================================
 interface BaseImageProps {
   originalname: string;
   filename: string;
@@ -103,7 +196,6 @@ interface AdminProps {
   createdAtString: string;
   updatedAtString: string;
 }
-
 interface ScoreResponse {
   data: ScoreProps[];
 }
@@ -116,12 +208,32 @@ interface AdminResponse {
 interface SchoolResponse {
   data: SchoolProps[];
 }
+interface StudentProps {
+  _id: string;
+  name: string;
+  role: string;
+  images: BaseImageProps;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  deletedAt: string;
+  school: BaseSchoolAdminProps;
+  createdAt: string;
+  createdAtString: string;
+  updatedAtString: string;
+}
 
 // ====================
 
 export type {
-  ProfileSuccessData,
-  // =================
+  SuccessResponse,
+  ErrorResponse,
+  ProfileSuccessResponse,
+  StudentSuccessResponse,
+  StudentListSuccessResponse,
+  SchoolSuccessResponse,
+  Student,
+  // CHECK DULU =================
   ScoreProps,
   ScoreResponse,
   StudentProps,

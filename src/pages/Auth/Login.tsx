@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckIcon, Eye, EyeOff } from 'lucide-react';
 import { useAppDispatch } from '../../app/hooks';
 import { useLoginMutation } from '../../services/authApi';
@@ -47,7 +47,7 @@ function Login() {
       showDefaultToast('Login berhasil!');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error?.data?.message) {
+      if (error.data.message) {
         showErrorToast(error.data.message);
       } else {
         showErrorToast('Login gagal!');
