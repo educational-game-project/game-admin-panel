@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { PlusIcon } from 'lucide-react';
-import StudentsTable from './components/StudentsTable';
+import StudentsTable from './components/StudentsTableV2';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
