@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { PlusIcon } from 'lucide-react';
 import StudentsTable from './components/StudentsTableV2';
 import Breadcrumb from '../../components/Breadcrumb';
-import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { useGetStudentMutation } from '../../services/studentApi';
 import { showErrorToast } from '../../components/Toast';
+import { useAppDispatch } from '../../app/hooks';
 
 function Students() {
   const refInitMount = useRef(true);

@@ -139,6 +139,20 @@ interface ScoreProps {
   name: string;
   score: number;
 }
+interface StudentProps {
+  _id: string;
+  name: string;
+  role: string;
+  image: BaseImageProps;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  deletedAt: string;
+  school: BaseSchoolAdminProps;
+  createdAt: string;
+  createdAtString: string;
+  updatedAtString: string;
+}
 interface SchoolProps {
   _id: string;
   name: string;
