@@ -15,11 +15,6 @@ const baseQuery = fetchBaseQuery({
   baseUrl: getBaseUrl(),
   credentials: 'same-origin',
   prepareHeaders: (headers, { getState }) => {
-    // if (headers.get('Content-Type') === 'multipart/form-data') {
-    //   return headers;
-    // } else {
-    //   headers.set('Content-Type', 'application/json');
-    // }
     const token = (getState() as RootState).auth.token;
     if (token) {
       headers.set('Authorization', `Bearer ${token.accessToken}`);
@@ -33,7 +28,7 @@ const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = async (args, api, extraOptions): Promise<any> => {
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);

@@ -99,7 +99,7 @@ interface SchoolSuccessResponse extends SuccessResponse {
   page: PageResponse;
 }
 
-// ========================================
+// CHECK DULU ========================================
 interface BaseImageProps {
   originalname: string;
   filename: string;
@@ -180,7 +180,6 @@ interface AdminProps {
   createdAtString: string;
   updatedAtString: string;
 }
-
 interface ScoreResponse {
   data: ScoreProps[];
 }
@@ -217,7 +216,7 @@ export type {
   StudentSuccessResponse,
   SchoolSuccessResponse,
   Student,
-  // =================
+  // CHECK DULU =================
   ScoreProps,
   ScoreResponse,
   StudentProps,
