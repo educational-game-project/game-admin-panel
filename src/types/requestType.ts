@@ -11,8 +11,8 @@ interface StudentAddRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any;
 }
-interface StudentDeleteRequest {
+interface StudentIdRequest {
   id: string;
 }
 
-export type { StudentAddRequest, StudentGetRequest, StudentDeleteRequest };
+export type { StudentAddRequest, StudentGetRequest, StudentIdRequest };

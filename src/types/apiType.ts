@@ -32,7 +32,19 @@ interface Student {
   role: string;
   email: string;
   phoneNumber: string;
-  password: string;
+  password?: string;
+  addedBy?: {
+    _id: string;
+    name: string;
+    role: string;
+    email: string;
+    phoneNumber: string;
+    deletedAt: string | null;
+    image: Image | null;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
   image: Image | null;
   school: {
     _id: string;
@@ -40,18 +52,19 @@ interface Student {
     address: string;
     adminsCount: number;
     studentsCount: number;
+    deletedAt?: string | null;
     images: Image[];
     createdAt: string;
     updatedAt: string;
     __v: number;
-    createdAtString: string;
-    updatedAtString: string;
+    createdAtString?: string;
+    updatedAtString?: string;
   };
   createdAt: string;
   deletedAt: string | null;
   __v: number;
-  createdAtString: string;
-  updatedAtString: string;
+  createdAtString?: string;
+  updatedAtString?: string;
 }
 interface School {
   _id: string;
@@ -90,9 +103,12 @@ interface ErrorResponse extends DefaultResponse {}
 interface ProfileSuccessResponse extends SuccessResponse {
   data: User;
 }
-interface StudentSuccessResponse extends SuccessResponse {
+interface StudentListSuccessResponse extends SuccessResponse {
   data: Student[];
   page: PageResponse;
+}
+interface StudentSuccessResponse extends SuccessResponse {
+  data: Student;
 }
 interface SchoolSuccessResponse extends SuccessResponse {
   data: School[];
@@ -214,6 +230,7 @@ export type {
   ErrorResponse,
   ProfileSuccessResponse,
   StudentSuccessResponse,
+  StudentListSuccessResponse,
   SchoolSuccessResponse,
   Student,
   // CHECK DULU =================
