@@ -22,8 +22,9 @@ import {
 } from 'lucide-react';
 import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 
-import { StudentProps } from '../../../types';
-import studentData from '../../../data/STUDENT_DATA.json';
+import { Student, StudentTable } from '../../../types';
+import { showErrorToast, showSuccessToast } from '../../../components/Toast';
+import { useDeleteStudentMutation } from '../../../services/studentApi';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -47,19 +48,14 @@ function IndeterminateCheckbox({
   );
 }
 
-function StudentsTable() {
+function StudentsTable({ student, refetchStudent }: StudentTable) {
   const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
-  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
-  );
-  const data: StudentProps[] = useMemo(
-    () => studentData.filter((ele) => ele.role === 'user'),
-    []
   );
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
@@ -67,8 +63,9 @@ function StudentsTable() {
     name: 'whitespace-nowrap',
     phoneNumber: 'whitespace-nowrap',
   };
+  const [deleteStudent, { isLoading }] = useDeleteStudentMutation();
 
-  const columnHelper = createColumnHelper<StudentProps>();
+  const columnHelper = createColumnHelper<Student>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -104,7 +101,11 @@ function StudentsTable() {
         cell: (info) => (
           <div className="flex items-center">
             <img
-              src={info.row.original.images.fileLink}
+              src={
+                info.row.original.image
+                  ? info.row.original.image.fileLink
+                  : `https://ui-avatars.com/api/?name=${info.getValue()}&background=6d5Acd&color=fff`
+              }
               alt={`${info.getValue()} Profile`}
               className="mr-3 w-6 h-6 object-cover object-center rounded-full"
             />
@@ -114,11 +115,11 @@ function StudentsTable() {
       }),
       columnHelper.accessor('email', {
         header: 'Email',
-        cell: (info) => info.getValue(),
+        cell: (info) => <>{info.getValue() ?? '-'}</>,
       }),
       columnHelper.accessor('phoneNumber', {
         header: 'Telepon',
-        cell: (info) => info.getValue(),
+        cell: (info) => <>{info.getValue() ?? '-'}</>,
       }),
       columnHelper.accessor('school.name', {
         header: 'Sekolah',
@@ -158,7 +159,7 @@ function StudentsTable() {
   );
 
   const table = useReactTable({
-    data,
+    data: student!,
     columns: defaultColumns,
     state: {
       globalFilter: filter,
@@ -166,7 +167,7 @@ function StudentsTable() {
       sorting,
     },
     enableRowSelection: true,
-    getCoreRowModel: getCoreRowModel<StudentProps>(),
+    getCoreRowModel: getCoreRowModel<Student>(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -188,14 +189,34 @@ function StudentsTable() {
     setIsOpenDeleteDialog(false);
   };
 
-  const handleDelete = () => {
-    setIsLoadingDelete(true);
-    console.log(`delete id:${deleteId}...`);
-    setTimeout(() => {
-      console.log('delete success');
-      setIsLoadingDelete(false);
-      setIsOpenDeleteDialog(false);
-    }, 3000);
+  const handleDelete = async () => {
+    try {
+      const responseDelete = await deleteStudent({ id: deleteId }).unwrap();
+      if (responseDelete.success) {
+        showSuccessToast('Berhasil menghapus data siswa');
+        refetchStudent();
+      }
+    } catch (error) {
+      showErrorToast('Gagal menghapus data siswa');
+    }
+    setIsOpenDeleteDialog(false);
+  };
+  const handleSlectedDelete = async (student: Student[]) => {
+    const studentId = student[0]._id;
+    if (student.length === 1) {
+      try {
+        const responseDelete = await deleteStudent({ id: studentId }).unwrap();
+        if (responseDelete.success) {
+          showSuccessToast('Berhasil menghapus data siswa');
+          refetchStudent();
+        }
+      } catch (error) {
+        showErrorToast('Gagal menghapus data siswa');
+      }
+    } else {
+      showErrorToast('Gagal menghapus data siswa');
+    }
+    table.setRowSelection({});
   };
 
   useEffect(() => {
@@ -332,7 +353,7 @@ function StudentsTable() {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">dari {data.length} data</p>
+            <p className="text-gray-500 ml-3">dari {student.length} data</p>
           </div>
           <div className="flex space-x-3">
             {isLargeView && (
@@ -395,11 +416,11 @@ function StudentsTable() {
             <button
               className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
               onClick={() => {
-                const selectedIds = Object.keys(rowSelection);
-                const newData = data.filter(
-                  (item) => !selectedIds.includes(item._id)
+                const selectedRow = table.getSelectedRowModel().flatRows;
+                const selectedRowOriginal = selectedRow.map(
+                  (row) => row.original
                 );
-                console.log('newData', newData);
+                handleSlectedDelete(selectedRowOriginal);
               }}>
               <Trash2Icon
                 size={16}
@@ -415,7 +436,7 @@ function StudentsTable() {
       <AlertDelete
         isOpen={isOpenDeleteDialog}
         message="siswa"
-        isLoading={isLoadingDelete}
+        isLoading={isLoading}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />
