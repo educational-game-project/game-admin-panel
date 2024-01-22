@@ -20,11 +20,11 @@ import {
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
-import AlertDelete from '../../../components/AlertDialog/AlertDelete';
+import AlertDelete from '../../../../components/AlertDialog/AlertDelete';
+import { showErrorToast, showSuccessToast } from '../../../../components/Toast';
+import { useDeleteStudentMutation } from '../../../../services/studentApi';
 
-import { Student, StudentTable } from '../../../types';
-import { showErrorToast, showSuccessToast } from '../../../components/Toast';
-import { useDeleteStudentMutation } from '../../../services/studentApi';
+import { Student, StudentTable } from '../../../../types';
 
 function IndeterminateCheckbox({
   indeterminate,
