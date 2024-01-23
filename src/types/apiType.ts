@@ -7,7 +7,7 @@ interface User {
   phoneNumber: string;
   deletedAt: string | null;
   addedBy: string | null;
-  image: string | null;
+  image: Image | null;
   school: string | null;
   createdAt: string;
   updatedAt: string;

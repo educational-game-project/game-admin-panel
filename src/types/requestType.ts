@@ -15,4 +15,15 @@ interface StudentIdRequest {
   id: string;
 }
 
-export type { StudentAddRequest, StudentGetRequest, StudentIdRequest };
+interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export type {
+  ChangePasswordRequest,
+  StudentAddRequest,
+  StudentGetRequest,
+  StudentIdRequest,
+};

@@ -1,5 +1,10 @@
 import { coreApi } from '../api/coreApi';
-import { LoginRequest, LoginSuccessResponse, SuccessResponse } from '../types';
+import {
+  ChangePasswordRequest,
+  LoginRequest,
+  LoginSuccessResponse,
+  SuccessResponse,
+} from '../types';
 
 export const authApi = coreApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,6 +14,7 @@ export const authApi = coreApi.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
+      invalidatesTags: ['Profile'],
     }),
     logout: builder.mutation<SuccessResponse, void>({
       query: () => ({
@@ -16,12 +22,13 @@ export const authApi = coreApi.injectEndpoints({
         method: 'POST',
       }),
     }),
-    changePassword: builder.mutation<SuccessResponse, void>({
+    changePassword: builder.mutation<SuccessResponse, ChangePasswordRequest>({
       query: (data) => ({
         url: '/auth/change-password',
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['Profile'],
     }),
   }),
 });
