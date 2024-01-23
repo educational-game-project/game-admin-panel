@@ -33,6 +33,7 @@ function ChangePassword() {
     formState: { errors },
     handleSubmit,
     register,
+    reset,
   } = useForm<ChangePasswordRequest>({
     mode: 'onTouched',
     resolver: yupResolver(schema),
@@ -53,6 +54,7 @@ function ChangePassword() {
     try {
       await changePassword(data).unwrap();
       showSuccessToast('Password berhasil diubah.');
+      reset();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.data) {
