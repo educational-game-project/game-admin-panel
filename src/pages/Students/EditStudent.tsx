@@ -6,7 +6,6 @@ import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
 import { StudentProps } from '../../types';
-import studentData from '../../data/STUDENT_DATA.json';
 
 function EditStudent() {
   const [student, setStudent] = useState<StudentProps | undefined>();
@@ -36,10 +35,10 @@ function EditStudent() {
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
   }, [dispatch, studentId]);
-  useEffect(() => {
-    const foundStudent = studentData.find((user) => user._id === studentId);
-    setStudent(foundStudent);
-  }, [studentId]);
+  // useEffect(() => {
+  //   const foundStudent = studentData.find((user) => user._id === studentId);
+  //   // setStudent(foundStudent);
+  // }, [studentId]);
 
   return (
     <div>
@@ -190,7 +189,7 @@ function EditStudent() {
               <div className="flex items-center mb-4">
                 <figure className="flex items-center justify-center overflow-hidden w-14 h-14 rounded-full mr-3">
                   <img
-                    src={student?.images?.fileLink}
+                    src={student?.image?.fileLink}
                     alt={`${student?.name} Profile`}
                     className="w-full h-full object-cover object-center"
                   />

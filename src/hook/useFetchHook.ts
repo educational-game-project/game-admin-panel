@@ -21,6 +21,8 @@ const useFetchHook = <T>({ url, method, options, payload }: IPropUseFetchHook): 
     const fetchData = async (): Promise<void> => {
       try {
         if (startFetching) {
+          setLoading(true)
+
           const createAxiosInstance = axios.create({ baseURL: getBaseUrl(), method: method ?? "POST" });
 
           const getLocalData: string | null = localStorage.getItem('userKogGame');
@@ -31,24 +33,22 @@ const useFetchHook = <T>({ url, method, options, payload }: IPropUseFetchHook): 
 
           createAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${user?.token?.accessToken}`;
 
-          const response = await createAxiosInstance({ ...options, url, data: { ...payload } })
+          const response = await createAxiosInstance({ ...options, url, data: { ...payload } });
 
-          if (response.status === 401) return handleUnauthorized();
-
-          const result = response;
-
-          setData(result.data);
+          setData(response.data);
         }
 
-      } catch (error) {
+      } catch (error: any) {
         setError(error instanceof Error ? error : new Error('An unknown error occurred'));
+
+        if (error?.response.status === 401) return handleUnauthorized();
       } finally {
         setLoading(false);
         setStartFetching(false)
       }
     };
 
-    const handleUnauthorized = (): void => {
+    const handleUnauthorized = (): void => { 
       localStorage.removeItem('userKogGame');
       window.location.replace('/login');
     };
