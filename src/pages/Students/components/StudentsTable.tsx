@@ -80,7 +80,7 @@ function StudentsTable() {
 
   // handle pagination
   useMemo(() => { setStartFetching(true); }, [query.page]);
-  useMemo(() => { setStartFetching(true); }, [query.paSWge]);
+  useMemo(() => { setStartFetching(true); }, [query.page]);
 
   // handle fetch after deleted student
   useMemo(() => { if(!loadingDeleted) {
