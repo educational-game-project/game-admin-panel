@@ -5,14 +5,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDropzone } from 'react-dropzone';
 import { ChevronDownIcon, Loader2Icon, UploadCloudIcon } from 'lucide-react';
-import Breadcrumb from '../../components/Breadcrumb';
-import { useAppDispatch } from '../../app/hooks';
-import { setBreadcrumb } from '../../features/breadcrumbSlice';
-import { showErrorToast, showSuccessToast } from '../../components/Toast';
-import { useAddStudentMutation } from '../../services/studentApi';
-import { setAllowedToast } from '../../features/toastSlice';
+import Breadcrumb from '../../../components/Breadcrumb';
+import { useAppDispatch } from '../../../app/hooks';
+import { setBreadcrumb } from '../../../features/breadcrumbSlice';
+import { showErrorToast, showSuccessToast } from '../../../components/Toast';
+import { useAddStudentMutation } from '../../../services/studentApi';
+import { setAllowedToast } from '../../../features/toastSlice';
 
-import { StudentAddRequest } from '../../types';
+import { StudentAddRequest } from '../../../types';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const schema = yup.object().shape({
@@ -197,6 +197,11 @@ function AddStudent() {
                     aria-invalid={errors.email ? 'true' : 'false'}
                     {...register('email')}
                   />
+                  {errors.email && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 {/* phone number */}
                 <div className="mb-4">
@@ -218,6 +223,11 @@ function AddStudent() {
                     aria-invalid={errors.phoneNumber ? 'true' : 'false'}
                     {...register('phoneNumber')}
                   />
+                  {errors.phoneNumber && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.phoneNumber.message}
+                    </p>
+                  )}
                 </div>
                 {/* school::select */}
                 <div className="mb-1">
@@ -249,6 +259,11 @@ function AddStudent() {
                       />
                     </div>
                   </div>
+                  {errors.schoolId && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.schoolId.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

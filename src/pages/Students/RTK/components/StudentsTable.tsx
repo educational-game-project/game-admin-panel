@@ -1,10 +1,11 @@
 import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDebounce } from 'use-debounce';
 import {
+  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -19,11 +20,11 @@ import {
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
-import AlertDelete from '../../../components/AlertDialog/AlertDelete';
+import AlertDelete from '../../../../components/AlertDialog/AlertDelete';
+import { showErrorToast, showSuccessToast } from '../../../../components/Toast';
+import { useDeleteStudentMutation } from '../../../../services/studentApi';
 
-import useFetchHook from '../../../hook/useFetchHook';
-import { SearchQueryType } from '../../../types/search_query';
-import { StudentProps } from '../../../types';
+import { Student, StudentTable } from '../../../../types';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -47,55 +48,24 @@ function IndeterminateCheckbox({
   );
 }
 
-function StudentsTable() {
+function StudentsTable({ student, refetchStudent }: StudentTable) {
+  const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const [query, setQuery] = useState<SearchQueryType>({ limit: 10 });
-
-  const { data: datastd, setStartFetching } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student/find", payload: query });
-  const { setStartFetching: setStartFetchingDelete, loading: loadingDeleted } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student", payload: { id: deleteId }, method: "DELETE" });
-
-  const response = useMemo<IResponse<StudentProps[]> | null>(
-    () => datastd,
-    [datastd]
-  );
-  const dataStudent = useMemo<StudentProps[]>(
-    () => response?.data?.filter((data) => data?.role === 'User') ?? [],
-    [response?.data]
-  );
-
-  useEffect(() => setStartFetching(true), []);
-
-  // handle Search
-  const [text] = useDebounce(query.search, 500);
-  useMemo(() => {
-    setQuery((e) => ({ ...e, page: 1 }));
-
-    setStartFetching(true);
-  }, [text]);
-
-  // handle pagination
-  useMemo(() => { setStartFetching(true); }, [query.page]);
-  useMemo(() => { setStartFetching(true); }, [query.paSWge]);
-
-  // handle fetch after deleted student
-  useMemo(() => { if(!loadingDeleted) {
-    setIsOpenDeleteDialog(false);
-    setStartFetching(true);
-  } }, [loadingDeleted]);
-
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
     name: 'whitespace-nowrap',
     phoneNumber: 'whitespace-nowrap',
   };
+  const [deleteStudent, { isLoading }] = useDeleteStudentMutation();
 
-  const columnHelper = createColumnHelper<StudentProps>();
+  const columnHelper = createColumnHelper<Student>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -131,7 +101,11 @@ function StudentsTable() {
         cell: (info) => (
           <div className="flex items-center">
             <img
-              src={info?.row?.original?.image?.fileLink}
+              src={
+                info.row.original.image
+                  ? info.row.original.image.fileLink
+                  : `https://ui-avatars.com/api/?name=${info.getValue()}&background=6d5Acd&color=fff`
+              }
               alt={`${info.getValue()} Profile`}
               className="mr-3 w-6 h-6 object-cover object-center rounded-full"
             />
@@ -141,11 +115,11 @@ function StudentsTable() {
       }),
       columnHelper.accessor('email', {
         header: 'Email',
-        cell: (info) => info.getValue(),
+        cell: (info) => <>{info.getValue() ?? '-'}</>,
       }),
       columnHelper.accessor('phoneNumber', {
         header: 'Telepon',
-        cell: (info) => info.getValue(),
+        cell: (info) => <>{info.getValue() ?? '-'}</>,
       }),
       columnHelper.accessor('school.name', {
         header: 'Sekolah',
@@ -185,21 +159,21 @@ function StudentsTable() {
   );
 
   const table = useReactTable({
-    data: dataStudent,
+    data: student!,
     columns: defaultColumns,
     state: {
-      globalFilter: query.search,
+      globalFilter: filter,
       rowSelection,
-      pagination: {
-        pageIndex: 0,
-        pageSize: query.limit ?? 10,
-      },
+      sorting,
     },
-
-    getCoreRowModel: getCoreRowModel<StudentProps>(),
+    enableRowSelection: true,
+    getCoreRowModel: getCoreRowModel<Student>(),
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    onGlobalFilterChange: setFilter,
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
   });
 
   const handleResize = () => {
@@ -215,8 +189,34 @@ function StudentsTable() {
     setIsOpenDeleteDialog(false);
   };
 
-  const handleDelete = () => {
-    setStartFetchingDelete(true)
+  const handleDelete = async () => {
+    try {
+      const responseDelete = await deleteStudent({ id: deleteId }).unwrap();
+      if (responseDelete.success) {
+        showSuccessToast('Berhasil menghapus data siswa');
+        refetchStudent();
+      }
+    } catch (error) {
+      showErrorToast('Gagal menghapus data siswa');
+    }
+    setIsOpenDeleteDialog(false);
+  };
+  const handleSlectedDelete = async (student: Student[]) => {
+    const studentId = student[0]._id;
+    if (student.length === 1) {
+      try {
+        const responseDelete = await deleteStudent({ id: studentId }).unwrap();
+        if (responseDelete.success) {
+          showSuccessToast('Berhasil menghapus data siswa');
+          refetchStudent();
+        }
+      } catch (error) {
+        showErrorToast('Gagal menghapus data siswa');
+      }
+    } else {
+      showErrorToast('Gagal menghapus data siswa');
+    }
+    table.setRowSelection({});
   };
 
   useEffect(() => {
@@ -235,8 +235,8 @@ function StudentsTable() {
               type="text"
               placeholder="Cari berdasarkan nama..."
               className="w-3/4 pl-10 focus:outline-none focus:ring-0"
-              value={query.search ?? ''}
-              onChange={(e) => setQuery({ ...query, search: e.target.value })}
+              value={filter ?? ''}
+              onChange={(e) => setFilter(String(e.target.value))}
             />
             <div className="absolute left-0 top-0">
               <SearchIcon
@@ -244,6 +244,11 @@ function StudentsTable() {
                 className="text-gray-500"
               />
             </div>
+          </div>
+          <div className="">
+            <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs">
+              {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+            </p>
           </div>
         </div>
         <div className="pb-3 overflow-x-auto">
@@ -324,13 +329,10 @@ function StudentsTable() {
                 id="tableScore_paginate"
                 name="tableScore_paginate"
                 className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none"
-                value={query.limit}
-                onChange={(e) =>
-                  setQuery((query) => ({
-                    ...query,
-                    limit: Number(e.target.value),
-                  }))
-                }>
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  table.setPageSize(Number(e.target.value));
+                }}>
                 {[10, 20, 50, 100].map((pageSize) => (
                   <option
                     key={pageSize}
@@ -351,28 +353,21 @@ function StudentsTable() {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">
-              dari {response?.page?.totalData} data
-            </p>
+            <p className="text-gray-500 ml-3">dari {student.length} data</p>
           </div>
           <div className="flex space-x-3">
             {isLargeView && (
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-                onClick={() => setQuery((e) => ({ ...e, page: 1 }))}
-                disabled={Number(response?.page.currentPage) <= 1}>
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}>
                 First
               </button>
             )}
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() =>
-                setQuery((e) => ({
-                  ...e,
-                  page: Number(Number(response?.page.currentPage) - 1),
-                }))
-              }
-              disabled={Number(response?.page.currentPage) <= 1}>
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}>
               <ArrowLeftIcon
                 size={16}
                 className={isLargeView ? 'mr-1' : ''}
@@ -381,16 +376,8 @@ function StudentsTable() {
             </button>
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() =>
-                setQuery((e) => ({
-                  ...e,
-                  page: Number(Number(response?.page.currentPage) + 1),
-                }))
-              }
-              disabled={
-                Number(response?.page.currentPage) >=
-                Number(response?.page.totalPage)
-              }>
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}>
               {isLargeView ? 'Next' : ''}
               <ArrowRightIcon
                 size={16}
@@ -400,13 +387,8 @@ function StudentsTable() {
             {isLargeView && (
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-                onClick={() =>
-                  setQuery((e) => ({ ...e, page: response?.page.totalPage }))
-                }
-                disabled={
-                  Number(response?.page.currentPage) >=
-                  Number(response?.page.totalPage)
-                }>
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}>
                 Last
               </button>
             )}
@@ -434,11 +416,11 @@ function StudentsTable() {
             <button
               className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
               onClick={() => {
-                const selectedIds = Object.keys(rowSelection);
-                const newData = dataStudent.filter(
-                  (item) => !selectedIds.includes(item._id)
+                const selectedRow = table.getSelectedRowModel().flatRows;
+                const selectedRowOriginal = selectedRow.map(
+                  (row) => row.original
                 );
-                console.log('newData', newData);
+                handleSlectedDelete(selectedRowOriginal);
               }}>
               <Trash2Icon
                 size={16}
@@ -454,7 +436,7 @@ function StudentsTable() {
       <AlertDelete
         isOpen={isOpenDeleteDialog}
         message="siswa"
-        isLoading={loadingDeleted}
+        isLoading={isLoading}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />

@@ -1,3 +1,5 @@
+import { SuccessResponse } from '.';
+
 interface User {
   _id: string;
   name: string;
@@ -15,20 +17,8 @@ interface LoginSuccessData {
   user: User;
   tokens: Token;
 }
-interface LoginSuccessResponse {
-  status_code: number;
-  success: true;
-  status: string;
-  message: string;
-  server_time: string;
+interface LoginSuccessResponse extends SuccessResponse {
   data: LoginSuccessData;
-}
-interface LogoutSuccessResponse {
-  status_code: number;
-  success: boolean;
-  status: string;
-  server_time: string;
-  message: string;
 }
 interface AuthState {
   user: User | null;
@@ -40,17 +30,9 @@ interface LoginRequest {
   password: string;
   remember?: boolean;
 }
-interface LoginErrorResponse {
-  statusCode: number;
-  status: string;
-  server_time: string;
-  message: string;
-}
 
 export type {
-  LoginErrorResponse,
   LoginSuccessData,
-  LogoutSuccessResponse,
   LoginSuccessResponse,
   User,
   Token,
