@@ -1,23 +1,52 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ChevronDownIcon, Loader2Icon, UploadCloudIcon } from 'lucide-react';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
-import { StudentProps } from '../../types';
+import { Student } from '../../types';
+import RoundedLoader from '../../components/Loaders/RoundedLoader';
+import useFetchHook from '../../hook/useFetchHook';
+
+type TypeUpdateStudent = {
+  name?: string;
+  email?: string;
+  media?: File | string;
+  phoneNumber?: string;
+}
 
 function EditStudent() {
-  const [student, setStudent] = useState<StudentProps | undefined>();
-  const [isLoadingSave, setIsLoadingSave] = useState(false);
-  const { studentId } = useParams();
   const dispatch = useAppDispatch();
+  const { studentId } = useParams();
+
+  const [student, setStudent] = useState<Student | undefined>(undefined);
+  const [studentUpdate, setStudentUpdate] = useState<TypeUpdateStudent>({});
+  const [formData, setFormData] = useState<FormData>();
+
+  const { setStartFetching, loading, data: dataStudent } = useFetchHook<IResponse<Student>>({ url: "/user/student/detail", payload: { id: studentId } });
+  const { loading: loadingUpdateStudent, setStartFetching: setStartFetchingUpdate } = useFetchHook({ 
+    url: "/user/student", 
+    payload: formData, 
+    options: { headers: { "Content-Type": "multipart/form-data" } } 
+  });
+
+  useMemo(() => {
+    if(dataStudent?.data !== undefined) setStudent(dataStudent?.data)
+  }, [dataStudent])
 
   const handleSubmit = () => {
-    setIsLoadingSave(true);
-    setTimeout(() => {
-      setIsLoadingSave(false);
-    }, 2000);
+    const formData = new FormData()
+    formData.append("name", studentUpdate.name as string)
+    formData.append("email", studentUpdate.name as string)
+    formData.append("phoneNumber", studentUpdate.name as string)
+    formData.append("media", studentUpdate.media as File)
+
+    if(!formData.has("media")) formData.delete("media");
+
+    setFormData(() => (formData));
+
+    setStartFetchingUpdate(true)
   };
 
   useEffect(() => {
@@ -34,14 +63,25 @@ function EditStudent() {
       },
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
-  }, [dispatch, studentId]);
-  // useEffect(() => {
-  //   const foundStudent = studentData.find((user) => user._id === studentId);
-  //   // setStudent(foundStudent);
-  // }, [studentId]);
 
+    setStartFetching(true)
+  }, [studentId]);
+
+  const handleForm = ({ type, value }: { type: string, value: string | File }): void => {
+    switch(type) {
+      case 'NAME': setStudentUpdate((e) => ({ ...e, name: value as string })); break;
+      case 'EMAIL': setStudentUpdate((e) => ({ ...e, email: value as string })); break;
+      case 'PHONE_NUMBER': setStudentUpdate((e) => ({ ...e, phoneNumber: value as string })); break;
+      case 'MEDIA': setStudentUpdate((e) => ({ ...e, media: value })); break;
+    }
+  }
+
+  useMemo(() => console.log(studentUpdate), [studentUpdate])
+
+  
   return (
     <div>
+      { loading ? <RoundedLoader /> : null }
       <div className="mb-6">
         <Breadcrumb />
         <div className="flex items-center justify-between">
@@ -53,7 +93,7 @@ function EditStudent() {
             <Link
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 ${
-                isLoadingSave
+                loadingUpdateStudent
                   ? 'opacity-50 cursor-not-allowed bg-gray-200'
                   : 'bg-gray-50 hover:bg-gray-100'
               }`}
@@ -63,9 +103,9 @@ function EditStudent() {
             <button
               type="button"
               className="leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent bg-violet-600 px-6 py-3 text-sm font-medium text-gray-100 hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2"
-              disabled={isLoadingSave}
+              disabled={loadingUpdateStudent}
               onClick={handleSubmit}>
-              {isLoadingSave ? (
+              {loadingUpdateStudent ? (
                 <>
                   <span className="translate-y-[1px]">
                     <Loader2Icon
@@ -82,7 +122,7 @@ function EditStudent() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-12 gap-6">
+      <form className="grid grid-cols-12 gap-6">
         <div className="col-span-full xl:col-span-8">
           <div className="bg-white rounded-xl">
             <div className="px-5 pt-4">
@@ -92,8 +132,7 @@ function EditStudent() {
               </p>
             </div>
             <div className="p-5">
-              <form
-                action=""
+              <div
                 className="block">
                 {/* name */}
                 <div className="mb-4">
@@ -106,7 +145,8 @@ function EditStudent() {
                     id="name"
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={student?.name}
+                    value={studentUpdate?.name ?? student?.name}
+                    onChange={(e) => handleForm({ type: 'NAME', value: e.target.value })}
                     placeholder="Masukkan nama siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -123,7 +163,8 @@ function EditStudent() {
                     id="email"
                     type="email"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={student?.email}
+                    value={studentUpdate?.email ?? student?.email}
+                    onChange={(e) => handleForm({ type: 'EMAIL', value: e.target.value })}
                     placeholder="Masukkan email siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -138,9 +179,10 @@ function EditStudent() {
                   </label>
                   <input
                     id="phone"
-                    type="text"
+                    type="number"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={student?.phoneNumber}
+                    value={studentUpdate?.phoneNumber ?? student?.phoneNumber}
+                    onChange={(e) => handleForm({ type: 'PHONE_NUMBER', value: e.target.value })}
                     placeholder="Masukkan nomor telepon siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -173,7 +215,7 @@ function EditStudent() {
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -188,33 +230,32 @@ function EditStudent() {
             <div className="p-5">
               <div className="flex items-center mb-4">
                 <figure className="flex items-center justify-center overflow-hidden w-14 h-14 rounded-full mr-3">
-                  <img
-                    src={student?.image?.fileLink}
-                    alt={`${student?.name} Profile`}
-                    className="w-full h-full object-cover object-center"
-                  />
+                  { student?.image?.fileLink ? (
+                    <img
+                      src={student?.image?.fileLink}
+                      alt={`${student?.name} Profile`}
+                      className="w-full h-full object-cover object-center"
+                    />
+                  ) : null }
                 </figure>
                 <div className="">
                   <h5 className="font-medium text-base mb-0.5">
                     Ubah Foto Profil
                   </h5>
                   <div className="flex items-center space-x-3">
-                    <p className="text-gray-400 hover:text-red-500 cursor-pointer">
+                    <p onClick={() => {}} className="text-gray-400 hover:text-red-500 cursor-pointer">
                       Hapus
-                    </p>
-                    <p className="text-violet-600 hover:text-violet-500 cursor-pointer">
-                      Update
                     </p>
                   </div>
                 </div>
               </div>
-              <form
-                action=""
+              <div
                 className="block">
                 <input
                   id="profileImg"
                   name="profileImg"
                   type="file"
+                  onChange={(e) => handleForm({ type: "MEDIA", value: e.target?.files?.[0] as File })}
                   className="hidden opacity-0 invisible"
                 />
                 <div className="cursor-pointer w-full p-4 border-2 border-dashed border-gray-300 rounded-md flex flex-col justify-center items-center">
@@ -236,11 +277,11 @@ function EditStudent() {
                     SVG, PNG, or JPG (max. 3.00 MB)
                   </p>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

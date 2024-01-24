@@ -8,7 +8,7 @@ interface IPropUseFetchHook {
   url: string;
   method?: string;
   options?: AxiosRequestConfig;
-  payload?: Record<string, any>;
+  payload?: any;
 }
 
 const useFetchHook = <T>({ url, method, options, payload }: IPropUseFetchHook): { data: T | null; error: Error | null; loading: boolean, setStartFetching: Dispatch<SetStateAction<boolean>> } => {
