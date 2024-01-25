@@ -233,6 +233,8 @@ export type {
   StudentListSuccessResponse,
   SchoolSuccessResponse,
   Student,
+  Image,
+  User,
   // CHECK DULU =================
   ScoreProps,
   ScoreResponse,

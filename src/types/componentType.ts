@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Student } from '.';
+import { User } from './apiType';
 
 // alert dialog
 interface AlertDialogProps {
@@ -43,12 +44,22 @@ interface StudentTable {
   refetchStudent: () => void;
 }
 
+// profile
+interface ProfileUserProps {
+  user: User;
+}
+interface HeaderProfileProps {
+  isProfilePage: boolean;
+}
+
 export type {
   AlertDialogProps,
   ButtonClipboardProps,
   Breadcrumb,
   BreadcrumbState,
   BreadcrumbIconProps,
+  HeaderProfileProps,
+  ProfileUserProps,
   ToastState,
   ToastProviderProps,
   StudentTable,

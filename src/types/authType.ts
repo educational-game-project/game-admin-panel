@@ -1,12 +1,12 @@
-import { SuccessResponse } from '.';
+import { Image, SuccessResponse } from '.';
 
-interface User {
+interface UserAuth {
   _id: string;
   name: string;
   role: string;
   email: string;
   phoneNumber: string;
-  images: string[];
+  images: Image | null;
   school: string;
 }
 interface Token {
@@ -14,14 +14,14 @@ interface Token {
   refreshToken: string;
 }
 interface LoginSuccessData {
-  user: User;
+  user: UserAuth;
   tokens: Token;
 }
 interface LoginSuccessResponse extends SuccessResponse {
   data: LoginSuccessData;
 }
 interface AuthState {
-  user: User | null;
+  user: UserAuth | null;
   token: Token | null;
   isAuth: boolean | null;
 }
@@ -34,7 +34,7 @@ interface LoginRequest {
 export type {
   LoginSuccessData,
   LoginSuccessResponse,
-  User,
+  UserAuth,
   Token,
   AuthState,
   LoginRequest,

@@ -28,7 +28,6 @@ export const authApi = coreApi.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Profile'],
     }),
   }),
 });

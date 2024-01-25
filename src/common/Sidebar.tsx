@@ -7,6 +7,8 @@ import {
   UserCog,
   Activity,
   LogOut,
+  MoonIcon,
+  SunIcon,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useLogoutMutation } from '../services/authApi';
@@ -21,6 +23,7 @@ import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
 
 export default function Sidebar({ children, currentPath }: SidebarProps) {
   const [profileToggle, setProfileToggle] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleProfileRef = useRef<HTMLButtonElement>(null);
   const modalProfileRef = useRef<HTMLDivElement>(null);
   const currentLocation: string = useLocation()?.pathname;
@@ -158,8 +161,8 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               ? 'visible opacity-100 z-10 translate-x-0'
               : 'invisible opacity-20 -z-10'
           }`}>
-          <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-100">
-            <div className="flex">
+          <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-200">
+            <div className="flex mb-2.5">
               <img
                 src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
                   user?.name
@@ -173,9 +176,31 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     {user?.name}
                   </h4>
                   <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis">
-                    Administrator
+                    {user?.role === 'Admin'
+                      ? 'Administrator'
+                      : 'Super Administrator'}
                   </span>
                 </div>
+              </div>
+            </div>
+            <div
+              className="relative flex items-center justify-between py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group text-gray-600"
+              title="Dark Mode">
+              <div className="flex items-center">
+                {isDarkMode ? <MoonIcon size={17} /> : <SunIcon size={17} />}
+                <span className="ml-2.5 text-sm">Dark Mode</span>
+              </div>
+              <div className="absolute right-2">
+                <label className="relative inline-block w-10 h-5">
+                  <input
+                    id="darkMode"
+                    name="darkMode"
+                    type="checkbox"
+                    onChange={() => setIsDarkMode((curr) => !curr)}
+                    className="peer/darkMode opacity-0 w-0 h-0"
+                  />
+                  <span className="slider round absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-gray-300 transition-all duration-[400ms] rounded-[2.125rem] before:absolute before:content-[''] before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:transition-all before:duration-[400ms] before:rounded-[50%] peer-checked/darkMode:bg-indigo-500 peer-checked/darkMode:before:translate-x-5"></span>
+                </label>
               </div>
             </div>
             <hr className="mt-2 mb-1.5" />
@@ -198,7 +223,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
                     : 'hover:bg-indigo-50 text-gray-600'
                 }`}
-                to="/activity"
+                to="/profile/activity"
                 onClick={() => setProfileToggle(false)}
                 title="Activity">
                 <Activity size={17} />

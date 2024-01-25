@@ -18,6 +18,7 @@ import Analysis from './pages/Analysis';
 import Preferences from './pages/Preferences';
 import Support from './pages/Support';
 import Profile from './pages/Profile';
+import ChangePassword from './pages/Profile/ChangePassword';
 import ErrorPage from './pages/Error';
 import Login from './pages/Auth/Login';
 import EditStudent from './pages/Students/EditStudent';
@@ -118,6 +119,10 @@ function App() {
                   <Route
                     path="/profile"
                     element={<Profile />}
+                  />
+                  <Route
+                    path="/profile/change-password"
+                    element={<ChangePassword />}
                   />
                 </Route>
               </Route>
