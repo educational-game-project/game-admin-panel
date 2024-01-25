@@ -1,7 +1,8 @@
 interface IResponse<T> {
-    data: T,
-    message: string,
+    data: T;
+    message: string;
     page: PageType
+    status_code?: number;
 }
 
 type PageType = {
