@@ -41,7 +41,7 @@ function Login() {
     try {
       const result = await login(data).unwrap();
       const prevPath = location.state?.from || '/';
-      dispatch(setAuth(result.data));
+      dispatch(setAuth(result?.data));
       navigate(prevPath);
       dispatch(setAllowedToast());
       showDefaultToast('Login berhasil!');
