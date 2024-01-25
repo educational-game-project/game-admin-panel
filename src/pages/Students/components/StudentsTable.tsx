@@ -51,18 +51,13 @@ function StudentsTable() {
   const [rowSelection, setRowSelection] = useState({});
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
-  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
   const [query, setQuery] = useState<SearchQueryType>({ limit: 10 });
 
-  const { data: datastd, setStartFetching } = useFetchHook<
-    IResponse<StudentProps[]>
-  >({ url: '/user/student/find', payload: query });
-  const { setStartFetching: setStartFetchingDelete, loading } = useFetchHook<
-    IResponse<StudentProps[]>
-  >({ url: '/user/student/find', payload: query, method: 'DELETE' });
+  const { data: datastd, setStartFetching } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student/find", payload: query });
+  const { setStartFetching: setStartFetchingDelete, loading: loadingDeleted } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student", payload: { id: deleteId }, method: "DELETE" });
 
   const response = useMemo<IResponse<StudentProps[]> | null>(
     () => datastd,
@@ -77,7 +72,6 @@ function StudentsTable() {
 
   // handle Search
   const [text] = useDebounce(query.search, 500);
-
   useMemo(() => {
     setQuery((e) => ({ ...e, page: 1 }));
 
@@ -85,9 +79,14 @@ function StudentsTable() {
   }, [text]);
 
   // handle pagination
-  useMemo(() => {
+  useMemo(() => { setStartFetching(true); }, [query.page]);
+  useMemo(() => { setStartFetching(true); }, [query.page]);
+
+  // handle fetch after deleted student
+  useMemo(() => { if(!loadingDeleted) {
+    setIsOpenDeleteDialog(false);
     setStartFetching(true);
-  }, [query.limit, query.page]);
+  } }, [loadingDeleted]);
 
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
@@ -217,9 +216,7 @@ function StudentsTable() {
   };
 
   const handleDelete = () => {
-    setTimeout(() => {
-      setIsOpenDeleteDialog(false);
-    }, 3000);
+    setStartFetchingDelete(true)
   };
 
   useEffect(() => {
@@ -457,7 +454,7 @@ function StudentsTable() {
       <AlertDelete
         isOpen={isOpenDeleteDialog}
         message="siswa"
-        isLoading={loading}
+        isLoading={loadingDeleted}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />
