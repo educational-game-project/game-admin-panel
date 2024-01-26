@@ -1,6 +1,6 @@
 import { coreApi } from '../api/coreApi';
 import {
-  StudentGetRequest,
+  DataTableGetRequest,
   StudentIdRequest,
   StudentListSuccessResponse,
   StudentSuccessResponse,
@@ -9,16 +9,17 @@ import {
 
 export const studentApi = coreApi.injectEndpoints({
   endpoints: (builder) => ({
-    getStudent: builder.mutation<StudentListSuccessResponse, StudentGetRequest>(
-      {
-        query: (data) => ({
-          url: '/user/student/find',
-          method: 'POST',
-          body: data,
-        }),
-        invalidatesTags: ['Student'],
-      }
-    ),
+    getStudent: builder.mutation<
+      StudentListSuccessResponse,
+      DataTableGetRequest
+    >({
+      query: (data) => ({
+        url: '/user/student/find',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Student'],
+    }),
     getStudentById: builder.mutation<StudentSuccessResponse, StudentIdRequest>({
       query: (id) => ({
         url: '/user/student/detail',

@@ -1,7 +1,7 @@
-interface StudentGetRequest {
+interface DataTableGetRequest {
   search: string;
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }
 interface StudentAddRequest {
   name: string;
@@ -14,6 +14,9 @@ interface StudentAddRequest {
 interface StudentIdRequest {
   id: string;
 }
+interface SchoolIdRequest {
+  id: string;
+}
 
 interface ChangePasswordRequest {
   oldPassword: string;
@@ -23,7 +26,8 @@ interface ChangePasswordRequest {
 
 export type {
   ChangePasswordRequest,
+  DataTableGetRequest,
   StudentAddRequest,
-  StudentGetRequest,
   StudentIdRequest,
+  SchoolIdRequest,
 };
