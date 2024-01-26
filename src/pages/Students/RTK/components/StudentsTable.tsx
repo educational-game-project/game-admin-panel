@@ -24,7 +24,7 @@ import AlertDelete from '../../../../components/AlertDialog/AlertDelete';
 import { showErrorToast, showSuccessToast } from '../../../../components/Toast';
 import { useDeleteStudentMutation } from '../../../../services/studentApi';
 
-import { Student, StudentTable } from '../../../../types';
+import { Student, StudentTableProps } from '../../../../types';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -48,7 +48,7 @@ function IndeterminateCheckbox({
   );
 }
 
-function StudentsTable({ student, refetchStudent }: StudentTable) {
+function StudentsTable({ student, refetchStudent }: StudentTableProps) {
   const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -201,7 +201,7 @@ function StudentsTable({ student, refetchStudent }: StudentTable) {
     }
     setIsOpenDeleteDialog(false);
   };
-  const handleSlectedDelete = async (student: Student[]) => {
+  const handleSelectedDelete = async (student: Student[]) => {
     const studentId = student[0]._id;
     if (student.length === 1) {
       try {
@@ -353,7 +353,7 @@ function StudentsTable({ student, refetchStudent }: StudentTable) {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">dari {student.length} data</p>
+            <p className="text-gray-500 ml-3">dari {student?.length} data</p>
           </div>
           <div className="flex space-x-3">
             {isLargeView && (
@@ -420,7 +420,7 @@ function StudentsTable({ student, refetchStudent }: StudentTable) {
                 const selectedRowOriginal = selectedRow.map(
                   (row) => row.original
                 );
-                handleSlectedDelete(selectedRowOriginal);
+                handleSelectedDelete(selectedRowOriginal);
               }}>
               <Trash2Icon
                 size={16}
