@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 import { showErrorToast, showSuccessToast } from '../../../components/Toast';
-import { useDeleteSchoolMutation } from '../../../services/ssApi';
+import { useDeleteSchoolMutation } from '../../../services/schoolApi';
 
 import { School, SchoolTableProps } from '../../../types';
 
