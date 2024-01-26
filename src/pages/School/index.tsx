@@ -4,7 +4,7 @@ import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import HeaderContainer from '../../components/HeaderContainer';
-import { useGetSchoolMutation } from '../../services/schoolApi';
+import { useGetSchoolMutation } from '../../services/ssApi';
 import { showErrorToast } from '../../components/Toast';
 
 function School() {
