@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
-import { useGetSchoolByIdMutation } from '../../services/schoolApi';
+import { useGetSchoolByIdMutation } from '../../services/ssApi';
 import { SchoolAddRequest } from '../../types';
 import { useForm } from 'react-hook-form';
 import { showErrorToast } from '../../components/Toast';

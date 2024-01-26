@@ -8,7 +8,7 @@ import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import {
   useGetSchoolByIdMutation,
   useUpdateSchoolMutation,
-} from '../../services/schoolApi';
+} from '../../services/ssApi';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDropzone } from 'react-dropzone';

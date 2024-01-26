@@ -5,7 +5,7 @@ import { Loader2Icon, UploadCloudIcon } from 'lucide-react';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
-import { useAddSchoolMutation } from '../../services/schoolApi';
+import { useAddSchoolMutation } from '../../services/ssApi';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SchoolAddRequest } from '../../types';
