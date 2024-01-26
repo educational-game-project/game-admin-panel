@@ -38,6 +38,14 @@ interface ToastProviderProps {
   children: ReactNode;
 }
 
+// header
+interface HeaderContainerProps {
+  title: string;
+  subtitle: string;
+  btnHref?: string;
+  btnText?: string;
+}
+
 // student
 interface StudentTable {
   student: Student[];
@@ -58,6 +66,7 @@ export type {
   Breadcrumb,
   BreadcrumbState,
   BreadcrumbIconProps,
+  HeaderContainerProps,
   HeaderProfileProps,
   ProfileUserProps,
   ToastState,
