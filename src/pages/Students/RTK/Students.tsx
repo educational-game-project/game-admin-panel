@@ -50,10 +50,14 @@ function Students() {
     );
   } else if (isSuccess) {
     content = (
-      <StudentsTable
-        student={student.data}
-        refetchStudent={fetchStudent}
-      />
+      <>
+        {student && (
+          <StudentsTable
+            student={student.data}
+            refetchStudent={fetchStudent}
+          />
+        )}
+      </>
     );
   }
 

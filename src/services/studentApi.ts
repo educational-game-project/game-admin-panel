@@ -55,7 +55,7 @@ export const studentApi = coreApi.injectEndpoints({
         formEditStudent.append('media', data.media[0]);
         return {
           url: '/user/student',
-          method: 'POST',
+          method: 'PUT',
           body: formEditStudent,
           formData: true,
         };
