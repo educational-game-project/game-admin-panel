@@ -183,11 +183,11 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
     try {
       const responseDelete = await deleteSchool({ id: deleteId }).unwrap();
       if (responseDelete.success) {
-        showSuccessToast('Berhasil menghapus data siswa');
+        showSuccessToast('Berhasil menghapus data sekolah');
         refetchSchool();
       }
     } catch (error) {
-      showErrorToast('Gagal menghapus data siswa');
+      showErrorToast('Gagal menghapus data sekolah');
     }
     setIsOpenDeleteDialog(false);
   };
@@ -204,14 +204,14 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
       try {
         const responseDelete = await deleteSchool({ id: schoolId }).unwrap();
         if (responseDelete.success) {
-          showSuccessToast('Berhasil menghapus data siswa');
+          showSuccessToast('Berhasil menghapus data sekolah');
           refetchSchool();
         }
       } catch (error) {
-        showErrorToast('Gagal menghapus data siswa');
+        showErrorToast('Gagal menghapus data sekolah');
       }
     } else {
-      showErrorToast('Gagal menghapus data siswa');
+      showErrorToast('Gagal menghapus data sekolah');
     }
     table.setRowSelection({});
   };

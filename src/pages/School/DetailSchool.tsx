@@ -1,16 +1,33 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
-
-import { SchoolProps } from '../../types';
-import schoolData from '../../data/SCHOOL_DATA.json';
+import { useGetSchoolByIdMutation } from '../../services/schoolApi';
+import { SchoolAddRequest } from '../../types';
+import { useForm } from 'react-hook-form';
+import { showErrorToast } from '../../components/Toast';
 
 function DetailSchool() {
-  const [school, setSchool] = useState<SchoolProps | undefined>();
+  const refInitMount = useRef(true);
+  const navigate = useNavigate();
   const { schoolId } = useParams();
   const dispatch = useAppDispatch();
+  const [getSchoolById, { data: school }] = useGetSchoolByIdMutation();
+
+  const { register, setValue } = useForm<SchoolAddRequest>();
+
+  const fetchSchoolById = async (id: string) => {
+    try {
+      const response = await getSchoolById({ id }).unwrap();
+      if (response.success) {
+        setValue('name', response.data.name);
+        setValue('address', response.data.address);
+      }
+    } catch (error) {
+      showErrorToast('Gagal mengambil data siswa');
+    }
+  };
 
   useEffect(() => {
     const newBreadcrumb = [
@@ -28,8 +45,16 @@ function DetailSchool() {
     dispatch(setBreadcrumb(newBreadcrumb));
   }, [dispatch, schoolId]);
   useEffect(() => {
-    const foundSchool = schoolData.find((item) => item._id === schoolId);
-    setSchool(foundSchool);
+    if (refInitMount.current) {
+      refInitMount.current = false;
+      return;
+    }
+    if (!schoolId) {
+      navigate('/school');
+      return;
+    } else {
+      fetchSchoolById(schoolId);
+    }
   }, [schoolId]);
 
   return (
@@ -51,7 +76,7 @@ function DetailSchool() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-12 gap-6">
+      <form className="grid grid-cols-12 gap-6">
         <div className="col-span-full xl:col-span-8">
           <div className="bg-white rounded-xl">
             <div className="px-5 pt-4">
@@ -63,9 +88,7 @@ function DetailSchool() {
               </p>
             </div>
             <div className="p-5">
-              <form
-                action=""
-                className="block">
+              <div>
                 {/* name */}
                 <div className="mb-4">
                   <label
@@ -77,10 +100,9 @@ function DetailSchool() {
                     id="name"
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={school?.name}
                     placeholder="Masukkan nama sekolah"
                     aria-required="true"
-                    aria-invalid="false"
+                    {...register('name')}
                     disabled
                   />
                 </div>
@@ -94,14 +116,13 @@ function DetailSchool() {
                   <textarea
                     id="address"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
-                    value={school?.address}
                     placeholder="Masukkan alamat sekolah"
                     aria-required="true"
-                    aria-invalid="false"
+                    {...register('address')}
                     disabled
                   />
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -110,26 +131,27 @@ function DetailSchool() {
             <div className="px-5 pt-4">
               <h4 className="font-semibold text-xl mb-0.5">Admin Sekolah</h4>
               <p className="text-gray-500">
-                Admin {school?.name} yang terdaftar dalam sistem.
+                Admin {school?.data.name} yang terdaftar dalam sistem.
               </p>
             </div>
             <div className="p-5">
               <div className="w-full flex flex-col gap-3">
-                {school?.admins.map((admin) => (
-                  <div className="w-full flex items-center p-3 rounded-md bg-gray-100">
-                    <figure className="w-9 h-9 rounded-full overflow-hidden mr-2">
-                      <img
-                        src={admin.images[0].fileLink}
-                        alt={`${admin.name} Profile`}
-                        className="w-full h-full object-cover object-center"
-                      />
-                    </figure>
-                    <div className="">
-                      <p className="font-medium">{admin.name}</p>
-                      <p className="text-xs text-gray-500">{admin.email}</p>
+                {school?.data.admins &&
+                  school?.data?.admins.map((admin) => (
+                    <div className="w-full flex items-center p-3 rounded-md bg-gray-100">
+                      <figure className="w-9 h-9 rounded-full overflow-hidden mr-2">
+                        <img
+                          src={admin?.image?.fileLink}
+                          alt={`${admin?.name} Profile`}
+                          className="w-full h-full object-cover object-center"
+                        />
+                      </figure>
+                      <div className="">
+                        <p className="font-medium">{admin?.name}</p>
+                        <p className="text-xs text-gray-500">{admin.email}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -144,12 +166,12 @@ function DetailSchool() {
             </div>
             <div className="p-5">
               <div className="grid grid-cols-12 xl:grid-cols-10 gap-4 mb-4">
-                {school?.images.map((image, index) => (
+                {school?.data?.images.map((image, index) => (
                   <div className="col-span-4 lg:col-span-3 xl:col-span-2">
                     <figure className="group overflow-hidden w-full h-32 rounded-md mr-3">
                       <img
-                        src={image.fileLink}
-                        alt={`${school?.name}-${index} Profile`}
+                        src={image?.fileLink}
+                        alt={`${school?.data?.name}-${index} Profile`}
                         className="w-full h-full object-cover object-center"
                       />
                     </figure>
@@ -159,7 +181,7 @@ function DetailSchool() {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

@@ -50,10 +50,14 @@ function School() {
     );
   } else if (isSuccess) {
     content = (
-      <SchoolTable
-        school={school.data}
-        refetchSchool={fetchSchool}
-      />
+      <>
+        {school && (
+          <SchoolTable
+            school={school.data}
+            refetchSchool={fetchSchool}
+          />
+        )}
+      </>
     );
   } else if (isError) {
     content = (
