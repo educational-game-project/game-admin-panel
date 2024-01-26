@@ -2,23 +2,26 @@ import { coreApi } from '../api/coreApi';
 import {
   DataTableGetRequest,
   SchoolIdRequest,
+  SchoolListSuccessResponse,
   SchoolSuccessResponse,
   SuccessResponse,
 } from '../types';
 
 export const schoolApi = coreApi.injectEndpoints({
   endpoints: (builder) => ({
-    getSchool: builder.mutation<SchoolSuccessResponse, DataTableGetRequest>({
-      query: (data) => ({
-        url: '/schools/find',
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: ['School'],
-    }),
-    getSchoolById: builder.mutation({
+    getSchool: builder.mutation<SchoolListSuccessResponse, DataTableGetRequest>(
+      {
+        query: (data) => ({
+          url: '/schools/find',
+          method: 'POST',
+          body: data,
+        }),
+        invalidatesTags: ['School'],
+      }
+    ),
+    getSchoolById: builder.mutation<SchoolSuccessResponse, SchoolIdRequest>({
       query: (id) => ({
-        url: '/user/school/detail',
+        url: '/schools/detail',
         method: 'POST',
         body: id,
       }),
@@ -28,12 +31,10 @@ export const schoolApi = coreApi.injectEndpoints({
       query: (data) => {
         const formAddSchool = new FormData();
         formAddSchool.append('name', data.name);
-        formAddSchool.append('email', data.email);
-        formAddSchool.append('phoneNumber', data.phoneNumber);
         formAddSchool.append('address', data.address);
         formAddSchool.append('media', data.media[0]);
         return {
-          url: '/user/school',
+          url: '/schools',
           method: 'POST',
           body: formAddSchool,
           formData: true,
@@ -44,14 +45,13 @@ export const schoolApi = coreApi.injectEndpoints({
     updateSchool: builder.mutation({
       query: (data) => {
         const formEditSchool = new FormData();
+        formEditSchool.append('id', data.id);
         formEditSchool.append('name', data.name);
-        formEditSchool.append('email', data.email);
-        formEditSchool.append('phoneNumber', data.phoneNumber);
         formEditSchool.append('address', data.address);
         formEditSchool.append('media', data.media[0]);
         return {
-          url: '/user/school',
-          method: 'POST',
+          url: '/schools',
+          method: 'PUT',
           body: formEditSchool,
           formData: true,
         };
@@ -60,7 +60,7 @@ export const schoolApi = coreApi.injectEndpoints({
     }),
     deleteSchool: builder.mutation<SuccessResponse, SchoolIdRequest>({
       query: (id) => ({
-        url: '/school',
+        url: '/schools',
         method: 'DELETE',
         body: id,
       }),
