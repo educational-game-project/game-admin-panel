@@ -1,4 +1,16 @@
 // BASE
+interface UserAddBy {
+  _id: string;
+  name: string;
+  role: string;
+  email: string;
+  phoneNumber: string;
+  deletedAt: string | null;
+  image: Image | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 interface User {
   _id: string;
   name: string;
@@ -6,9 +18,9 @@ interface User {
   email: string;
   phoneNumber: string;
   deletedAt: string | null;
-  addedBy: string | null;
+  addedBy: UserAddBy | null;
   image: Image | null;
-  school: string | null;
+  school: School | null;
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -66,6 +78,19 @@ interface Student {
   createdAtString?: string;
   updatedAtString?: string;
 }
+interface Admin {
+  _id: string;
+  name: string;
+  role: string;
+  email: string;
+  phoneNumber: string;
+  deletedAt: null;
+  addedBy: UserAddBy | null;
+  image: Image | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: 0;
+}
 interface School {
   _id: string;
   name: string;
@@ -76,11 +101,12 @@ interface School {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  lastUpdatedBy: string | null;
+  lastUpdatedBy?: string | null;
+  admins?: Admin[] | null;
   images: Image[];
-  addedBy: string | null;
-  createdAtString: string;
-  updatedAtString: string;
+  addedBy?: string | null;
+  createdAtString?: string;
+  updatedAtString?: string;
 }
 
 // RESPONSE
@@ -110,9 +136,12 @@ interface StudentListSuccessResponse extends SuccessResponse {
 interface StudentSuccessResponse extends SuccessResponse {
   data: Student;
 }
-interface SchoolSuccessResponse extends SuccessResponse {
+interface SchoolListSuccessResponse extends SuccessResponse {
   data: School[];
   page: PageResponse;
+}
+interface SchoolSuccessResponse extends SuccessResponse {
+  data: School;
 }
 
 // CHECK DULU ========================================
@@ -208,6 +237,7 @@ export type {
   ProfileSuccessResponse,
   StudentSuccessResponse,
   StudentListSuccessResponse,
+  SchoolListSuccessResponse,
   SchoolSuccessResponse,
   Student,
   School,
