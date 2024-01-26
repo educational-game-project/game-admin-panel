@@ -128,14 +128,6 @@ interface BaseImageProps {
   updatedAt: string;
   size?: number;
 }
-interface BaseAdminSchoolProps {
-  _id: string;
-  name: string;
-  role: string;
-  images: BaseImageProps[];
-  email: string;
-  phoneNumber: string;
-}
 interface BaseSchoolAdminProps {
   _id: string;
   name: string;
@@ -169,18 +161,6 @@ interface StudentProps {
   createdAtString: string;
   updatedAtString: string;
 }
-interface SchoolProps {
-  _id: string;
-  name: string;
-  address: string;
-  images: BaseImageProps[];
-  adminsCount: number;
-  studentsCount: number;
-  deletedAt: string | null;
-  admins: BaseAdminSchoolProps[];
-  createdAt: string;
-  updatedAt: string;
-}
 interface AdminProps {
   _id: string;
   name: string;
@@ -204,9 +184,6 @@ interface StudentResponse {
 }
 interface AdminResponse {
   data: AdminProps[];
-}
-interface SchoolResponse {
-  data: SchoolProps[];
 }
 interface StudentProps {
   _id: string;
@@ -233,6 +210,7 @@ export type {
   StudentListSuccessResponse,
   SchoolSuccessResponse,
   Student,
+  School,
   Image,
   User,
   // CHECK DULU =================
@@ -242,6 +220,4 @@ export type {
   StudentResponse,
   AdminProps,
   AdminResponse,
-  SchoolProps,
-  SchoolResponse,
 };

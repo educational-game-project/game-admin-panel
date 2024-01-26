@@ -22,9 +22,10 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 import AlertDelete from '../../../components/AlertDialog/AlertDelete';
+import { showErrorToast, showSuccessToast } from '../../../components/Toast';
+import { useDeleteSchoolMutation } from '../../../services/schoolApi';
 
-import { SchoolProps } from '../../../types';
-import schoolData from '../../../data/SCHOOL_DATA.json';
+import { School, SchoolTableProps } from '../../../types';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -48,23 +49,22 @@ function IndeterminateCheckbox({
   );
 }
 
-function SchoolTable() {
+function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
   const [filter, setFilter] = useState('');
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
-  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const data = useMemo(() => schoolData, []);
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
   };
+  const [deleteSchool, { isLoading }] = useDeleteSchoolMutation();
 
-  const columnHelper = createColumnHelper<SchoolProps>();
+  const columnHelper = createColumnHelper<School>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -149,7 +149,7 @@ function SchoolTable() {
   );
 
   const table = useReactTable({
-    data,
+    data: school,
     columns: defaultColumns,
     state: {
       globalFilter: filter,
@@ -157,7 +157,7 @@ function SchoolTable() {
       sorting,
     },
     enableRowSelection: true,
-    getCoreRowModel: getCoreRowModel<SchoolProps>(),
+    getCoreRowModel: getCoreRowModel<School>(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -179,14 +179,17 @@ function SchoolTable() {
     setIsOpenDeleteDialog(false);
   };
 
-  const handleDelete = () => {
-    setIsLoadingDelete(true);
-    console.log(`delete id:${deleteId}...`);
-    setTimeout(() => {
-      console.log('delete success');
-      setIsLoadingDelete(false);
-      setIsOpenDeleteDialog(false);
-    }, 3000);
+  const handleDelete = async () => {
+    try {
+      const responseDelete = await deleteSchool({ id: deleteId }).unwrap();
+      if (responseDelete.success) {
+        showSuccessToast('Berhasil menghapus data siswa');
+        refetchSchool();
+      }
+    } catch (error) {
+      showErrorToast('Gagal menghapus data siswa');
+    }
+    setIsOpenDeleteDialog(false);
   };
 
   useEffect(() => {
@@ -195,6 +198,23 @@ function SchoolTable() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+  const handleSelectedDelete = async (school: School[]) => {
+    const schoolId = school[0]._id;
+    if (school.length === 1) {
+      try {
+        const responseDelete = await deleteSchool({ id: schoolId }).unwrap();
+        if (responseDelete.success) {
+          showSuccessToast('Berhasil menghapus data siswa');
+          refetchSchool();
+        }
+      } catch (error) {
+        showErrorToast('Gagal menghapus data siswa');
+      }
+    } else {
+      showErrorToast('Gagal menghapus data siswa');
+    }
+    table.setRowSelection({});
+  };
 
   return (
     <div className="">
@@ -323,7 +343,7 @@ function SchoolTable() {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">dari {data.length} data</p>
+            <p className="text-gray-500 ml-3">dari {school?.length} data</p>
           </div>
           <div className="flex space-x-3">
             {isLargeView && (
@@ -386,11 +406,11 @@ function SchoolTable() {
             <button
               className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
               onClick={() => {
-                const selectedIds = Object.keys(rowSelection);
-                const newData = data.filter(
-                  (item) => !selectedIds.includes(item._id)
+                const selectedRow = table.getSelectedRowModel().flatRows;
+                const selectedRowOriginal = selectedRow.map(
+                  (row) => row.original
                 );
-                console.log('newData', newData);
+                handleSelectedDelete(selectedRowOriginal);
               }}>
               <Trash2Icon
                 size={16}
@@ -406,7 +426,7 @@ function SchoolTable() {
       <AlertDelete
         isOpen={isOpenDeleteDialog}
         message="sekolah"
-        isLoading={isLoadingDelete}
+        isLoading={isLoading}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />
