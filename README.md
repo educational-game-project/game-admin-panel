@@ -30,4 +30,4 @@ Postman Link : https://app.getpostman.com/join-team?invite_code=b69255e19c972d36
 
 Deployed Link: https://game-admin-panel-three.vercel.app/
 
-BE Link: https://lucky-frog-gilet.cyclic.app/admin
+BE Link: https://be-game.cyclic.app/admin
