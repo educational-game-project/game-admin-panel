@@ -158,9 +158,9 @@ function App() {
             draggable={false}
             closeOnClick={true}
           />
-          <main className="w-full min-h-screen bg-gradient-to-br from-indigo-400 from-20% via-sky-400 via-40% to-emerald-400 to-90% px-6">
+          <main className="w-full min-h-screen bg-gradient-to-br from-indigo-400 from-20% via-sky-400 via-40% to-emerald-400 to-90% px-6 dark:from-indigo-600 dark:via-sky-600 dark:to-emerald-600">
             <div className="h-full w-full min-h-screen flex justify-center items-center">
-              <div className="bg-white p-6 sm:p-8 rounded-xl w-auto sm:w-96">
+              <div className="bg-white p-6 sm:p-8 rounded-xl w-auto sm:w-96 dark:bg-gray-800">
                 <p className="mb-4">
                   <img
                     src={images.desktopIcon}
@@ -168,7 +168,7 @@ function App() {
                     className="h-14"
                   />
                 </p>
-                <h4 className="mb-20 sm:mb-24 font-bold text-2xl text-gray-700">
+                <h4 className="mb-20 sm:mb-24 font-bold text-2xl text-gray-700 dark:text-gray-200">
                   Gameon is only available on desktop for now.
                 </h4>
                 <p className="text-center mb-3 text-gray-400">

@@ -35,12 +35,14 @@ function Profile() {
   }
 
   return (
-    <div className="bg-white rounded-xl min-h-[calc(100vh-120.5px)]">
+    <div className="bg-white rounded-xl min-h-[calc(100vh-120.5px)] dark:bg-gray-800">
       <HeaderProfile isProfilePage={true} />
       <div className="p-5">
         <div className="mb-4">
           <h3 className="mb-0.5 text-lg font-semibold">Profil Saya</h3>
-          <p className="mb-4 text-gray-600">Kelola informasi profil Anda</p>
+          <p className="mb-4 text-gray-600 dark:text-gray-400">
+            Kelola informasi profil Anda
+          </p>
           {content}
         </div>
       </div>

@@ -23,7 +23,7 @@ function Layout() {
   const { user } = useUser();
 
   return (
-    <main className="w-full p-3">
+    <main className="w-full p-3 min-h-screen">
       <div className="w-full flex">
         {/* sidebar */}
         <Sidebar currentPath={firstPath}>
@@ -77,7 +77,7 @@ function Layout() {
               />
             </>
           ) : null}
-          <hr className="mb-6 mt-5" />
+          <hr className="mb-6 mt-5 dark:border-gray-600/80" />
           <SeparateSidebar caption="Settings" />
           <SidebarItem
             icon={<Settings size={20} />}

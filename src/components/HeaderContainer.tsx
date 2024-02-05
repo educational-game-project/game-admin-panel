@@ -1,7 +1,7 @@
 import { PlusIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { HeaderContainerProps } from '../types';
+import type { HeaderContainerProps } from '../types';
 
 function HeaderContainer({
   title,

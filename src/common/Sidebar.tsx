@@ -18,12 +18,16 @@ import { useUser } from '../hook/authHooks';
 import { transformStringPlus } from '../utilities/stringUtils';
 import { showDefaultToast, showErrorToast } from '../components/Toast';
 import { setAllowedToast } from '../features/toastSlice';
+import { selectTheme, toggleTheme } from '../features/themeSlice';
 
-import { SeparateSidebarProps, SidebarItemProps, SidebarProps } from '../types';
+import type {
+  SeparateSidebarProps,
+  SidebarItemProps,
+  SidebarProps,
+} from '../types';
 
 export default function Sidebar({ children, currentPath }: SidebarProps) {
   const [profileToggle, setProfileToggle] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleProfileRef = useRef<HTMLButtonElement>(null);
   const modalProfileRef = useRef<HTMLDivElement>(null);
   const currentLocation: string = useLocation()?.pathname;
@@ -32,6 +36,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isExpanded = useAppSelector(selectExpanded);
+  const theme = useAppSelector(selectTheme);
   const [logout, { isLoading }] = useLogoutMutation();
   const { user } = useUser();
 
@@ -75,8 +80,8 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
   }, []);
 
   return (
-    <aside className="h-full fixed z-10">
-      <nav className="h-[calc(100%-24px)] flex flex-col bg-white rounded-xl relative">
+    <aside className="h-full fixed z-20">
+      <nav className="h-[calc(100%-24px)] flex flex-col bg-white rounded-xl relative dark:bg-gray-800">
         {/* head */}
         <div className="px-4 py-5 flex justify-between items-center">
           <Link to="/">
@@ -92,21 +97,25 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             onClick={handleSidebarToggle}
             className={`p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ${
               isExpanded ? 'm-0' : 'mx-auto'
-            }`}
+            } dark:bg-gray-700 dark:hover:bg-gray-600`}
             title={`${isExpanded ? 'Sidebar Close' : 'Sidebar Open'}`}>
-            {isExpanded ? <ChevronFirst /> : <ChevronLast />}
+            {isExpanded ? (
+              <ChevronFirst className="dark:stroke-gray-300" />
+            ) : (
+              <ChevronLast className="dark:stroke-gray-300" />
+            )}
           </button>
         </div>
         {/* sidebar list */}
         <ul className="flex-1 px-4">{children}</ul>
         {/* bottom */}
-        <div className="border-t p-3">
+        <div className="border-t p-3 dark:border-t-gray-600/30">
           <button
             ref={toggleProfileRef}
             className={`flex p-2 rounded-md transition-all-200 text-left group ${
               isProfileLocation
-                ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100'
-                : 'bg-gray-100 hover:bg-gray-200'
+                ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 dark:from-indigo-600 dark:to-indigo-400'
+                : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600'
             }`}
             onClick={() => setProfileToggle((curr) => !curr)}>
             <img
@@ -117,7 +126,8 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               className={`${
                 isExpanded ? 'w-10 h-10' : 'w-9 h-9'
               } rounded-full object-cover object-center ${
-                isProfileLocation && 'border-[3px] border-indigo-700'
+                isProfileLocation &&
+                'border-3 border-indigo-700 dark:border-indigo-200'
               }`}
             />
             <div
@@ -125,11 +135,16 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               flex justify-between items-center
               overflow-hidden transition-all ${isExpanded ? 'w-48 ml-3' : 'w-0'}
           `}>
-              <div className="leading-4 max-w-[10rem]">
+              <div className="leading-4 max-w-40">
                 <h4 className="font-semibold mb-0.5 text-sm line-clamp-1 text-ellipsis">
                   {user?.name}
                 </h4>
-                <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis">
+                <span
+                  className={`text-xs text-gray-600 line-clamp-1 block text-ellipsis ${
+                    isProfileLocation
+                      ? 'dark:text-gray-300'
+                      : 'dark:text-gray-400'
+                  }`}>
                   {user?.email}
                 </span>
               </div>
@@ -145,10 +160,9 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 ${
             profileToggle ? 'hidden' : 'block'
-          }
-      `}>
+          } dark:bg-gray-950 dark:text-slate-300 z-30`}>
                 {user?.name}
-                <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent" />
+                <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent dark:border-r-gray-950" />
               </div>
             )}
           </button>
@@ -161,7 +175,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               ? 'visible opacity-100 z-10 translate-x-0'
               : 'invisible opacity-20 -z-10'
           }`}>
-          <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-200">
+          <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex mb-2.5">
               <img
                 src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
@@ -175,7 +189,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                   <h4 className="font-semibold mb-0.5 text-3.25xs line-clamp-1 text-ellipsis">
                     {user?.name}
                   </h4>
-                  <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis">
+                  <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis dark:text-gray-400/90">
                     {user?.role === 'Admin'
                       ? 'Administrator'
                       : 'Super Administrator'}
@@ -184,10 +198,14 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               </div>
             </div>
             <div
-              className="relative flex items-center justify-between py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group text-gray-600"
+              className="relative flex items-center justify-between py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group text-gray-600 dark:text-gray-400"
               title="Dark Mode">
               <div className="flex items-center">
-                {isDarkMode ? <MoonIcon size={17} /> : <SunIcon size={17} />}
+                {theme === 'dark' ? (
+                  <MoonIcon size={17} />
+                ) : (
+                  <SunIcon size={17} />
+                )}
                 <span className="ml-2.5 text-sm">Dark Mode</span>
               </div>
               <div className="absolute right-2">
@@ -196,20 +214,21 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     id="darkMode"
                     name="darkMode"
                     type="checkbox"
-                    onChange={() => setIsDarkMode((curr) => !curr)}
+                    checked={theme === 'dark'}
+                    onChange={() => dispatch(toggleTheme())}
                     className="peer/darkMode opacity-0 w-0 h-0"
                   />
-                  <span className="slider round absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-gray-300 transition-all duration-[400ms] rounded-[2.125rem] before:absolute before:content-[''] before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:transition-all before:duration-[400ms] before:rounded-[50%] peer-checked/darkMode:bg-indigo-500 peer-checked/darkMode:before:translate-x-5"></span>
+                  <span className="slider round absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-gray-300 transition-all duration-400 rounded-8.5 before:absolute before:content-empty before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:transition-all before:duration-400 before:rounded-half peer-checked/darkMode:bg-indigo-500 peer-checked/darkMode:before:translate-x-5"></span>
                 </label>
               </div>
             </div>
-            <hr className="mt-2 mb-1.5" />
+            <hr className="mt-2 mb-1.5 dark:border-gray-600/80" />
             <div className="">
               <Link
                 className={`relative flex items-center py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group ${
                   currentPath === 'profile'
-                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
-                    : 'hover:bg-indigo-50 text-gray-600'
+                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
+                    : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
                 }`}
                 to="/profile"
                 onClick={() => setProfileToggle(false)}
@@ -220,8 +239,8 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               <Link
                 className={`relative flex items-center py-1.5 px-2 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
                   currentPath === 'activity'
-                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
-                    : 'hover:bg-indigo-50 text-gray-600'
+                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
+                    : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
                 }`}
                 to="/profile/activity"
                 onClick={() => setProfileToggle(false)}
@@ -230,15 +249,15 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                 <span className="ml-2.5 text-sm">Activity</span>
               </Link>
             </div>
-            <hr className="mt-2 mb-1.5" />
+            <hr className="mt-2 mb-1.5 dark:border-gray-600/80" />
             <button
-              className="group profile-logout relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors group hover:bg-red-50 hover:text-red-500 text-gray-600 w-full"
+              className="group profile-logout relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors hover:bg-red-50 hover:text-red-500 text-gray-600 w-full dark:text-gray-400 dark:hover:bg-red-700/20 dark:hover:text-red-600"
               title="Logout"
               onClick={handleLogout}
               role="button">
               {isLoading ? (
                 <svg
-                  className="animate-spin-fast h-4.5 w-4.5 group-hover-[.profile-logout]:text-red-500 text-gray-600 inline-block"
+                  className="animate-spin-fast h-4.5 w-4.5 group-hover-[.profile-logout]:text-red-500 text-gray-600 inline-block dark:group-hover-[.profile-logout]:text-red-600 dark:text-gray-400"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24">
@@ -284,8 +303,8 @@ export function SidebarItem({
         transition-colors group
         ${
           active
-            ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
-            : 'hover:bg-indigo-50 text-gray-600'
+            ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
+            : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
         }`}
         to={path}
         title={`Menu ${text}`}>
@@ -300,14 +319,14 @@ export function SidebarItem({
           <div
             className={`absolute right-2 text-2xs rounded-full text-center ${
               isExpanded
-                ? 'py-px px-1.5 min-w-[26px] bg-red-400 text-slate-50'
+                ? 'py-px px-1.5 min-w-6.5 bg-red-400 text-slate-50 dark:bg-red-500'
                 : 'w-2.5 h-2.5 top-1.5'
             }`}>
             {isExpanded ? (
               '10'
             ) : (
               <>
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 translate-x-px -translate-y-0.75"></span>
               </>
             )}
@@ -320,10 +339,10 @@ export function SidebarItem({
           absolute left-full rounded-md px-2 py-1 ml-6
           bg-gray-800 text-slate-200 text-sm
           invisible opacity-20 -translate-x-3 transition-all
-          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 dark:bg-gray-950 dark:text-slate-300 z-30
       `}>
             {text}
-            <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent" />
+            <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent dark:border-r-gray-950" />
           </div>
         )}
       </Link>
@@ -345,7 +364,7 @@ export function SeparateSidebar({ caption }: SeparateSidebarProps) {
     <p
       className={`transition-all text-xs uppercase tracking-wide font-medium text-slate-500 mb-3 ${
         isExpanded ? 'w-full' : 'w-11 line-clamp-1 break-words'
-      }`}>
+      } dark:text-slate-500`}>
       {caption}
     </p>
   );

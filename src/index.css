@@ -6,13 +6,21 @@
   @apply font-inter leading-normal;
 }
 
+html {
+  --line-color: #e5e7eb;
+}
+
+html.dark {
+  --line-color: rgba(255, 255, 255, 0.2);
+}
+
 html,
 body {
-  @apply bg-slate-100 text-gray-900;
+  @apply bg-slate-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
 }
 
 body {
-  @apply antialiased text-sm selection:bg-indigo-500 selection:text-gray-50;
+  @apply antialiased text-sm selection:bg-indigo-500 selection:text-gray-50 dark:selection:bg-indigo-600;
 }
 
 button {

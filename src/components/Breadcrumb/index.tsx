@@ -33,7 +33,7 @@ function Breadcrumb() {
       <li className="flex items-center group/breadcrumb">
         <Link
           to="/"
-          className="flex items-center text-gray-500 mr-2 font-medium group-hover/breadcrumb:text-violet-700">
+          className="flex items-center text-gray-500 mr-2 font-medium group-hover/breadcrumb:text-violet-700 dark:text-gray-400">
           <HomeIcon
             size={16}
             className="mr-1.5"
@@ -56,9 +56,9 @@ function Breadcrumb() {
             to={breadcrumb?.path}
             className={`flex items-center mr-2 ${
               index + 1 === breadcrumbs.length
-                ? 'text-indigo-800 font-medium'
-                : 'text-gray-500'
-            } group-hover/breadcrumb:text-violet-700`}>
+                ? 'text-violet-800 font-medium dark:text-violet-600'
+                : 'text-gray-500 dark:text-gray-400'
+            } group-hover/breadcrumb:text-violet-700 dark:group-hover/breadcrumb:text-violet-600`}>
             <BreadcumbIcon name={breadcrumb?.icon} />
             <span className="leading-none">{breadcrumb?.label}</span>
           </Link>

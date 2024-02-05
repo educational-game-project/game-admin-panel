@@ -27,7 +27,7 @@ function Analysis() {
           subtitle="Lihat analisis data."
         />
       </div>
-      <div className="h-[1500px] bg-white p-5 rounded-xl"></div>
+      <div className="bg-white p-5 rounded-xl dark:bg-gray-800"></div>
     </div>
   );
 }

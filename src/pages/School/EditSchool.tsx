@@ -15,7 +15,7 @@ import { useDropzone } from 'react-dropzone';
 import { setAllowedToast } from '../../features/toastSlice';
 import { showErrorToast, showSuccessToast } from '../../components/Toast';
 
-import { SchoolUpdateRequest } from '../../types';
+import type { SchoolUpdateRequest } from '../../types';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const schema = yup.object().shape({
@@ -148,7 +148,7 @@ function EditSchool() {
               onClick={handleSubmit(onSubmit)}>
               {isLoadingUpdate ? (
                 <>
-                  <span className="translate-y-[.0625rem]">
+                  <span className="translate-y-px">
                     <Loader2Icon
                       size={18}
                       className="mr-1.5 animate-spin-fast"

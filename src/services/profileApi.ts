@@ -1,6 +1,6 @@
 import { coreApi } from '../api/coreApi';
 
-import { ProfileSuccessResponse } from '../types';
+import type { ProfileSuccessResponse } from '../types';
 
 export const profileApi = coreApi.injectEndpoints({
   endpoints: (builder) => ({

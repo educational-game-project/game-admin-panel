@@ -5,6 +5,7 @@ import authReducer from '../features/authSlice';
 import breadcrumbReducer from './../features/breadcrumbSlice';
 import sidebarReducer from './../features/sidebarSlice';
 import toastReducer from './../features/toastSlice';
+import themeReducer from '../features/themeSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     breadcrumb: breadcrumbReducer,
     sidebar: sidebarReducer,
     toast: toastReducer,
+    themes: themeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(coreApi.middleware),

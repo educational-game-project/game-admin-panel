@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Loader2Icon } from 'lucide-react';
 
-import { AlertDialogProps } from '../../types';
+import type { AlertDialogProps } from '../../types';
 
 function AlertDelete({
   isOpen,
@@ -69,7 +69,7 @@ function AlertDelete({
                       onClick={onConfirm}>
                       {isLoading ? (
                         <>
-                          <span className="translate-y-[1px]">
+                          <span className="translate-y-px">
                             <Loader2Icon
                               size={18}
                               className="mr-1.5 animate-spin-fast"

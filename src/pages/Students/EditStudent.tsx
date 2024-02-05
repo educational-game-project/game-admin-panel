@@ -14,7 +14,7 @@ type TypeUpdateStudent = {
   email?: string;
   media?: File | string;
   phoneNumber?: string;
-}
+};
 
 function EditStudent() {
   const dispatch = useAppDispatch();
@@ -24,29 +24,39 @@ function EditStudent() {
   const [studentUpdate, setStudentUpdate] = useState<TypeUpdateStudent>({});
   const [formData, setFormData] = useState<FormData>();
 
-  const { setStartFetching, loading, data: dataStudent } = useFetchHook<IResponse<Student>>({ url: "/user/student/detail", payload: { id: studentId } });
-  const { loading: loadingUpdateStudent, setStartFetching: setStartFetchingUpdate } = useFetchHook({ 
-    url: "/user/student", 
-    payload: formData, 
-    options: { headers: { "Content-Type": "multipart/form-data" } } 
+  const {
+    setStartFetching,
+    loading,
+    data: dataStudent,
+  } = useFetchHook<IResponse<Student>>({
+    url: '/user/student/detail',
+    payload: { id: studentId },
+  });
+  const {
+    loading: loadingUpdateStudent,
+    setStartFetching: setStartFetchingUpdate,
+  } = useFetchHook({
+    url: '/user/student',
+    payload: formData,
+    options: { headers: { 'Content-Type': 'multipart/form-data' } },
   });
 
   useMemo(() => {
-    if(dataStudent?.data !== undefined) setStudent(dataStudent?.data)
-  }, [dataStudent])
+    if (dataStudent?.data !== undefined) setStudent(dataStudent?.data);
+  }, [dataStudent]);
 
   const handleSubmit = () => {
-    const formData = new FormData()
-    formData.append("name", studentUpdate.name as string)
-    formData.append("email", studentUpdate.name as string)
-    formData.append("phoneNumber", studentUpdate.name as string)
-    formData.append("media", studentUpdate.media as File)
+    const formData = new FormData();
+    formData.append('name', studentUpdate.name as string);
+    formData.append('email', studentUpdate.name as string);
+    formData.append('phoneNumber', studentUpdate.name as string);
+    formData.append('media', studentUpdate.media as File);
 
-    if(!formData.has("media")) formData.delete("media");
+    if (!formData.has('media')) formData.delete('media');
 
-    setFormData(() => (formData));
+    setFormData(() => formData);
 
-    setStartFetchingUpdate(true)
+    setStartFetchingUpdate(true);
   };
 
   useEffect(() => {
@@ -64,24 +74,37 @@ function EditStudent() {
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
 
-    setStartFetching(true)
+    setStartFetching(true);
   }, [studentId]);
 
-  const handleForm = ({ type, value }: { type: string, value: string | File }): void => {
-    switch(type) {
-      case 'NAME': setStudentUpdate((e) => ({ ...e, name: value as string })); break;
-      case 'EMAIL': setStudentUpdate((e) => ({ ...e, email: value as string })); break;
-      case 'PHONE_NUMBER': setStudentUpdate((e) => ({ ...e, phoneNumber: value as string })); break;
-      case 'MEDIA': setStudentUpdate((e) => ({ ...e, media: value })); break;
+  const handleForm = ({
+    type,
+    value,
+  }: {
+    type: string;
+    value: string | File;
+  }): void => {
+    switch (type) {
+      case 'NAME':
+        setStudentUpdate((e) => ({ ...e, name: value as string }));
+        break;
+      case 'EMAIL':
+        setStudentUpdate((e) => ({ ...e, email: value as string }));
+        break;
+      case 'PHONE_NUMBER':
+        setStudentUpdate((e) => ({ ...e, phoneNumber: value as string }));
+        break;
+      case 'MEDIA':
+        setStudentUpdate((e) => ({ ...e, media: value }));
+        break;
     }
-  }
+  };
 
-  useMemo(() => console.log(studentUpdate), [studentUpdate])
+  useMemo(() => console.log(studentUpdate), [studentUpdate]);
 
-  
   return (
     <div>
-      { loading ? <RoundedLoader /> : null }
+      {loading ? <RoundedLoader /> : null}
       <div className="mb-6">
         <Breadcrumb />
         <div className="flex items-center justify-between">
@@ -107,7 +130,7 @@ function EditStudent() {
               onClick={handleSubmit}>
               {loadingUpdateStudent ? (
                 <>
-                  <span className="translate-y-[1px]">
+                  <span className="translate-y-px">
                     <Loader2Icon
                       size={18}
                       className="mr-1.5 animate-spin-fast"
@@ -132,8 +155,7 @@ function EditStudent() {
               </p>
             </div>
             <div className="p-5">
-              <div
-                className="block">
+              <div className="block">
                 {/* name */}
                 <div className="mb-4">
                   <label
@@ -146,7 +168,9 @@ function EditStudent() {
                     type="text"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
                     value={studentUpdate?.name ?? student?.name}
-                    onChange={(e) => handleForm({ type: 'NAME', value: e.target.value })}
+                    onChange={(e) =>
+                      handleForm({ type: 'NAME', value: e.target.value })
+                    }
                     placeholder="Masukkan nama siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -164,7 +188,9 @@ function EditStudent() {
                     type="email"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
                     value={studentUpdate?.email ?? student?.email}
-                    onChange={(e) => handleForm({ type: 'EMAIL', value: e.target.value })}
+                    onChange={(e) =>
+                      handleForm({ type: 'EMAIL', value: e.target.value })
+                    }
                     placeholder="Masukkan email siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -182,7 +208,12 @@ function EditStudent() {
                     type="number"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
                     value={studentUpdate?.phoneNumber ?? student?.phoneNumber}
-                    onChange={(e) => handleForm({ type: 'PHONE_NUMBER', value: e.target.value })}
+                    onChange={(e) =>
+                      handleForm({
+                        type: 'PHONE_NUMBER',
+                        value: e.target.value,
+                      })
+                    }
                     placeholder="Masukkan nomor telepon siswa"
                     aria-required="true"
                     aria-invalid="false"
@@ -198,7 +229,7 @@ function EditStudent() {
                   <div className="relative">
                     <select
                       id="school"
-                      className={`h-[43.2px] px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
+                      className={`h-10.8 px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
                       // value={student?.school?.name}
                       aria-required="true"
                       aria-invalid="false">
@@ -230,32 +261,38 @@ function EditStudent() {
             <div className="p-5">
               <div className="flex items-center mb-4">
                 <figure className="flex items-center justify-center overflow-hidden w-14 h-14 rounded-full mr-3">
-                  { student?.image?.fileLink ? (
+                  {student?.image?.fileLink ? (
                     <img
                       src={student?.image?.fileLink}
                       alt={`${student?.name} Profile`}
                       className="w-full h-full object-cover object-center"
                     />
-                  ) : null }
+                  ) : null}
                 </figure>
                 <div className="">
                   <h5 className="font-medium text-base mb-0.5">
                     Ubah Foto Profil
                   </h5>
                   <div className="flex items-center space-x-3">
-                    <p onClick={() => {}} className="text-gray-400 hover:text-red-500 cursor-pointer">
+                    <p
+                      onClick={() => {}}
+                      className="text-gray-400 hover:text-red-500 cursor-pointer">
                       Hapus
                     </p>
                   </div>
                 </div>
               </div>
-              <div
-                className="block">
+              <div className="block">
                 <input
                   id="profileImg"
                   name="profileImg"
                   type="file"
-                  onChange={(e) => handleForm({ type: "MEDIA", value: e.target?.files?.[0] as File })}
+                  onChange={(e) =>
+                    handleForm({
+                      type: 'MEDIA',
+                      value: e.target?.files?.[0] as File,
+                    })
+                  }
                   className="hidden opacity-0 invisible"
                 />
                 <div className="cursor-pointer w-full p-4 border-2 border-dashed border-gray-300 rounded-md flex flex-col justify-center items-center">
