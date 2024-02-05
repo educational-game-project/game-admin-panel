@@ -1,19 +1,2 @@
 💡!!BACKLOG!!
-- sidebar
-- view CRUD siswa (table)
-- view history score (table)
-- view report (table, line chart)
-- view analysis (sudah diolah datanya)
-
-😃!!DO!!
-- sync login page api
-
-🧪!!TEST!!
-- view login page
-
-🎯!!DONE!!
-
-🔥!!LEARN!!
-- nested context
-- how to manage cookies / using cookies
-- how to manage dark theme
+- import type
