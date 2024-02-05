@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../app/store';
 
-import { ToastState } from '../types';
+import type { RootState } from '../app/store';
+import type { ToastState } from '../types';
 
 const initialState: ToastState = {
   isAllowed: false,

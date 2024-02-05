@@ -25,7 +25,7 @@ import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 import { showErrorToast, showSuccessToast } from '../../../components/Toast';
 import { useDeleteSchoolMutation } from '../../../services/schoolApi';
 
-import { School, SchoolTableProps } from '../../../types';
+import type { School, SchoolTableProps } from '../../../types';
 
 function IndeterminateCheckbox({
   indeterminate,

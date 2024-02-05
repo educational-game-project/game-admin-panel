@@ -14,7 +14,7 @@ import {
   UserSquare2Icon,
 } from 'lucide-react';
 
-import { BreadcrumbIconProps } from '../../types';
+import type { BreadcrumbIconProps } from '../../types';
 
 function BreadcumbIcon({ name }: BreadcrumbIconProps) {
   const breadcrumbConfig = [

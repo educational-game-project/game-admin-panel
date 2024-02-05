@@ -7,7 +7,7 @@ import {
   setNotAllowedToast,
 } from '../features/toastSlice';
 
-import { ToastProviderProps } from '../types';
+import type { ToastProviderProps } from '../types';
 
 const ToastProvider = ({ children }: ToastProviderProps) => {
   const location = useLocation();

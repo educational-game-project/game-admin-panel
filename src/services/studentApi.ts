@@ -1,5 +1,6 @@
 import { coreApi } from '../api/coreApi';
-import {
+
+import type {
   DataTableGetRequest,
   StudentIdRequest,
   StudentListSuccessResponse,

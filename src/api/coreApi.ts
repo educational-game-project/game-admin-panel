@@ -9,7 +9,7 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
-import { LoginSuccessData } from '../types';
+import type { LoginSuccessData } from '../types';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: getBaseUrl(),

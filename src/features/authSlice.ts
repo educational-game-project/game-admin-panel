@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-
-import { AuthState, Token, UserAuth } from '../types';
+import type { AuthState, Token, UserAuth } from '../types';
 
 const authCredential = JSON.parse(
   localStorage.getItem('userKogGame') || 'null'
