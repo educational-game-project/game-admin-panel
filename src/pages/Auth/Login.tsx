@@ -3,14 +3,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CheckIcon, Eye, EyeOff } from 'lucide-react';
-import { useAppDispatch } from '../../app/hooks';
+import { CheckIcon, Eye, EyeOff, MoonIcon, SunIcon } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useLoginMutation } from '../../services/authApi';
 import { setAuth } from '../../features/authSlice';
 import { setAllowedToast } from '../../features/toastSlice';
+import { selectTheme, toggleTheme } from '../../features/themeSlice';
 import { showDefaultToast, showErrorToast } from '../../components/Toast';
 
-import { LoginRequest } from '../../types';
+import type { LoginRequest } from '../../types';
 
 const schema = yup.object().shape({
   email: yup.string().required('Email harus diisi').email('Email tidak valid'),
@@ -23,6 +24,7 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [login, { isLoading }] = useLoginMutation();
+  const theme = useAppSelector(selectTheme);
 
   const {
     register,
@@ -56,7 +58,7 @@ function Login() {
   };
 
   return (
-    <main className="w-full min-h-screen p-3 bg-white">
+    <main className="w-full min-h-screen p-3 bg-white relative dark:bg-gray-900">
       <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-4 min-h-screen">
         <div className="col-span-full lg:col-span-6">
           <div className="">
@@ -69,7 +71,7 @@ function Login() {
                 />
               </div>
             </div>
-            <div className="w-[26.5rem] mx-auto mt-24 mb-40">
+            <div className="w-106 mx-auto mt-24 mb-40">
               <h3 className="font-bold text-8 mb-6 text-center">
                 Masuk ke Gameon
               </h3>
@@ -82,9 +84,9 @@ function Login() {
                   <input
                     id="email"
                     type="email"
-                    className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                    className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 dark:bg-gray-700 dark:border-gray-700 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600 ${
                       errors.email
-                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
                         : ''
                     }`}
                     placeholder="Masukkan email Anda"
@@ -103,9 +105,9 @@ function Login() {
                     <input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
-                      className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      className={`p-4 rounded-xl border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 dark:bg-gray-700 dark:border-gray-700 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600 ${
                         errors.password
-                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
+                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
                           : ''
                       }`}
                       placeholder="Masukkan password Anda"
@@ -145,7 +147,9 @@ function Login() {
                       <div className="absolute left-0 top-px">
                         <div
                           className={`w-4.5 h-4.5 rounded-full flex items-center justify-center ${
-                            rememberVal ? 'bg-indigo-500' : 'bg-gray-300'
+                            rememberVal
+                              ? 'bg-indigo-500'
+                              : 'bg-gray-300 dark:bg-gray-600'
                           }`}
                           role="checkbox"
                           aria-checked="false"
@@ -161,7 +165,7 @@ function Login() {
                     </div>
                     <label
                       htmlFor="remember"
-                      className="ml-2.5">
+                      className="ml-2.5 dark:text-gray-300">
                       Ingat saya
                     </label>
                   </div>
@@ -169,28 +173,32 @@ function Login() {
                 <button
                   title="Signin"
                   type="submit"
-                  className="p-4 rounded-xl text-base w-full text-center bg-indigo-600 transition-all-200 text-white font-semibold hover:bg-indigo-700 flex items-center justify-center disabled:bg-indigo-300 disabled:text-white/70 disabled:cursor-not-allowed"
+                  className="p-4 rounded-xl text-base w-full text-center bg-indigo-600 transition-all-200 text-white font-semibold hover:bg-indigo-700 flex items-center justify-center disabled:bg-indigo-300 disabled:text-white/70 disabled:cursor-not-allowed dark:bg-indigo-700 dark:hover:bg-indigo-600 dark:disabled:bg-gray-700 dark:disabled:text-gray-500"
                   disabled={isLoading}>
-                  {isLoading && (
-                    <svg
-                      className="animate-spin-fast -ml-1 mr-3 h-5 w-5 text-white inline-block"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24">
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                  {isLoading ? (
+                    <>
+                      <svg
+                        className="animate-spin-fast -ml-1 mr-3 h-5 w-5 text-white inline-block dark:text-gray-300"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24">
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Checking...
+                    </>
+                  ) : (
+                    'Masuk'
                   )}
-                  Masuk
                 </button>
               </form>
             </div>
@@ -205,8 +213,22 @@ function Login() {
           </div>
         </div>
         <div className="lg:col-span-6 hidden lg:block">
-          <div className="w-full h-full bg-gradient-to-br from-indigo-200 from-20% via-sky-200 via-40% to-emerald-200 to-90% rounded-2xl"></div>
+          <div className="w-full h-full bg-gradient-to-br from-indigo-200 from-20% via-sky-200 via-40% to-emerald-200 to-90% rounded-2xl dark:from-indigo-500 dark:via-sky-500 dark:to-emerald-500"></div>
         </div>
+      </div>
+      {/* theme */}
+      <div className="absolute top-10 right-10">
+        <button
+          className="bg-white w-12 h-12 bg-opacity-80 border border-gray-100 border-opacity-40 shadow-lg lg:shadow-2xl rounded-full flex items-center justify-center transition-all hover:bg-white/60 dark:bg-gray-950 dark:border-gray-800 dark:hover:bg-gray-950/80"
+          onClick={() => dispatch(toggleTheme())}
+          type="button"
+          title="Theme Toggler">
+          {theme === 'light' ? (
+            <SunIcon />
+          ) : (
+            <MoonIcon className="stroke-gray-200" />
+          )}
+        </button>
       </div>
     </main>
   );

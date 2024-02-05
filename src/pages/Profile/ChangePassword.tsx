@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { ChangePasswordRequest } from '../../types';
 import { useChangePasswordMutation } from '../../services/authApi';
 import { showErrorToast, showSuccessToast } from '../../components/Toast';
 import HeaderProfile from './components/HeaderProfile';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+
+import type { ChangePasswordRequest } from '../../types';
 
 const schema = yup.object().shape({
   oldPassword: yup.string().required('Password lama harus diisi.'),
@@ -68,14 +69,16 @@ function ChangePassword() {
   };
 
   return (
-    <div className="bg-white rounded-xl">
+    <div className="bg-white rounded-xl dark:bg-gray-800">
       <HeaderProfile isProfilePage={false} />
       <div className="p-5">
         <div className="mb-2">
           <h3 className="mb-0.5 text-lg font-semibold">Ubah Password</h3>
-          <p className="mb-4 text-gray-600">Ubah password akun Anda</p>
+          <p className="mb-4 text-gray-600 dark:text-gray-400">
+            Ubah password akun Anda
+          </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="py-4 border-y border-gray-300">
+            <div className="py-4 border-y border-gray-300 dark:border-gray-600/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
@@ -91,9 +94,9 @@ function ChangePassword() {
                       id="oldPassword"
                       className={`pl-3 pr-10 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
                         errors.oldPassword
-                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
+                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
                           : ''
-                      }`}
+                      } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                       placeholder="Masukkan password lama"
                       aria-required="true"
                       aria-invalid={errors.oldPassword ? 'true' : 'false'}
@@ -124,7 +127,7 @@ function ChangePassword() {
                 </div>
               </div>
             </div>
-            <div className="py-4 border-b border-gray-300">
+            <div className="py-4 border-b border-gray-300 dark:border-gray-600/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
@@ -140,9 +143,9 @@ function ChangePassword() {
                       id="newPassword"
                       className={`pl-3 pr-10 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
                         errors.newPassword
-                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
+                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
                           : ''
-                      }`}
+                      } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                       placeholder="Masukkan password baru"
                       aria-required="true"
                       aria-invalid={errors.newPassword ? 'true' : 'false'}
@@ -173,7 +176,7 @@ function ChangePassword() {
                 </div>
               </div>
             </div>
-            <div className="py-4 border-b border-gray-300">
+            <div className="py-4 border-b border-gray-300 dark:border-gray-600/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
@@ -189,9 +192,9 @@ function ChangePassword() {
                       id="newPassword"
                       className={`pl-3 pr-10 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
                         errors.confirmPassword
-                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500'
+                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
                           : ''
-                      }`}
+                      } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                       placeholder="Masukkan konfirmasi password baru"
                       aria-required="true"
                       aria-invalid={errors.confirmPassword ? 'true' : 'false'}
@@ -224,7 +227,7 @@ function ChangePassword() {
             </div>
             <div className="mt-6 flex justify-end">
               <button
-                className="leading-normal inline-flex items-center justify-center rounded-md border border-transparent bg-violet-600 px-3.5 py-2 text-sm font-medium text-gray-100 hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2"
+                className="leading-normal inline-flex items-center justify-center rounded-md border border-transparent bg-violet-600 px-3.5 py-2 text-sm font-medium text-gray-100 hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2 transition-all dark:bg-violet-700 dark:hover:bg-violet-600"
                 type="submit"
                 disabled={isLoading}>
                 {isLoading && (

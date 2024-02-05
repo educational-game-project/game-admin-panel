@@ -8,10 +8,11 @@ import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { useAddSchoolMutation } from '../../services/schoolApi';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SchoolAddRequest } from '../../types';
 import { useDropzone } from 'react-dropzone';
 import { setAllowedToast } from '../../features/toastSlice';
 import { showErrorToast, showSuccessToast } from '../../components/Toast';
+
+import type { SchoolAddRequest } from '../../types';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const schema = yup.object().shape({
@@ -115,7 +116,7 @@ function AddSchool() {
               onClick={handleSubmit(onSubmit)}>
               {isLoading ? (
                 <>
-                  <span className="translate-y-[1px]">
+                  <span className="translate-y-px">
                     <Loader2Icon
                       size={18}
                       className="mr-1.5 animate-spin-fast"

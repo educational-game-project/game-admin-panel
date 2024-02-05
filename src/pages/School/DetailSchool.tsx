@@ -4,9 +4,10 @@ import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { useGetSchoolByIdMutation } from '../../services/schoolApi';
-import { SchoolAddRequest } from '../../types';
 import { useForm } from 'react-hook-form';
 import { showErrorToast } from '../../components/Toast';
+
+import type { SchoolAddRequest } from '../../types';
 
 function DetailSchool() {
   const refInitMount = useRef(true);

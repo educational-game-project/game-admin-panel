@@ -29,7 +29,7 @@ function Home() {
         <h5 className="font-semibold text-3xl mb-1.5">Home</h5>
         <p className="text-gray-500">Selamat datang di Dashboard Gameon.</p>
       </div>
-      <div className="h-[1500px] bg-white p-5 rounded-xl">
+      <div className="bg-white p-5 rounded-xl dark:bg-gray-800">
         <div className="flex space-x-4 items-center">
           <button
             onClick={notify_1}

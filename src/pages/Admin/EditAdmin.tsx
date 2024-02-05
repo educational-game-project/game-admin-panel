@@ -68,7 +68,7 @@ function EditAdmin() {
               onClick={handleSubmit}>
               {isLoadingSave ? (
                 <>
-                  <span className="translate-y-[1px]">
+                  <span className="translate-y-px">
                     <Loader2Icon
                       size={18}
                       className="mr-1.5 animate-spin-fast"
@@ -157,7 +157,7 @@ function EditAdmin() {
                   <div className="relative">
                     <select
                       id="school"
-                      className={`h-[43.2px] px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
+                      className={`h-10.8 px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
                       // value={admin?.school?.name}
                       aria-required="true"
                       aria-invalid="false">
