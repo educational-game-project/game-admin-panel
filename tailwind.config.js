@@ -4,6 +4,28 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 1.5s linear infinite',
+        'spin-fast': 'spin 0.75s linear infinite',
+      },
+      blur: {
+        2: '0.5rem',
+        40: '10rem',
+      },
+      borderRadius: {
+        8.5: '2.125rem',
+        half: '50%',
+      },
+      borderWidth: {
+        3: '3px',
+      },
+      boxShadow: {
+        'solid-slate-100': '0 -12px 0 0 rgb(241,245,249)',
+        'solid-gray-900': '0 -12px 0 0 rgb(17,24,39)',
+      },
+      content: {
+        empty: '""',
+      },
       fontFamily: {
         inter: ['Inter', ...defaultTheme.fontFamily.sans],
       },
@@ -12,9 +34,9 @@ export default {
         '3.25xs': '13px',
         8: '2rem',
       },
-      spacing: {
-        0.75: '0.1875rem',
-        4.5: '1.125rem',
+      scale: {
+        104: '1.04',
+        115: '1.15',
       },
       screens: {
         xs: '390px',
@@ -29,9 +51,22 @@ export default {
         '2xl': '1440px',
         '3xl': '1536px',
       },
-      animation: {
-        'spin-slow': 'spin 1.5s linear infinite',
-        'spin-fast': 'spin 0.75s linear infinite',
+      spacing: {
+        0.125: '0.03125rem',
+        0.75: '0.1875rem',
+        1.6375: '0.409375rem',
+        4.5: '1.125rem',
+        6.5: '1.625rem',
+        31: '7.75rem',
+        10.8: '2.7rem',
+        106: '26.5rem',
+        112.5: '28.125rem',
+      },
+      transitionDuration: {
+        400: '400ms',
+      },
+      zIndex: {
+        full: 9999,
       },
     },
   },
@@ -40,4 +75,5 @@ export default {
       strategy: 'class', // only generate classes
     }),
   ],
+  darkMode: 'class',
 };
