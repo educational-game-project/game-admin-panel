@@ -60,7 +60,7 @@ function ChangePassword() {
       await changePassword(data).unwrap();
       showSuccessToast('Password berhasil diubah.');
       reset();
-      navigate('/profile');
+      navigate('/profile/account');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.data) {
@@ -81,12 +81,12 @@ function ChangePassword() {
             Ubah password akun Anda
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="py-4 border-y border-gray-300 dark:border-gray-600/80">
+            <div className="py-4 border-y border-gray-200 dark:border-gray-700/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
                     htmlFor="oldPassword"
-                    className="text-sm font-medium">
+                    className="text-sm font-medium dark:text-gray-300">
                     Password Lama
                   </label>
                 </div>
@@ -130,12 +130,12 @@ function ChangePassword() {
                 </div>
               </div>
             </div>
-            <div className="py-4 border-b border-gray-300 dark:border-gray-600/80">
+            <div className="py-4 border-b border-gray-200 dark:border-gray-700/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
                     htmlFor="newPassword"
-                    className="text-sm font-medium">
+                    className="text-sm font-medium dark:text-gray-300">
                     Password Baru
                   </label>
                 </div>
@@ -179,12 +179,12 @@ function ChangePassword() {
                 </div>
               </div>
             </div>
-            <div className="py-4 border-b border-gray-300 dark:border-gray-600/80">
+            <div className="py-4 border-b border-gray-200 dark:border-gray-700/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
                     htmlFor="confirmPassword"
-                    className="text-sm font-medium">
+                    className="text-sm font-medium dark:text-gray-300">
                     Konfirmasi Password Baru
                   </label>
                 </div>

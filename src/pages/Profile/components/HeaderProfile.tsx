@@ -50,7 +50,7 @@ function HeaderProfile({ isProfilePage }: HeaderProfileProps) {
             </Link>
           ) : (
             <Link
-              to="/profile"
+              to="/profile/account"
               className="leading-normal ml-4 inline-flex justify-center rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-800 hover:bg-neutral-100 hover:border-neutral-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2 transition-all dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 h-[35px] xl:h-auto items-center">
               <span className="hidden xl:inline-block">Profil</span>
               <span className="inline-block xl:hidden">

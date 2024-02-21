@@ -15,6 +15,7 @@ function Profile() {
           <p className="mb-4 text-gray-600 dark:text-gray-400">
             Kelola informasi profil Anda
           </p>
+          {/* <LoadingProfileUser /> */}
           {isLoading && <LoadingProfileUser />}
           {isSuccess && <ProfileUser user={user.data} />}
         </div>
