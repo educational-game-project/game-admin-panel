@@ -28,7 +28,7 @@ function Score() {
           subtitle="Lihat poin yang didapat oleh setiap pemain."
         />
       </div>
-      <div className="bg-white p-5 rounded-xl">
+      <div className="bg-white p-5 rounded-xl dark:bg-gray-800">
         <ScoreTable />
       </div>
     </div>
