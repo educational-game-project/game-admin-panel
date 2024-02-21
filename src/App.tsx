@@ -117,7 +117,7 @@ function App() {
                     element={<Support />}
                   />
                   <Route
-                    path="/profile"
+                    path="/profile/account"
                     element={<Profile />}
                   />
                   <Route

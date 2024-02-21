@@ -79,7 +79,7 @@ function Navbar() {
                   </div>
                 </button>
                 <Link
-                  to="/profile"
+                  to="/profile/account"
                   title="Profile">
                   <img
                     src={

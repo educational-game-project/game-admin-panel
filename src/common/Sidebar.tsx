@@ -235,7 +235,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
                     : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
                 }`}
-                to="/profile"
+                to="/profile/account"
                 onClick={() => setProfileToggle(false)}
                 title="Account Settings">
                 <UserCog size={17} />
