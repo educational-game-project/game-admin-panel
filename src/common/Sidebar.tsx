@@ -239,7 +239,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                 onClick={() => setProfileToggle(false)}
                 title="Account Settings">
                 <UserCog size={17} />
-                <span className="ml-2.5 text-sm">Account Settings</span>
+                <span className="ml-2.5 text-sm">Pengaturan Akun</span>
               </Link>
               <Link
                 className={`relative flex items-center py-1.5 px-2 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
@@ -251,7 +251,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                 onClick={() => setProfileToggle(false)}
                 title="Activity">
                 <Activity size={17} />
-                <span className="ml-2.5 text-sm">Activity</span>
+                <span className="ml-2.5 text-sm">Aktivitas</span>
               </Link>
             </div>
             <hr className="mt-2 mb-1.5 dark:border-gray-600/80" />

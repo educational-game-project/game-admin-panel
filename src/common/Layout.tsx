@@ -37,21 +37,21 @@ function Layout() {
           />
           <SidebarItem
             icon={<UserSquare2 size={20} />}
-            text="Students"
+            text="Siswa"
             path="/student"
             alert={true}
             active={isCurrentLocation('student')}
           />
           <SidebarItem
             icon={<MousePointerClick size={20} />}
-            text="Score"
+            text="Skor"
             path="/score"
             alert={true}
             active={isCurrentLocation('score')}
           />
           <SidebarItem
             icon={<LineChart size={20} />}
-            text="Analysis"
+            text="Analisis"
             path="/analysis"
             alert={false}
             active={isCurrentLocation('analysis')}
@@ -70,7 +70,7 @@ function Layout() {
               />
               <SidebarItem
                 icon={<SchoolIcon size={20} />}
-                text="School"
+                text="Sekolah"
                 path="/school"
                 alert={false}
                 active={isCurrentLocation('school')}
