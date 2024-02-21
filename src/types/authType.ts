@@ -6,7 +6,7 @@ interface UserAuth {
   role: string;
   email: string;
   phoneNumber: string;
-  images: Image | null;
+  image: Image | null;
   school: string;
 }
 interface Token {

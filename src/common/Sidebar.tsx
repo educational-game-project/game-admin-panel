@@ -86,10 +86,10 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
         <div className="px-4 py-5 flex justify-between items-center">
           <Link to="/">
             <img
-              src="https://img.logoipsum.com/243.svg"
+              src="https://img.logoipsum.com/297.svg"
               className={`overflow-hidden transition-all ${
                 isExpanded ? 'w-32' : 'w-0'
-              }`}
+              } dark:filter-invert dark:grayscale-100`}
               alt="logo admin panel"
             />
           </Link>
@@ -119,16 +119,16 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             }`}
             onClick={() => setProfileToggle((curr) => !curr)}>
             <img
-              src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
-                user?.name
-              )}`}
+              src={
+                user?.image?.fileLink ??
+                `https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
+                  user?.name
+                )}`
+              }
               alt={`${user?.name} profile`}
               className={`${
                 isExpanded ? 'w-10 h-10' : 'w-9 h-9'
-              } rounded-full object-cover object-center ${
-                isProfileLocation &&
-                'border-3 border-indigo-700 dark:border-indigo-200'
-              }`}
+              } rounded-full object-cover object-center`}
             />
             <div
               className={`
@@ -178,13 +178,16 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex mb-2.5">
               <img
-                src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
-                  user?.name
-                )}`}
+                src={
+                  user?.image?.fileLink ??
+                  `https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
+                    user?.name
+                  )}`
+                }
                 alt={`${user?.name} profile`}
                 className="w-9 h-9 rounded-full object-cover object-center"
               />
-              <div className="flex justify-between items-center overflow-hidden transition-all ml-2">
+              <div className="flex justify-between items-center overflow-hidden ml-2">
                 <div className="leading-4">
                   <h4 className="font-semibold mb-0.5 text-3.25xs line-clamp-1 text-ellipsis">
                     {user?.name}
@@ -208,19 +211,21 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                 )}
                 <span className="ml-2.5 text-sm">Dark Mode</span>
               </div>
-              <div className="absolute right-2">
-                <label className="relative inline-block w-10 h-5">
-                  <input
-                    id="darkMode"
-                    name="darkMode"
-                    type="checkbox"
-                    checked={theme === 'dark'}
-                    onChange={() => dispatch(toggleTheme())}
-                    className="peer/darkMode opacity-0 w-0 h-0"
-                  />
-                  <span className="slider round absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-gray-300 transition-all duration-400 rounded-8.5 before:absolute before:content-empty before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:transition-all before:duration-400 before:rounded-half peer-checked/darkMode:bg-indigo-500 peer-checked/darkMode:before:translate-x-5"></span>
-                </label>
-              </div>
+              {profileToggle && (
+                <div className="absolute right-2">
+                  <label className="relative inline-block w-10 h-5">
+                    <input
+                      id="darkMode"
+                      name="darkMode"
+                      type="checkbox"
+                      checked={theme === 'dark'}
+                      onChange={() => dispatch(toggleTheme())}
+                      className="peer/darkMode opacity-0 w-0 h-0"
+                    />
+                    <span className="slider round absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-gray-300 transition-all duration-400 rounded-8.5 before:absolute before:content-empty before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:transition-all before:duration-400 before:rounded-half peer-checked/darkMode:bg-indigo-500 peer-checked/darkMode:before:translate-x-5"></span>
+                  </label>
+                </div>
+              )}
             </div>
             <hr className="mt-2 mb-1.5 dark:border-gray-600/80" />
             <div className="">

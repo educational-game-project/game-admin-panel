@@ -82,9 +82,12 @@ function Navbar() {
                   to="/profile"
                   title="Profile">
                   <img
-                    src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
-                      user?.name
-                    )}`}
+                    src={
+                      user?.image?.fileLink ??
+                      `https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${transformStringPlus(
+                        user?.name
+                      )}`
+                    }
                     alt={`${user?.name} profile`}
                     className="w-9 h-9 rounded-full object-cover object-center"
                   />
