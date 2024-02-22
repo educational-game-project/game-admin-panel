@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { coreApi } from '../api/coreApi';
 import authReducer from '../features/authSlice';
+import adminReducer from '../features/adminSlice';
 import breadcrumbReducer from './../features/breadcrumbSlice';
 import sidebarReducer from './../features/sidebarSlice';
 import toastReducer from './../features/toastSlice';
@@ -11,6 +12,7 @@ export const store = configureStore({
   reducer: {
     [coreApi.reducerPath]: coreApi.reducer,
     auth: authReducer,
+    admin: adminReducer,
     breadcrumb: breadcrumbReducer,
     sidebar: sidebarReducer,
     toast: toastReducer,
