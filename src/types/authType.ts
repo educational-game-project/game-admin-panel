@@ -1,4 +1,4 @@
-import { Image, SuccessResponse } from '.';
+import type { Image, SuccessResponse } from '.';
 
 interface UserAuth {
   _id: string;

@@ -91,6 +91,11 @@ interface Admin {
   updatedAt: string;
   __v: 0;
 }
+interface AdminState {
+  admin: Admin[] | null;
+  page: PageResponse | null;
+  status: string;
+}
 interface School {
   _id: string;
   name: string;
@@ -135,6 +140,11 @@ interface StudentListSuccessResponse extends SuccessResponse {
 }
 interface StudentSuccessResponse extends SuccessResponse {
   data: Student;
+}
+
+interface AdminListSuccessResponse extends SuccessResponse {
+  data: Admin[];
+  page: PageResponse;
 }
 interface SchoolListSuccessResponse extends SuccessResponse {
   data: School[];
@@ -232,6 +242,7 @@ interface StudentProps {
 // ====================
 
 export type {
+  AdminListSuccessResponse,
   SuccessResponse,
   ErrorResponse,
   ProfileSuccessResponse,
@@ -243,6 +254,9 @@ export type {
   School,
   Image,
   User,
+  Admin,
+  AdminState,
+  PageResponse,
   // CHECK DULU =================
   ScoreProps,
   ScoreResponse,

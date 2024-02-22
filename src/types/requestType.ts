@@ -1,5 +1,6 @@
 interface DataTableGetRequest {
   search: string;
+  schoolId?: string;
   page?: number;
   limit?: number;
 }
