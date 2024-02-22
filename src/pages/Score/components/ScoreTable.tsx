@@ -19,8 +19,8 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 
-import { ScoreProps } from '../../../types';
 import scoreData from '../../../data/SCORE_DATA.json';
+import type { ScoreProps } from '../../../types';
 
 function IndeterminateCheckbox({
   isHeader,

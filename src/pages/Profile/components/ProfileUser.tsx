@@ -1,5 +1,6 @@
-import type { ProfileUserProps } from '../../../types';
 import { extractNameParts } from '../../../utilities/stringUtils';
+
+import type { ProfileUserProps } from '../../../types';
 
 function ProfileUser({ user }: ProfileUserProps) {
   const { firstName, lastName } = extractNameParts(user?.name);

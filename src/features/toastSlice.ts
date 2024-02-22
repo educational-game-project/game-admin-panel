@@ -22,6 +22,6 @@ export const toastSlice = createSlice({
 
 export const { setAllowedToast, setNotAllowedToast } = toastSlice.actions;
 
-export default toastSlice.reducer;
-
 export const selectIsAllowedToast = (state: RootState) => state.toast.isAllowed;
+
+export default toastSlice.reducer;

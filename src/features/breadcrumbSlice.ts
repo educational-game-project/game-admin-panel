@@ -19,7 +19,8 @@ export const breadcrumbSlice = createSlice({
 });
 
 export const { setBreadcrumb } = breadcrumbSlice.actions;
-export default breadcrumbSlice.reducer;
 
 export const selectBreadcrumb = (state: RootState) =>
   state.breadcrumb.breadcrumbs;
+
+export default breadcrumbSlice.reducer;

@@ -12,7 +12,7 @@ import { showErrorToast, showSuccessToast } from '../../components/Toast';
 import { useAddStudentMutation } from '../../services/studentApi';
 import { setAllowedToast } from '../../features/toastSlice';
 
-import { StudentAddRequest } from '../../types';
+import type { StudentAddRequest } from '../../types';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const schema = yup.object().shape({
