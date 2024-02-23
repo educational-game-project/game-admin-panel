@@ -19,7 +19,7 @@ function AlertDelete({
         as={Fragment}>
         <Dialog
           as="div"
-          className="relative z-10"
+          className="relative z-30"
           onClose={() => true}>
           <Transition.Child
             as={Fragment}
@@ -29,7 +29,7 @@ function AlertDelete({
             leave="ease-in duration-200"
             leaveFrom="opacity-100"
             leaveTo="opacity-0">
-            <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
+            <div className="fixed inset-0 bg-black/25 backdrop-blur-sm dark:bg-black/60" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -42,14 +42,14 @@ function AlertDelete({
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95">
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-gray-800">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900">
+                    className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
                     Apakah Anda yakin?
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       Data {message} akan dihapus. Anda tidak dapat
                       mengembalikan data yang telah dihapus.
                     </p>
@@ -57,14 +57,14 @@ function AlertDelete({
                   <div className="mt-4 flex justify-end">
                     <button
                       type="button"
-                      className="leading-normal inline-flex justify-center rounded-md border border-gray-300 bg-transparent px-4 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:focus-visible:ring-2 disabled:focus-visible:ring-gray-500 disabled:focus-visible:ring-offset-2"
+                      className="leading-normal inline-flex justify-center rounded-md border border-gray-300 bg-transparent px-4 py-1.5 text-sm font-medium text-gray-900 transition hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:focus-visible:ring-2 disabled:focus-visible:ring-gray-500 disabled:focus-visible:ring-offset-2 dark:border-gray-500 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:border-gray-600"
                       disabled={isLoading}
                       onClick={onCancel}>
                       Batal
                     </button>
                     <button
                       type="button"
-                      className="leading-normal ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-1.5 text-sm font-medium text-gray-100 hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-red-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-red-500 disabled:focus-visible:ring-offset-2"
+                      className="leading-normal ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-1.5 text-sm font-medium text-gray-100 transition hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-red-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-red-500 disabled:focus-visible:ring-offset-2"
                       disabled={isLoading}
                       onClick={onConfirm}>
                       {isLoading ? (
