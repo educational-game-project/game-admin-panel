@@ -5,7 +5,7 @@ import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
-import { AdminProps } from '../../types';
+import type { AdminProps } from '../../types';
 import adminData from '../../data/ADMIN_DATA.json';
 
 function EditAdmin() {

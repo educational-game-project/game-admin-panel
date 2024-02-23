@@ -8,6 +8,7 @@ import { setBreadcrumb } from '../../features/breadcrumbSlice';
 function AddAdmin() {
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const dispatch = useAppDispatch();
+  const errors = false;
 
   const handleSubmit = () => {
     setIsLoadingSave(true);
@@ -46,17 +47,17 @@ function AddAdmin() {
           <div className="flex justify-end">
             <Link
               type="button"
-              className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 ${
+              className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition ${
                 isLoadingSave
-                  ? 'opacity-50 cursor-not-allowed bg-gray-200'
+                  ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
                   : 'bg-gray-50 hover:bg-gray-100'
-              }`}
+              } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
               to="/admin">
               Kembali
             </Link>
             <button
               type="button"
-              className="leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent bg-violet-600 px-6 py-3 text-sm font-medium text-gray-100 hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2"
+              className="leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent bg-violet-600 px-6 py-3 text-sm font-medium text-gray-100 transition hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2 dark:hover:bg-violet-700 dark:disabled:bg-violet-700"
               disabled={isLoadingSave}
               onClick={handleSubmit}>
               {isLoadingSave ? (
@@ -78,7 +79,7 @@ function AddAdmin() {
       </div>
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-full xl:col-span-8">
-          <div className="bg-white rounded-xl">
+          <div className="bg-white rounded-xl dark:bg-gray-800">
             <div className="px-5 pt-4">
               <h4 className="font-semibold text-xl mb-0.5">Informasi Admin</h4>
               <p className="text-gray-500">
@@ -93,13 +94,17 @@ function AddAdmin() {
                 <div className="mb-4">
                   <label
                     htmlFor="name"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
                     Nama Lengkap
                   </label>
                   <input
                     id="name"
                     type="text"
-                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                     placeholder="Masukkan nama admin"
                     aria-required="true"
                     aria-invalid="false"
@@ -109,13 +114,17 @@ function AddAdmin() {
                 <div className="mb-4">
                   <label
                     htmlFor="email"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
                     Email
                   </label>
                   <input
                     id="email"
                     type="email"
-                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                     placeholder="Masukkan email admin"
                     aria-required="true"
                     aria-invalid="false"
@@ -125,13 +134,17 @@ function AddAdmin() {
                 <div className="mb-4">
                   <label
                     htmlFor="phone"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
                     Nomor Telepon
                   </label>
                   <input
                     id="phone"
                     type="text"
-                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                     placeholder="Masukkan nomor telepon admin"
                     aria-required="true"
                     aria-invalid="false"
@@ -141,13 +154,17 @@ function AddAdmin() {
                 <div className="mb-1">
                   <label
                     htmlFor="school"
-                    className="block mb-2 font-medium text-gray-500">
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
                     Sekolah
                   </label>
                   <div className="relative">
                     <select
                       id="school"
-                      className={`h-10.8 px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80`}
+                      className={`h-10.8 px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full appearance-none focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                        errors
+                          ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                          : ''
+                      } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                       aria-required="true"
                       aria-invalid="false">
                       <option value="">Pilih Sekolah</option>
@@ -168,7 +185,7 @@ function AddAdmin() {
           </div>
         </div>
         <div className="col-span-full xl:col-span-4">
-          <div className="bg-white rounded-xl">
+          <div className="bg-white rounded-xl dark:bg-gray-800">
             <div className="px-5 pt-4">
               <h4 className="font-semibold text-xl mb-0.5">Foto Profil</h4>
               <p className="text-gray-500">
@@ -189,7 +206,7 @@ function AddAdmin() {
                     Tambah Foto Profil
                   </h5>
                   <div className="flex items-center space-x-3">
-                    <p className="text-gray-400 hover:text-red-500 cursor-pointer">
+                    <p className="text-gray-400 hover:text-red-500 cursor-pointer dark:text-gray-600 dark:hover:text-red-600">
                       Hapus
                     </p>
                     <p className="text-violet-600 hover:text-violet-500 cursor-pointer">
@@ -207,8 +224,8 @@ function AddAdmin() {
                   type="file"
                   className="hidden opacity-0 invisible"
                 />
-                <div className="cursor-pointer w-full p-4 border-2 border-dashed border-gray-300 rounded-md flex flex-col justify-center items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-50 mt-1 mb-4">
+                <div className="cursor-pointer w-full p-4 border-2 border-dashed border-gray-300 rounded-md flex flex-col justify-center items-center dark:border-gray-700">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-50 mt-1 mb-4 dark:bg-gray-900">
                     <UploadCloudIcon
                       size={24}
                       className="text-gray-500"

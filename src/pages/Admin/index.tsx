@@ -7,7 +7,6 @@ import HeaderContainer from '../../components/HeaderContainer';
 
 function Admin() {
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     const newBreadcrumb = [
       {
@@ -30,7 +29,7 @@ function Admin() {
           btnText="Tambah Admin"
         />
       </div>
-      <div className="bg-white p-5 rounded-xl">
+      <div className="bg-white p-5 rounded-xl dark:bg-gray-800">
         <AdminTable />
       </div>
     </div>
