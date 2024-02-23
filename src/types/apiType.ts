@@ -84,12 +84,16 @@ interface Admin {
   role: string;
   email: string;
   phoneNumber: string;
-  deletedAt: null;
-  addedBy: UserAddBy | null;
+  password: string;
   image: Image | null;
+  school: School | null;
   createdAt: string;
   updatedAt: string;
-  __v: 0;
+  isActive: boolean;
+  deletedAt?: null;
+  addedBy: UserAddBy | null;
+  createdAtString?: string;
+  updatedAtString?: string;
 }
 interface AdminState {
   admin: Admin[] | null;

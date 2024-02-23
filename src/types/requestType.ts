@@ -31,6 +31,9 @@ interface SchoolUpdateRequest {
 interface SchoolIdRequest {
   id: string;
 }
+interface AdminIdRequest {
+  id: string;
+}
 interface ChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
@@ -38,6 +41,7 @@ interface ChangePasswordRequest {
 }
 
 export type {
+  AdminIdRequest,
   ChangePasswordRequest,
   DataTableGetRequest,
   StudentAddRequest,
