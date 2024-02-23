@@ -74,7 +74,7 @@ button {
 
 /* skeleton */
 .skeleton-loader {
-  @apply bg-gray-200 dark:bg-gray-700 rounded-lg;
+  @apply bg-gray-300 dark:bg-gray-700 rounded-lg;
 }
 .skeleton-xs {
   @apply h-3;
