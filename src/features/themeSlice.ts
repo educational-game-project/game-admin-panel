@@ -8,16 +8,20 @@ const getTheme = () => {
   if (theme) {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-color-mode', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-color-mode', 'light');
     }
     return theme;
   }
   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     document.documentElement.classList.add('dark');
+    document.documentElement.setAttribute('data-color-mode', 'dark');
     return 'dark';
   } else {
     document.documentElement.classList.remove('dark');
+    document.documentElement.setAttribute('data-color-mode', 'light');
     return 'light';
   }
 };
@@ -34,8 +38,10 @@ export const themeSlice = createSlice({
       state.theme = state.theme === 'light' ? 'dark' : 'light';
       if (state.theme === 'dark') {
         document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('data-color-mode', 'dark');
       } else {
         document.documentElement.classList.remove('dark');
+        document.documentElement.setAttribute('data-color-mode', 'light');
       }
       localStorage.setItem('themeKogGame', state.theme);
     },
