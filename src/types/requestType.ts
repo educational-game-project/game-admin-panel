@@ -34,6 +34,24 @@ interface SchoolIdRequest {
 interface AdminIdRequest {
   id: string;
 }
+interface AdminAddRequest {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  school: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: File | Blob | any;
+}
+interface AdminUpdateRequest {
+  id?: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  school: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: File | Blob | any | undefined;
+}
 interface ChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
@@ -41,6 +59,8 @@ interface ChangePasswordRequest {
 }
 
 export type {
+  AdminAddRequest,
+  AdminUpdateRequest,
   AdminIdRequest,
   ChangePasswordRequest,
   DataTableGetRequest,

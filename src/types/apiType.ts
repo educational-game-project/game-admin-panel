@@ -150,6 +150,9 @@ interface AdminListSuccessResponse extends SuccessResponse {
   data: Admin[];
   page: PageResponse;
 }
+interface AdminSuccessResponse extends SuccessResponse {
+  data: Admin;
+}
 interface SchoolListSuccessResponse extends SuccessResponse {
   data: School[];
   page: PageResponse;
@@ -247,6 +250,7 @@ interface StudentProps {
 
 export type {
   AdminListSuccessResponse,
+  AdminSuccessResponse,
   SuccessResponse,
   ErrorResponse,
   ProfileSuccessResponse,
