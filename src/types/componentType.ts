@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import type { Admin, PageResponse, School, Student, User } from './apiType';
+import type { School, Student, User } from './apiType';
 
 // alert dialog
 interface AlertDialogProps {
