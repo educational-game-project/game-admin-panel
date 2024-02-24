@@ -4,3 +4,5 @@
 - number table
 - error section or page
 - functionality table select
+- school
+- game
