@@ -9,13 +9,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import {
-  selectAdmin,
-  selectAdminPage,
-  selectAdminStatus,
-  setAdmin,
-} from '../../../features/adminSlice';
 import {
   useDeleteAdminMutation,
   useGetAdminMutation,
@@ -79,14 +72,12 @@ function AdminTable() {
     window.innerWidth > 1024
   );
 
-  const dispatch = useAppDispatch();
-  const [getAdmin, { isLoading, isSuccess, isError }] = useGetAdminMutation();
+  const [getAdmin, { isLoading, isError, data: admins }] =
+    useGetAdminMutation();
   const [deleteAdmin, { isLoading: isLoadingDelete }] =
     useDeleteAdminMutation();
-  const admins = useAppSelector(selectAdmin);
-  const adminStatus = useAppSelector(selectAdminStatus);
-  const adminPages = useAppSelector(selectAdminPage);
-  const admin = useMemo(() => admins ?? [], [admins]);
+  const admin = useMemo(() => admins?.data ?? [], [admins]);
+  const adminPages = admins?.page;
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
   const headerClass: Record<string, string> = {
@@ -96,8 +87,7 @@ function AdminTable() {
 
   const fetchAdmin = async (credentials: DataTableGetRequest) => {
     try {
-      const result = await getAdmin(credentials).unwrap();
-      dispatch(setAdmin(result));
+      await getAdmin(credentials).unwrap();
     } catch (error) {
       showErrorToast('Gagal mengambil data admin');
     }
@@ -116,6 +106,7 @@ function AdminTable() {
       const responseDelete = await deleteAdmin({ id: deleteId }).unwrap();
       if (responseDelete.success) {
         showSuccessToast('Berhasil menghapus data sekolah');
+        fetchAdmin({ search: querySearch, limit: limitPage });
       }
     } catch (error) {
       showErrorToast('Gagal menghapus data sekolah');
@@ -159,16 +150,20 @@ function AdminTable() {
         header: 'Nama Lengkap',
         cell: (info) => (
           <div className="flex items-center">
-            <img
-              src={
-                info?.row?.original?.image?.fileLink ??
-                `https://ui-avatars.com/api/?name=${transformStringPlus(
-                  info.getValue()
-                )}&background=6d5Acd&color=fff`
-              }
-              alt={`${info?.getValue()} Profile`}
-              className="mr-3 w-6 h-6 object-cover object-center rounded-full"
-            />
+            <div className="">
+              <figure className="mr-3 size-6 rounded-full block overflow-hidden">
+                <img
+                  src={
+                    info?.row?.original?.image?.fileLink ??
+                    `https://ui-avatars.com/api/?name=${transformStringPlus(
+                      info.getValue()
+                    )}&background=6d5Acd&color=fff`
+                  }
+                  alt={`${info?.getValue()} Profile`}
+                  className="w-full h-full object-cover object-center block"
+                />
+              </figure>
+            </div>
             <p className="pr-3">{info?.getValue()}</p>
           </div>
         ),
@@ -181,10 +176,10 @@ function AdminTable() {
         header: 'Telepon',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('school.name', {
+      columnHelper.accessor((data) => data?.school?.name || '', {
         id: 'school',
         header: 'Sekolah',
-        cell: (info) => info.getValue() ?? '-',
+        cell: (info) => info?.row?.original?.school?.name ?? '-',
       }),
       // action edit and delete
       columnHelper.display({
@@ -240,9 +235,7 @@ function AdminTable() {
   }, []);
 
   useEffect(() => {
-    if (adminStatus === 'idle' || isSuccess) {
-      fetchAdmin({ search: querySearch, limit: limitPage });
-    }
+    fetchAdmin({ search: querySearch, limit: limitPage });
   }, [querySearch, limitPage]);
 
   return (
@@ -328,25 +321,25 @@ function AdminTable() {
                   <tr
                     className="animate-pulse-fast"
                     key={index}>
-                    <td className="px-3 py-3 text-center">
+                    <td className="px-3 py-3.5 text-center">
                       <div className="skeleton-loader skeleton-sm !size-4.5 !rounded mx-auto" />
                     </td>
-                    <td className="px-3 py-3 text-center">
+                    <td className="px-3 py-3.5 text-center">
                       <div className="skeleton-loader skeleton-sm w-4/5 mx-auto" />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
                   </tr>
