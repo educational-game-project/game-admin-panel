@@ -29,7 +29,7 @@ button {
 
 /* form */
 .forms-checkbox {
-  @apply form-checkbox h-4 w-4 border-2 border-gray-400 rounded bg-gray-50 focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-indigo-600/20 focus:border-indigo-500/50 focus:ring-offset-0 focus:ring-0 block checked:bg-indigo-500;
+  @apply form-checkbox h-4 w-4 border-2 border-gray-400 rounded bg-gray-50 focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-indigo-600/20 focus:border-indigo-500/50 focus:ring-offset-0 focus:ring-0 block checked:bg-indigo-500 dark:border-gray-600 dark:bg-gray-600 dark:checked:bg-indigo-600 dark:checked:border-indigo-600;
 }
 
 /* utilities */
@@ -41,43 +41,47 @@ button {
 .Toastify__toast-container {
   @apply w-full xsm:w-auto;
 }
-
 .toastify-containers {
   @apply relative flex min-h-0 overflow-hidden cursor-pointer pl-2 pr-4 py-2 rounded-lg items-center mb-4 mx-2 sm:mx-0 mt-2 sm:mt-0;
 }
-
 .Toastify__toast-body {
   @apply mr-5;
 }
-
 .Toastify__toast-body > div:last-child {
   @apply text-sm font-medium leading-tight whitespace-nowrap;
 }
-
 .Toastify__close-button {
   @apply py-0.75 pl-0.75 pr-0.5 bg-transparent rounded self-center;
 }
-
 .Toastify__close-button:hover {
   @apply bg-gray-900/10;
 }
-
 .Toastify__toast-icon {
   @apply w-auto mr-3;
 }
-
 .Toastify__toast--success {
   @apply bg-emerald-500;
 }
-
 .Toastify__toast--error {
   @apply bg-red-500;
 }
-
 .Toastify__toast--warning {
   @apply bg-amber-500;
 }
-
 .Toastify__toast--info {
   @apply bg-violet-500;
+}
+
+/* skeleton */
+.skeleton-loader {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-lg;
+}
+.skeleton-xs {
+  @apply h-3;
+}
+.skeleton-sm {
+  @apply h-4;
+}
+.skeleton-base {
+  @apply h-5;
 }

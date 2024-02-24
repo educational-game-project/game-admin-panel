@@ -1,2 +1,6 @@
 💡!!BACKLOG!!
-- import type
+- management alert
+- alert error
+- number table
+- error section or page
+- functionality table select

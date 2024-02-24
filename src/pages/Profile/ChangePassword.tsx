@@ -8,6 +8,7 @@ import HeaderProfile from './components/HeaderProfile';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 import type { ChangePasswordRequest } from '../../types';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
   oldPassword: yup.string().required('Password lama harus diisi.'),
@@ -25,6 +26,7 @@ interface ShowPasswordState {
 }
 
 function ChangePassword() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<ShowPasswordState>({
     oldPassword: false,
     newPassword: false,
@@ -58,6 +60,7 @@ function ChangePassword() {
       await changePassword(data).unwrap();
       showSuccessToast('Password berhasil diubah.');
       reset();
+      navigate('/profile/account');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.data) {
@@ -78,12 +81,12 @@ function ChangePassword() {
             Ubah password akun Anda
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="py-4 border-y border-gray-300 dark:border-gray-600/80">
+            <div className="py-4 border-y border-gray-200 dark:border-gray-700/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
                     htmlFor="oldPassword"
-                    className="text-sm font-medium">
+                    className="text-sm font-medium dark:text-gray-300">
                     Password Lama
                   </label>
                 </div>
@@ -127,12 +130,12 @@ function ChangePassword() {
                 </div>
               </div>
             </div>
-            <div className="py-4 border-b border-gray-300 dark:border-gray-600/80">
+            <div className="py-4 border-b border-gray-200 dark:border-gray-700/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
                     htmlFor="newPassword"
-                    className="text-sm font-medium">
+                    className="text-sm font-medium dark:text-gray-300">
                     Password Baru
                   </label>
                 </div>
@@ -176,12 +179,12 @@ function ChangePassword() {
                 </div>
               </div>
             </div>
-            <div className="py-4 border-b border-gray-300 dark:border-gray-600/80">
+            <div className="py-4 border-b border-gray-200 dark:border-gray-700/80">
               <div className="grid grid-cols-12">
                 <div className="col-span-4">
                   <label
                     htmlFor="confirmPassword"
-                    className="text-sm font-medium">
+                    className="text-sm font-medium dark:text-gray-300">
                     Konfirmasi Password Baru
                   </label>
                 </div>
@@ -189,7 +192,7 @@ function ChangePassword() {
                   <div className="relative max-w-xl w-full">
                     <input
                       type={showPassword.confirmPassword ? 'text' : 'password'}
-                      id="newPassword"
+                      id="confirmPassword"
                       className={`pl-3 pr-10 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
                         errors.confirmPassword
                           ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'

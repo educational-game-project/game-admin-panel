@@ -16,7 +16,7 @@ function ErrorPage() {
       }}>
       <div className="w-full flex justify-center pt-24 pb-4">
         <img
-          src="https://img.logoipsum.com/243.svg"
+          src="https://img.logoipsum.com/297.svg"
           className="w-36"
           alt="logo admin panel"
         />

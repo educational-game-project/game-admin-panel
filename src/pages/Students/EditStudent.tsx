@@ -5,9 +5,9 @@ import Breadcrumb from '../../components/Breadcrumb';
 import { useAppDispatch } from '../../app/hooks';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 
-import { Student } from '../../types';
 import RoundedLoader from '../../components/Loaders/RoundedLoader';
 import useFetchHook from '../../hook/useFetchHook';
+import type { Student } from '../../types';
 
 type TypeUpdateStudent = {
   name?: string;

@@ -84,12 +84,21 @@ interface Admin {
   role: string;
   email: string;
   phoneNumber: string;
-  deletedAt: null;
-  addedBy: UserAddBy | null;
+  password: string;
   image: Image | null;
+  school: School | null;
   createdAt: string;
   updatedAt: string;
-  __v: 0;
+  isActive: boolean;
+  deletedAt?: null;
+  addedBy: UserAddBy | null;
+  createdAtString?: string;
+  updatedAtString?: string;
+}
+interface AdminState {
+  admin: Admin[] | null;
+  page: PageResponse | null;
+  status: string;
 }
 interface School {
   _id: string;
@@ -135,6 +144,14 @@ interface StudentListSuccessResponse extends SuccessResponse {
 }
 interface StudentSuccessResponse extends SuccessResponse {
   data: Student;
+}
+
+interface AdminListSuccessResponse extends SuccessResponse {
+  data: Admin[];
+  page: PageResponse;
+}
+interface AdminSuccessResponse extends SuccessResponse {
+  data: Admin;
 }
 interface SchoolListSuccessResponse extends SuccessResponse {
   data: School[];
@@ -232,6 +249,8 @@ interface StudentProps {
 // ====================
 
 export type {
+  AdminListSuccessResponse,
+  AdminSuccessResponse,
   SuccessResponse,
   ErrorResponse,
   ProfileSuccessResponse,
@@ -243,6 +262,9 @@ export type {
   School,
   Image,
   User,
+  Admin,
+  AdminState,
+  PageResponse,
   // CHECK DULU =================
   ScoreProps,
   ScoreResponse,

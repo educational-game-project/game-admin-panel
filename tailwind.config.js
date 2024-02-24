@@ -7,6 +7,7 @@ export default {
       animation: {
         'spin-slow': 'spin 1.5s linear infinite',
         'spin-fast': 'spin 0.75s linear infinite',
+        'pulse-fast': 'pulse 1s linear infinite',
       },
       blur: {
         2: '0.5rem',
@@ -56,7 +57,9 @@ export default {
         0.75: '0.1875rem',
         1.6375: '0.409375rem',
         4.5: '1.125rem',
+        5.5: '1.375rem',
         6.5: '1.625rem',
+        30: '7.5rem',
         31: '7.75rem',
         10.8: '2.7rem',
         106: '26.5rem',

@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { Student } from '.';
-import { School, User } from './apiType';
+import type { Admin, PageResponse, School, Student, User } from './apiType';
 
 // alert dialog
 interface AlertDialogProps {
@@ -68,15 +67,15 @@ interface HeaderProfileProps {
 
 export type {
   AlertDialogProps,
-  ButtonClipboardProps,
+  HeaderContainerProps,
+  HeaderProfileProps,
   Breadcrumb,
   BreadcrumbState,
   BreadcrumbIconProps,
-  HeaderContainerProps,
-  HeaderProfileProps,
+  ButtonClipboardProps,
   ProfileUserProps,
+  SchoolTableProps,
+  StudentTableProps,
   ToastState,
   ToastProviderProps,
-  StudentTableProps,
-  SchoolTableProps,
 };

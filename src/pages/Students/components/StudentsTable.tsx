@@ -22,8 +22,8 @@ import {
 import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 
 import useFetchHook from '../../../hook/useFetchHook';
-import { SearchQueryType } from '../../../types/search_query';
-import { StudentProps } from '../../../types';
+import type { SearchQueryType } from '../../../types/search_query';
+import type { StudentProps } from '../../../types';
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -56,8 +56,15 @@ function StudentsTable() {
   );
   const [query, setQuery] = useState<SearchQueryType>({ limit: 10 });
 
-  const { data: datastd, setStartFetching } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student/find", payload: query });
-  const { setStartFetching: setStartFetchingDelete, loading: loadingDeleted } = useFetchHook<IResponse<StudentProps[]>>({ url: "/user/student", payload: { id: deleteId }, method: "DELETE" });
+  const { data: datastd, setStartFetching } = useFetchHook<
+    IResponse<StudentProps[]>
+  >({ url: '/user/student/find', payload: query });
+  const { setStartFetching: setStartFetchingDelete, loading: loadingDeleted } =
+    useFetchHook<IResponse<StudentProps[]>>({
+      url: '/user/student',
+      payload: { id: deleteId },
+      method: 'DELETE',
+    });
 
   const response = useMemo<IResponse<StudentProps[]> | null>(
     () => datastd,
@@ -79,14 +86,20 @@ function StudentsTable() {
   }, [text]);
 
   // handle pagination
-  useMemo(() => { setStartFetching(true); }, [query.page]);
-  useMemo(() => { setStartFetching(true); }, [query.page]);
+  useMemo(() => {
+    setStartFetching(true);
+  }, [query.page]);
+  useMemo(() => {
+    setStartFetching(true);
+  }, [query.page]);
 
   // handle fetch after deleted student
-  useMemo(() => { if(!loadingDeleted) {
-    setIsOpenDeleteDialog(false);
-    setStartFetching(true);
-  } }, [loadingDeleted]);
+  useMemo(() => {
+    if (!loadingDeleted) {
+      setIsOpenDeleteDialog(false);
+      setStartFetching(true);
+    }
+  }, [loadingDeleted]);
 
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
@@ -216,7 +229,7 @@ function StudentsTable() {
   };
 
   const handleDelete = () => {
-    setStartFetchingDelete(true)
+    setStartFetchingDelete(true);
   };
 
   useEffect(() => {
