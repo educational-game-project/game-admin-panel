@@ -65,7 +65,7 @@ function Login() {
             <div className="mx-10 mt-10">
               <div>
                 <img
-                  src="https://img.logoipsum.com/243.svg"
+                  src="https://img.logoipsum.com/297.svg"
                   className="w-36"
                   alt="logo admin panel"
                 />
