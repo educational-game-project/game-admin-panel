@@ -73,7 +73,7 @@ function Login() {
             </div>
             <div className="w-106 mx-auto mt-24 mb-40">
               <h3 className="font-bold text-8 mb-6 text-center">
-                Masuk ke Gameon
+                Masuk ke Dashboard
               </h3>
               <p className="text-gray-400 text-center mb-8">
                 Masuk dengan akun yang telah terdaftar. Kelola siswa dan

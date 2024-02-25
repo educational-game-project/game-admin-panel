@@ -1,15 +1,24 @@
 import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import { Link } from 'react-router-dom';
 import {
   SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import {
+  useDeleteSchoolMutation,
+  useGetSchoolMutation,
+} from '../../../services/schoolApi';
+import AlertDelete from '../../../components/AlertDialog/AlertDelete';
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from '../../../components/Toast';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -17,20 +26,22 @@ import {
   ArrowUpIcon,
   ChevronDownIcon,
   EyeIcon,
+  Loader2Icon,
   PenSquareIcon,
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
-import AlertDelete from '../../../components/AlertDialog/AlertDelete';
-import { showErrorToast, showSuccessToast } from '../../../components/Toast';
-import { useDeleteSchoolMutation } from '../../../services/schoolApi';
 
-import type { School, SchoolTableProps } from '../../../types';
+import type { DataTableGetRequest, School } from '../../../types';
 
 function IndeterminateCheckbox({
+  isHeader,
   indeterminate,
   ...rest
-}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+}: {
+  indeterminate?: boolean;
+  isHeader?: boolean;
+} & HTMLProps<HTMLInputElement>) {
   const ref = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
@@ -43,26 +54,88 @@ function IndeterminateCheckbox({
     <input
       type="checkbox"
       ref={ref}
-      className="cursor-pointer forms-checkbox"
+      className={`cursor-pointer form-checkbox h-4 w-4 border-2 border-gray-400 rounded bg-gray-50 focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-indigo-600/20 focus:border-indigo-500/50 focus:ring-offset-0 focus:ring-0 block checked:bg-indigo-500 dark:checked:bg-indigo-600 dark:checked:border-indigo-600 dark:checked:hover:bg-indigo-600 dark:checked:hover:border-indigo-600 ${
+        isHeader
+          ? 'dark:bg-gray-500 dark:border-gray-500'
+          : 'dark:border-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:hover:border-gray-500'
+      }`}
+      autoComplete="off"
       {...rest}
     />
   );
 }
 
-function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
-  const [filter, setFilter] = useState('');
+function SchoolTable() {
+  const [search, setSearch] = useState('');
+  const [limitPage, setLimitPage] = useState(10);
+  const [querySearch] = useDebounce(search, 500);
+
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const [deleteId, setDeleteId] = useState<string>('');
+
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
+
+  const [getSchool, { isLoading, isError, data: schools }] =
+    useGetSchoolMutation();
+  const [deleteSchool, { isLoading: isLoadingDelete }] =
+    useDeleteSchoolMutation();
+  const school = useMemo(() => schools?.data ?? [], [schools]);
+  const schoolPages = schools?.page;
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [deleteId, setDeleteId] = useState<string>('');
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
   };
-  const [deleteSchool, { isLoading }] = useDeleteSchoolMutation();
+
+  const fetchSchool = async (credentials: DataTableGetRequest) => {
+    try {
+      await getSchool(credentials).unwrap();
+    } catch (error) {
+      showErrorToast('Gagal mengambil data sekolah');
+    }
+  };
+
+  const openDeleteDialog = (id: string) => {
+    setIsOpenDeleteDialog(true);
+    setDeleteId(id);
+  };
+  const closeDeleteDialog = () => {
+    setIsOpenDeleteDialog(false);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const responseDelete = await deleteSchool({ id: deleteId }).unwrap();
+      if (responseDelete.success) {
+        showSuccessToast('Berhasil menghapus data sekolah');
+        fetchSchool({ search: querySearch, limit: limitPage });
+      }
+    } catch (error) {
+      showErrorToast('Gagal menghapus data sekolah');
+    }
+    setIsOpenDeleteDialog(false);
+  };
+
+  const handleSelectedDelete = async (school: School[]) => {
+    const schoolId = school[0]._id;
+    if (school.length === 1) {
+      try {
+        const responseDelete = await deleteSchool({ id: schoolId }).unwrap();
+        if (responseDelete.success) {
+          showSuccessToast('Berhasil menghapus data sekolah');
+          fetchSchool({ search: querySearch, limit: limitPage });
+        }
+      } catch (error) {
+        showErrorToast('Gagal menghapus data sekolah');
+      }
+    } else {
+      showWarningToast('Maaf, fitur ini belum tersedia');
+    }
+    table.setRowSelection({});
+  };
 
   const columnHelper = createColumnHelper<School>();
   const defaultColumns = useMemo(
@@ -71,6 +144,7 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
         id: 'checkboxs',
         header: ({ table }) => (
           <IndeterminateCheckbox
+            isHeader
             {...{
               checked: table.getIsAllRowsSelected(),
               indeterminate: table.getIsSomeRowsSelected(),
@@ -93,7 +167,17 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
       columnHelper.display({
         id: 'row_number',
         header: '#',
-        cell: (info) => info.row.index + 1,
+        cell: (info) => {
+          if (schoolPages) {
+            const orderedNumber =
+              (schoolPages?.currentPage - 1) * schoolPages?.perPage +
+              info?.row?.index +
+              1;
+            return orderedNumber;
+          } else {
+            return info.row.index + 1;
+          }
+        },
       }),
       columnHelper.accessor('name', {
         header: 'Nama Sekolah',
@@ -116,7 +200,7 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
         id: 'action',
         header: '',
         cell: (info) => (
-          <div className="flex space-x-4 px-2">
+          <div className="flex space-x-5 px-2">
             <Link
               className=""
               to={`/school/${info.row.original._id}`}>
@@ -152,16 +236,12 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
     data: school,
     columns: defaultColumns,
     state: {
-      globalFilter: filter,
       rowSelection,
       sorting,
     },
     enableRowSelection: true,
     getCoreRowModel: getCoreRowModel<School>(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onGlobalFilterChange: setFilter,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
   });
@@ -170,63 +250,29 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
     setIsLargeView(window.innerWidth > 1024);
   };
 
-  const openDeleteDialog = (id: string) => {
-    setIsOpenDeleteDialog(true);
-    setDeleteId(id);
-  };
-
-  const closeDeleteDialog = () => {
-    setIsOpenDeleteDialog(false);
-  };
-
-  const handleDelete = async () => {
-    try {
-      const responseDelete = await deleteSchool({ id: deleteId }).unwrap();
-      if (responseDelete.success) {
-        showSuccessToast('Berhasil menghapus data sekolah');
-        refetchSchool();
-      }
-    } catch (error) {
-      showErrorToast('Gagal menghapus data sekolah');
-    }
-    setIsOpenDeleteDialog(false);
-  };
-
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  const handleSelectedDelete = async (school: School[]) => {
-    const schoolId = school[0]._id;
-    if (school.length === 1) {
-      try {
-        const responseDelete = await deleteSchool({ id: schoolId }).unwrap();
-        if (responseDelete.success) {
-          showSuccessToast('Berhasil menghapus data sekolah');
-          refetchSchool();
-        }
-      } catch (error) {
-        showErrorToast('Gagal menghapus data sekolah');
-      }
-    } else {
-      showErrorToast('Gagal menghapus data sekolah');
-    }
-    table.setRowSelection({});
-  };
+
+  useEffect(() => {
+    fetchSchool({ search: querySearch, limit: limitPage });
+  }, [querySearch, limitPage]);
 
   return (
     <div className="">
-      <div className="w-full border border-gray-200 rounded-lg overflow-hidden">
+      <div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
         <div className="flex space-x-3 my-4 px-5 items-center justify-between">
           <div className="relative w-full">
             <input
+              id="searchSchool"
               type="text"
               placeholder="Cari berdasarkan nama..."
-              className="w-3/4 pl-10 focus:outline-none focus:ring-0"
-              value={filter ?? ''}
-              onChange={(e) => setFilter(String(e.target.value))}
+              className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"
+              value={search ?? ''}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <div className="absolute left-0 top-0">
               <SearchIcon
@@ -236,8 +282,8 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
             </div>
           </div>
           <div className="">
-            <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs">
-              {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+            <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
+              {schoolPages?.currentPage ?? 1}/{schoolPages?.totalPage ?? 1}
             </p>
           </div>
         </div>
@@ -247,13 +293,13 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr
                   key={headerGroup.id}
-                  className="border-y border-gray-200 bg-indigo-50/50">
+                  className="border-y border-gray-200 bg-indigo-50/50 dark:border-gray-600 dark:bg-gray-600">
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       className={`font-bold text-xs text-gray-500 tracking-wide px-3 py-3 text-left ${
                         headerClass[header.id] ?? ''
-                      }`}>
+                      } dark:text-gray-300`}>
                       {header.isPlaceholder ? null : (
                         <div
                           {...{
@@ -290,39 +336,89 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
               ))}
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-gray-200 hover:bg-gray-100">
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className={`text-sm px-3 py-3 text-gray-500 ${
-                        cell.column.id === 'score' ? 'font-semibold' : ''
-                      } ${headerClass[cell.column.id] ?? ''}`}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              {isLoading ? (
+                Array.from({
+                  length: school.length !== 0 ? school.length : 5,
+                }).map((_, index) => (
+                  <tr
+                    className="animate-pulse-fast"
+                    key={index}>
+                    <td className="px-3 py-3.5 text-center">
+                      <div className="skeleton-loader skeleton-sm !size-4.5 !rounded mx-auto" />
                     </td>
-                  ))}
+                    <td className="px-3 py-3.5 text-center">
+                      <div className="skeleton-loader skeleton-sm w-4/5 mx-auto" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                  </tr>
+                ))
+              ) : school.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="text-center py-3 text-gray-500 dark:text-gray-400">
+                    Tidak ada data sekolah yang ditemukan.
+                    {isError && (
+                      <span
+                        aria-label="button"
+                        className="cursor-pointer text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                        onClick={() =>
+                          fetchSchool({ search: querySearch, limit: limitPage })
+                        }>
+                        {' '}
+                        Coba lagi.
+                      </span>
+                    )}
+                  </td>
                 </tr>
-              ))}
+              ) : (
+                table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="border-b border-gray-200 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600/40">
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className={`text-sm px-3 py-3 text-gray-500 dark:text-gray-400 ${
+                          headerClass[cell.column.id] ?? ''
+                        }`}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
         <div className="flex items-center justify-between mb-3 px-5">
           <div className="flex items-center">
-            <p className="text-gray-500 mr-3">Menampilkan</p>
+            <p className="text-gray-500 mr-3 dark:text-gray-400">Menampilkan</p>
             <div className="relative">
               <select
-                id="tableScore_paginate"
-                name="tableScore_paginate"
-                className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none"
-                value={table.getState().pagination.pageSize}
-                onChange={(e) => {
-                  table.setPageSize(Number(e.target.value));
-                }}>
+                id="tableSchool_paginate"
+                name="tableSchool_paginate"
+                className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                value={limitPage}
+                disabled={isLoading}
+                onChange={(e) => setLimitPage(Number(e.target.value))}>
                 {[10, 20, 50, 100].map((pageSize) => (
                   <option
                     key={pageSize}
@@ -333,7 +429,7 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
               </select>
               <div className="absolute right-1.5 top-1.5 pointer-events-none">
                 <label
-                  htmlFor="tableScore_paginate"
+                  htmlFor="tableSchool_paginate"
                   className="block">
                   <ChevronDownIcon
                     size={20}
@@ -343,21 +439,31 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">dari {school?.length} data</p>
+            <p className="text-gray-500 ml-3 dark:text-gray-400">
+              dari {schoolPages?.totalData ?? 0} data
+            </p>
           </div>
           <div className="flex space-x-3">
             {isLargeView && (
               <button
-                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}>
+                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
+                onClick={() =>
+                  fetchSchool({ search: '', page: 1, limit: limitPage })
+                }
+                disabled={Number(schoolPages?.currentPage) <= 1 || isLoading}>
                 First
               </button>
             )}
             <button
-              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}>
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
+              onClick={() =>
+                fetchSchool({
+                  search: '',
+                  page: Number(schoolPages?.currentPage) - 1,
+                  limit: limitPage,
+                })
+              }
+              disabled={Number(schoolPages?.currentPage) <= 1 || isLoading}>
               <ArrowLeftIcon
                 size={16}
                 className={isLargeView ? 'mr-1' : ''}
@@ -365,9 +471,18 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
               {isLargeView ? 'Previous' : ''}
             </button>
             <button
-              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}>
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
+              onClick={() =>
+                fetchSchool({
+                  search: '',
+                  page: Number(schoolPages?.currentPage) + 1,
+                  limit: limitPage,
+                })
+              }
+              disabled={
+                Number(schoolPages?.currentPage) >=
+                  Number(schoolPages?.totalPage) || isLoading
+              }>
               {isLargeView ? 'Next' : ''}
               <ArrowRightIcon
                 size={16}
@@ -376,9 +491,18 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
             </button>
             {isLargeView && (
               <button
-                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}>
+                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
+                onClick={() =>
+                  fetchSchool({
+                    search: '',
+                    page: Number(schoolPages?.totalPage),
+                    limit: limitPage,
+                  })
+                }
+                disabled={
+                  Number(schoolPages?.currentPage) >=
+                    Number(schoolPages?.totalPage) || isLoading
+                }>
                 Last
               </button>
             )}
@@ -405,6 +529,7 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
             {/* hapus */}
             <button
               className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
+              disabled={isLoadingDelete}
               onClick={() => {
                 const selectedRow = table.getSelectedRowModel().flatRows;
                 const selectedRowOriginal = selectedRow.map(
@@ -412,11 +537,25 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
                 );
                 handleSelectedDelete(selectedRowOriginal);
               }}>
-              <Trash2Icon
-                size={16}
-                className="mr-1"
-              />
-              Hapus
+              {isLoadingDelete ? (
+                <>
+                  <span className="translate-y-px">
+                    <Loader2Icon
+                      size={18}
+                      className="mr-1.5 animate-spin-fast"
+                    />
+                  </span>
+                  <span>Menghapus...</span>
+                </>
+              ) : (
+                <>
+                  <Trash2Icon
+                    size={16}
+                    className="mr-1"
+                  />
+                  Hapus
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -426,7 +565,7 @@ function SchoolTable({ refetchSchool, school }: SchoolTableProps) {
       <AlertDelete
         isOpen={isOpenDeleteDialog}
         message="sekolah"
-        isLoading={isLoading}
+        isLoading={isLoadingDelete}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />

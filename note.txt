@@ -1,8 +1,4 @@
 💡!!BACKLOG!!
-- management alert
-- alert error
-- number table
-- error section or page
-- functionality table select
-- school
-- game
+- CRUD GAME
+- FUNCTIONALITY SELECT TABLE
+- PAGE / SECTION ERROR HANDLING

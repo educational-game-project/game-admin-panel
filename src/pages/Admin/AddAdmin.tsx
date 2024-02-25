@@ -383,7 +383,7 @@ function AddAdmin() {
               <div className="">
                 <div
                   {...getRootProps({ className: 'dropzone' })}
-                  className={`group drop-media cursor-pointer w-full p-4 border-2 border-dashed rounded-md flex flex-col justify-center items-center ${
+                  className={`group drop-media cursor-pointer w-full p-4 border-2 border-dashed rounded-md flex flex-col justify-center items-center focus:ring-0 focus:outline-none focus:border-gray-400 focus:bg-neutral-200 dark:focus:bg-gray-700 dark:focus:!border-gray-600 hover:bg-gray-100/60 dark:hover:bg-gray-900/60 transition ${
                     isDragActive
                       ? 'border-gray-400 bg-neutral-200 dark:bg-gray-700 dark:!border-gray-600'
                       : 'border-gray-300'
