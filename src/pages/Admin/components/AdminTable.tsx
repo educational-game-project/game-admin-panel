@@ -351,7 +351,7 @@ function AdminTable() {
                   length: admin.length !== 0 ? admin.length : 5,
                 }).map((_, index) => (
                   <tr
-                    className="animate-pulse-fast"
+                    className="animate-pulse-fast border-b border-gray-20 dark:border-gray-600"
                     key={index}>
                     <td className="px-3 py-3.5 text-center">
                       <div className="skeleton-loader skeleton-sm !size-4.5 !rounded mx-auto" />
