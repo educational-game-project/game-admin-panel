@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import Breadcrumb from '../../components/Breadcrumb';
-import { useAppDispatch } from '../../app/hooks';
-import { setBreadcrumb } from '../../features/breadcrumbSlice';
-import { useGetSchoolByIdMutation } from '../../services/schoolApi';
 import { useForm } from 'react-hook-form';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../app/hooks';
+import { useGetSchoolByIdMutation } from '../../services/schoolApi';
+import { setBreadcrumb } from '../../features/breadcrumbSlice';
+import { setAllowedToast } from '../../features/toastSlice';
+import Breadcrumb from '../../components/Breadcrumb';
 import { showErrorToast } from '../../components/Toast';
+import { AlertTriangleIcon, Loader2Icon } from 'lucide-react';
+import { transformStringPlus } from '../../utilities/stringUtils';
 
 import type { SchoolAddRequest } from '../../types';
-import { setAllowedToast } from '../../features/toastSlice';
-import { AlertTriangleIcon, Loader2Icon } from 'lucide-react';
 
 function DetailSchool() {
   const navigate = useNavigate();
@@ -160,7 +161,12 @@ function DetailSchool() {
                       key={admin?.image?.fileName}>
                       <figure className="w-9 h-9 rounded-full overflow-hidden mr-2">
                         <img
-                          src={admin?.image?.fileLink}
+                          src={
+                            admin?.image?.fileLink ??
+                            `https://ui-avatars.com/api/?name=${transformStringPlus(
+                              admin?.name
+                            )}&background=6d5Acd&color=fff`
+                          }
                           alt={`${admin?.name} Profile`}
                           className="w-full h-full object-cover object-center"
                         />
@@ -203,7 +209,7 @@ function DetailSchool() {
                 {school?.data?.images.map((image, index) => (
                   <div
                     className="col-span-4 lg:col-span-3 xl:col-span-2"
-                    key={image?.fileName}>
+                    key={index}>
                     <figure className="group overflow-hidden w-full h-32 rounded-md mr-3">
                       <img
                         src={image?.fileLink}

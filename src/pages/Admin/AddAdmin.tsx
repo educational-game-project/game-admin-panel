@@ -6,6 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '../../app/hooks';
 import { useAddAdminMutation } from '../../services/adminApi';
+import { useGetSchoolMutation } from '../../services/schoolApi';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { setAllowedToast } from '../../features/toastSlice';
 import Breadcrumb from '../../components/Breadcrumb';
@@ -18,7 +19,7 @@ import {
   UploadCloudIcon,
 } from 'lucide-react';
 
-import type { AdminAddRequest } from '../../types';
+import type { AdminAddRequest, School } from '../../types';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const schema = yup.object().shape({
@@ -56,6 +57,18 @@ function AddAdmin() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [addAdmin, { isLoading }] = useAddAdminMutation();
+  const [getSchool, { isLoading: isLoadingGet, data: schools }] =
+    useGetSchoolMutation();
+
+  const fetchSchool = async () => {
+    try {
+      await getSchool({ search: '', limit: 100 }).unwrap();
+    } catch (error) {
+      dispatch(setAllowedToast());
+      showErrorToast('Gagal memuat data sekolah');
+      navigate('/admin');
+    }
+  };
 
   const {
     clearErrors,
@@ -108,6 +121,10 @@ function AddAdmin() {
   };
 
   useEffect(() => {
+    fetchSchool();
+  }, []);
+
+  useEffect(() => {
     const newBreadcrumb = [
       {
         icon: 'admin',
@@ -129,7 +146,17 @@ function AddAdmin() {
         <Breadcrumb />
         <div className="flex items-center justify-between">
           <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5">Tambah Admin</h5>
+            <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
+              Tambah Admin
+              {isLoadingGet && (
+                <span className="translate-y-px">
+                  <Loader2Icon
+                    size={22}
+                    className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
+                  />
+                </span>
+              )}
+            </h5>
             <p className="text-gray-500">
               Tambahkan admin baru ke dalam sistem.
             </p>
@@ -138,7 +165,7 @@ function AddAdmin() {
             <Link
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition ${
-                isLoading
+                isLoading || isLoadingGet
                   ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
                   : 'bg-gray-50 hover:bg-gray-100'
               } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
@@ -148,7 +175,7 @@ function AddAdmin() {
             <button
               type="button"
               className="leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent bg-violet-600 px-6 py-3 text-sm font-medium text-gray-100 transition hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2 dark:hover:bg-violet-700 dark:disabled:bg-violet-700"
-              disabled={isLoading}
+              disabled={isLoading || isLoadingGet}
               onClick={handleSubmit(onSubmit)}>
               {isLoading ? (
                 <>
@@ -319,9 +346,13 @@ function AddAdmin() {
                       aria-invalid={errors.school ? 'true' : 'false'}
                       {...register('school')}>
                       <option value="">Pilih Sekolah</option>
-                      <option value="65a56e7fc5a51e008c5b4909">
-                        TK Tadika Mesra
-                      </option>
+                      {schools?.data.map((school: School) => (
+                        <option
+                          key={school._id}
+                          value={school._id}>
+                          {school.name}
+                        </option>
+                      ))}
                     </select>
                     <div className="absolute inset-y-0 right-1 flex items-center px-2 pointer-events-none">
                       <ChevronDownIcon

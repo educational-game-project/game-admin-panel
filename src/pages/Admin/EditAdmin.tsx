@@ -9,13 +9,14 @@ import {
   useGetAdminByIdMutation,
   useUpdateAdminMutation,
 } from '../../services/adminApi';
+import { useGetSchoolMutation } from '../../services/schoolApi';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { setAllowedToast } from '../../features/toastSlice';
 import Breadcrumb from '../../components/Breadcrumb';
 import { showErrorToast, showSuccessToast } from '../../components/Toast';
 import { ChevronDownIcon, Loader2Icon, UploadCloudIcon } from 'lucide-react';
 
-import type { Admin, AdminUpdateRequest } from '../../types';
+import type { Admin, AdminUpdateRequest, School } from '../../types';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const schema = yup.object().shape({
@@ -54,6 +55,18 @@ function EditAdmin() {
   const [getAdminById, { isLoading: isLoadingGet }] = useGetAdminByIdMutation();
   const [updateAdmin, { isLoading: isLoadingUpdate }] =
     useUpdateAdminMutation();
+  const [getSchool, { isLoading: isLoadingGetSchool, data: schools }] =
+    useGetSchoolMutation();
+
+  const fetchSchool = async () => {
+    try {
+      await getSchool({ search: '', limit: 100 }).unwrap();
+    } catch (error) {
+      dispatch(setAllowedToast());
+      showErrorToast('Gagal memuat data sekolah');
+      navigate('/admin');
+    }
+  };
 
   const {
     clearErrors,
@@ -146,6 +159,7 @@ function EditAdmin() {
   }, [dispatch, adminId]);
   useEffect(() => {
     if (adminId) {
+      fetchSchool();
       fetchAdminById(adminId);
     }
   }, [adminId]);
@@ -158,13 +172,15 @@ function EditAdmin() {
           <div className="">
             <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
               Edit Admin
-              {isLoadingGet && (
+              {isLoadingGet || isLoadingGetSchool ? (
                 <span className="translate-y-px">
                   <Loader2Icon
                     size={22}
                     className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
                   />
                 </span>
+              ) : (
+                ''
               )}
             </h5>
             <p className="text-gray-500">Edit data admin.</p>
@@ -173,7 +189,7 @@ function EditAdmin() {
             <Link
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition ${
-                isLoadingGet || isLoadingUpdate
+                isLoadingGet || isLoadingUpdate || isLoadingGetSchool
                   ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
                   : 'bg-gray-50 hover:bg-gray-100'
               } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
@@ -183,7 +199,7 @@ function EditAdmin() {
             <button
               type="button"
               className="leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent bg-violet-600 px-6 py-3 text-sm font-medium text-gray-100 transition hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2 dark:hover:bg-violet-700 dark:disabled:bg-violet-700"
-              disabled={isLoadingGet || isLoadingUpdate}
+              disabled={isLoadingGet || isLoadingUpdate || isLoadingGetSchool}
               onClick={handleSubmit(onSubmit)}>
               {isLoadingUpdate ? (
                 <>
@@ -231,7 +247,9 @@ function EditAdmin() {
                     placeholder="Masukkan nama admin"
                     aria-required="true"
                     aria-invalid={errors.name ? 'true' : 'false'}
-                    disabled={isLoadingGet || isLoadingUpdate}
+                    disabled={
+                      isLoadingGet || isLoadingUpdate || isLoadingGetSchool
+                    }
                     {...register('name')}
                   />
                   {errors.name && (
@@ -258,7 +276,9 @@ function EditAdmin() {
                     placeholder="Masukkan email admin"
                     aria-required="true"
                     aria-invalid={errors.email ? 'true' : 'false'}
-                    disabled={isLoadingGet || isLoadingUpdate}
+                    disabled={
+                      isLoadingGet || isLoadingUpdate || isLoadingGetSchool
+                    }
                     {...register('email')}
                   />
                   {errors.email && (
@@ -285,7 +305,9 @@ function EditAdmin() {
                     placeholder="Masukkan nomor telepon admin"
                     aria-required="true"
                     aria-invalid={errors.phoneNumber ? 'true' : 'false'}
-                    disabled={isLoadingGet || isLoadingUpdate}
+                    disabled={
+                      isLoadingGet || isLoadingUpdate || isLoadingGetSchool
+                    }
                     {...register('phoneNumber')}
                   />
                   {errors.phoneNumber && (
@@ -311,12 +333,18 @@ function EditAdmin() {
                       } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                       aria-required="true"
                       aria-invalid={errors.school ? 'true' : 'false'}
-                      disabled={isLoadingGet || isLoadingUpdate}
+                      disabled={
+                        isLoadingGet || isLoadingUpdate || isLoadingGetSchool
+                      }
                       {...register('school')}>
                       <option value="">Pilih Sekolah</option>
-                      <option value="65a56e7fc5a51e008c5b4909">
-                        TK Tadika Mesra
-                      </option>
+                      {schools?.data.map((school: School) => (
+                        <option
+                          key={school._id}
+                          value={school._id}>
+                          {school.name}
+                        </option>
+                      ))}
                     </select>
                     <div className="absolute inset-y-0 right-1 flex items-center px-2 pointer-events-none">
                       <ChevronDownIcon
