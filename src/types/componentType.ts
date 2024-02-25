@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import type { School, Student, User } from './apiType';
+import type { Student, User } from './apiType';
 
 // alert dialog
 interface AlertDialogProps {
@@ -51,12 +51,6 @@ interface StudentTableProps {
   refetchStudent: () => void;
 }
 
-// school
-interface SchoolTableProps {
-  school: School[];
-  refetchSchool: () => void;
-}
-
 // profile
 interface ProfileUserProps {
   user: User;
@@ -67,14 +61,13 @@ interface HeaderProfileProps {
 
 export type {
   AlertDialogProps,
-  HeaderContainerProps,
-  HeaderProfileProps,
   Breadcrumb,
   BreadcrumbState,
   BreadcrumbIconProps,
   ButtonClipboardProps,
+  HeaderContainerProps,
+  HeaderProfileProps,
   ProfileUserProps,
-  SchoolTableProps,
   StudentTableProps,
   ToastState,
   ToastProviderProps,
