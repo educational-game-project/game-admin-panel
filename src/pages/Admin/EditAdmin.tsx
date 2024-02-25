@@ -63,7 +63,7 @@ function EditAdmin() {
     setValue,
     watch,
   } = useForm<AdminUpdateRequest>({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(schema),
   });
 
@@ -87,7 +87,7 @@ function EditAdmin() {
       }
     } catch (error) {
       dispatch(setAllowedToast());
-      showErrorToast('Gagal mengambil data siswa');
+      showErrorToast('Gagal mengambil data admin');
       navigate('/admin');
     }
   };
@@ -156,7 +156,17 @@ function EditAdmin() {
         <Breadcrumb />
         <div className="flex items-center justify-between">
           <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5">Edit Admin</h5>
+            <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
+              Edit Admin
+              {isLoadingGet && (
+                <span className="translate-y-px">
+                  <Loader2Icon
+                    size={22}
+                    className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
+                  />
+                </span>
+              )}
+            </h5>
             <p className="text-gray-500">Edit data admin.</p>
           </div>
           <div className="flex justify-end">
@@ -368,7 +378,7 @@ function EditAdmin() {
               <div className="">
                 <div
                   {...getRootProps({ className: 'dropzone' })}
-                  className={`group drop-media cursor-pointer w-full p-4 border-2 border-dashed rounded-md flex flex-col justify-center items-center ${
+                  className={`group drop-media cursor-pointer w-full p-4 border-2 border-dashed rounded-md flex flex-col justify-center items-center focus:ring-0 focus:outline-none focus:border-gray-400 focus:bg-neutral-200 dark:focus:bg-gray-700 dark:focus:!border-gray-600 hover:bg-gray-100/60 dark:hover:bg-gray-900/60 transition ${
                     isDragActive
                       ? 'border-gray-400 bg-neutral-200 dark:bg-gray-700 dark:!border-gray-600'
                       : 'border-gray-300'

@@ -13,7 +13,11 @@ import {
   useDeleteAdminMutation,
   useGetAdminMutation,
 } from '../../../services/adminApi';
-import { showErrorToast, showSuccessToast } from '../../../components/Toast';
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from '../../../components/Toast';
 import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 import {
   ArrowDownIcon,
@@ -21,6 +25,7 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  Loader2Icon,
   PenSquareIcon,
   SearchIcon,
   Trash2Icon,
@@ -105,13 +110,31 @@ function AdminTable() {
     try {
       const responseDelete = await deleteAdmin({ id: deleteId }).unwrap();
       if (responseDelete.success) {
-        showSuccessToast('Berhasil menghapus data sekolah');
+        showSuccessToast('Berhasil menghapus data admin');
         fetchAdmin({ search: querySearch, limit: limitPage });
       }
     } catch (error) {
-      showErrorToast('Gagal menghapus data sekolah');
+      showErrorToast('Gagal menghapus data admin');
     }
     setIsOpenDeleteDialog(false);
+  };
+
+  const handleSelectedDelete = async (admin: Admin[]) => {
+    const adminId = admin[0]._id;
+    if (admin.length === 1) {
+      try {
+        const responseDelete = await deleteAdmin({ id: adminId }).unwrap();
+        if (responseDelete.success) {
+          showSuccessToast('Berhasil menghapus data admin');
+          fetchAdmin({ search: querySearch, limit: limitPage });
+        }
+      } catch (error) {
+        showErrorToast('Gagal menghapus data admin');
+      }
+    } else {
+      showWarningToast('Maaf, fitur ini belum tersedia');
+    }
+    table.setRowSelection({});
   };
 
   const columnHelper = createColumnHelper<Admin>();
@@ -144,7 +167,17 @@ function AdminTable() {
       columnHelper.display({
         id: 'row_number',
         header: '#',
-        cell: (info) => info?.row?.index + 1,
+        cell: (info) => {
+          if (adminPages) {
+            const orderedNumber =
+              (adminPages?.currentPage - 1) * adminPages?.perPage +
+              info?.row?.index +
+              1;
+            return orderedNumber;
+          } else {
+            return info.row.index + 1;
+          }
+        },
       }),
       columnHelper.accessor('name', {
         header: 'Nama Lengkap',
@@ -186,7 +219,7 @@ function AdminTable() {
         id: 'action',
         header: '',
         cell: (info) => (
-          <div className="flex space-x-4 px-2">
+          <div className="flex space-x-5 px-2">
             <Link
               className=""
               to={`/admin/edit/${info?.row?.original?._id}`}>
@@ -249,7 +282,6 @@ function AdminTable() {
               placeholder="Cari berdasarkan nama..."
               className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"
               value={search ?? ''}
-              disabled={isLoading}
               onChange={(e) => setSearch(e.target.value)}
             />
             <div className="absolute left-0 top-0">
@@ -372,8 +404,8 @@ function AdminTable() {
                       <td
                         key={cell.id}
                         className={`text-sm px-3 py-3 text-gray-500 dark:text-gray-400 ${
-                          cell.column.id === 'score' ? 'font-semibold' : ''
-                        } ${headerClass[cell.column.id] ?? ''}`}>
+                          headerClass[cell.column.id] ?? ''
+                        }`}>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -391,8 +423,8 @@ function AdminTable() {
             <p className="text-gray-500 mr-3 dark:text-gray-400">Menampilkan</p>
             <div className="relative">
               <select
-                id="tableScore_paginate"
-                name="tableScore_paginate"
+                id="tableAdmin_paginate"
+                name="tableAdmin_paginate"
                 className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
                 value={limitPage}
                 disabled={isLoading}
@@ -407,7 +439,7 @@ function AdminTable() {
               </select>
               <div className="absolute right-1.5 top-1.5 pointer-events-none">
                 <label
-                  htmlFor="tableScore_paginate"
+                  htmlFor="tableAdmin_paginate"
                   className="block">
                   <ChevronDownIcon
                     size={20}
@@ -506,16 +538,34 @@ function AdminTable() {
             </button>
             {/* hapus */}
             <button
-              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
+              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              disabled={isLoadingDelete}
               onClick={() => {
-                const selectedIds = Object.keys(rowSelection);
-                console.log('🚀 ~ AdminTable ~ selectedIds:', selectedIds);
+                const selectedRow = table.getSelectedRowModel().flatRows;
+                const selectedRowOriginal = selectedRow.map(
+                  (row) => row.original
+                );
+                handleSelectedDelete(selectedRowOriginal);
               }}>
-              <Trash2Icon
-                size={16}
-                className="mr-1"
-              />
-              Hapus
+              {isLoadingDelete ? (
+                <>
+                  <span className="translate-y-px">
+                    <Loader2Icon
+                      size={18}
+                      className="mr-1.5 animate-spin-fast"
+                    />
+                  </span>
+                  <span>Menghapus...</span>
+                </>
+              ) : (
+                <>
+                  <Trash2Icon
+                    size={16}
+                    className="mr-1"
+                  />
+                  Hapus
+                </>
+              )}
             </button>
           </div>
         </div>
