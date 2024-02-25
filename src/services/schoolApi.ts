@@ -33,7 +33,9 @@ export const schoolApi = coreApi.injectEndpoints({
         const formAddSchool = new FormData();
         formAddSchool.append('name', data.name);
         formAddSchool.append('address', data.address);
-        formAddSchool.append('media', data.media[0]);
+        if (data?.media) {
+          formAddSchool.append('media', data?.media[0] || '');
+        }
         return {
           url: '/schools',
           method: 'POST',
@@ -49,7 +51,9 @@ export const schoolApi = coreApi.injectEndpoints({
         formEditSchool.append('id', data.id);
         formEditSchool.append('name', data.name);
         formEditSchool.append('address', data.address);
-        formEditSchool.append('media', data.media[0]);
+        if (data?.media) {
+          formEditSchool.append('media', data?.media[0] || '');
+        }
         return {
           url: '/schools',
           method: 'PUT',
