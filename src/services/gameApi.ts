@@ -58,7 +58,11 @@ export const gameApi = coreApi.injectEndpoints({
         formEditGame.append('maxLevel', data.maxLevel);
         formEditGame.append('maxRetry', data.maxRetry);
         formEditGame.append('maxTime', data.maxTime);
-        formEditGame.append('media[]', data?.media[0]);
+        if (data.media && data.media.length > 0) {
+          data.media.forEach((image: File, index: number) => {
+            formEditGame.append(`media[${index}]`, image);
+          });
+        }
         return {
           url: '/games',
           method: 'PUT',
