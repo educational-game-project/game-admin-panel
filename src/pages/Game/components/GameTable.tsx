@@ -562,7 +562,7 @@ function GameTable() {
       {/* dialog delete */}
       <AlertDelete
         isOpen={isOpenDeleteDialog}
-        message="sekolah"
+        message="permainan"
         isLoading={isLoadingDelete}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
