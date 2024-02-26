@@ -65,7 +65,7 @@ function EditSchool() {
       }
     } catch (error) {
       dispatch(setAllowedToast());
-      showErrorToast('Gagal mengambil data sekolah');
+      showErrorToast('Data sekolah tidak ditemukan');
       navigate('/school');
     }
   };
