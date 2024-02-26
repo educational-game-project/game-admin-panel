@@ -101,7 +101,7 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
     },
     {
       id: 9,
-      name: 'school_detail',
+      name: 'detail',
       icon: (
         <MousePointerSquareIcon
           size={16}
