@@ -30,7 +30,7 @@ function DetailSchool() {
       }
     } catch (error) {
       dispatch(setAllowedToast());
-      showErrorToast('Gagal mengambil data sekolah');
+      showErrorToast('Data sekolah tidak ditemukan');
       navigate('/school');
     }
   };
@@ -43,7 +43,7 @@ function DetailSchool() {
         path: '/school',
       },
       {
-        icon: 'school_detail',
+        icon: 'detail',
         label: 'Detail School',
         path: `/school/${schoolId}`,
       },
