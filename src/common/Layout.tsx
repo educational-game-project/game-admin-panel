@@ -35,6 +35,13 @@ function Layout() {
             active={isCurrentLocation('')}
           />
           <SidebarItem
+            icon={<Gamepad2Icon size={20} />}
+            text="Game"
+            path="/game"
+            alert={false}
+            active={isCurrentLocation('game')}
+          />
+          <SidebarItem
             icon={<UserSquare2 size={20} />}
             text="Siswa"
             path="/student"
@@ -66,13 +73,6 @@ function Layout() {
                 path="/admin"
                 alert={false}
                 active={isCurrentLocation('admin')}
-              />
-              <SidebarItem
-                icon={<Gamepad2Icon size={20} />}
-                text="Game"
-                path="/game"
-                alert={false}
-                active={isCurrentLocation('game')}
               />
               <SidebarItem
                 icon={<SchoolIcon size={20} />}
