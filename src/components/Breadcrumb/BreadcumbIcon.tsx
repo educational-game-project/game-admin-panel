@@ -1,7 +1,7 @@
 import {
+  ActivityIcon,
   CopyPlusIcon,
   Gamepad2Icon,
-  HeadphonesIcon,
   HomeIcon,
   LineChartIcon,
   MousePointerClickIcon,
@@ -131,16 +131,6 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
     },
     {
       id: 12,
-      name: 'support',
-      icon: (
-        <HeadphonesIcon
-          size={16}
-          className="mr-1.5"
-        />
-      ),
-    },
-    {
-      id: 13,
       name: 'user_add',
       icon: (
         <UserPlusIcon
@@ -150,10 +140,20 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
       ),
     },
     {
-      id: 14,
+      id: 13,
       name: 'game',
       icon: (
         <Gamepad2Icon
+          size={16}
+          className="mr-1.5"
+        />
+      ),
+    },
+    {
+      id: 14,
+      name: 'activity',
+      icon: (
+        <ActivityIcon
           size={16}
           className="mr-1.5"
         />

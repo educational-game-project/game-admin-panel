@@ -6,12 +6,10 @@ import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
 import {
   Gamepad2Icon,
-  Headphones,
   HomeIcon,
   LineChart,
   MousePointerClick,
   SchoolIcon,
-  Settings,
   UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
@@ -85,22 +83,6 @@ function Layout() {
               />
             </>
           ) : null}
-          <hr className="mb-6 mt-5 dark:border-gray-600/80" />
-          <SeparateSidebar caption="Settings" />
-          <SidebarItem
-            icon={<Settings size={20} />}
-            text="Preferences"
-            path="/preferences"
-            alert={false}
-            active={isCurrentLocation('preferences')}
-          />
-          <SidebarItem
-            icon={<Headphones size={20} />}
-            text="Support"
-            path="/support"
-            alert={false}
-            active={isCurrentLocation('support')}
-          />
         </Sidebar>
         {/* main content */}
         <section

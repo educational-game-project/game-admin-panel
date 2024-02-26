@@ -18,6 +18,7 @@ import {
   LogOut,
   MoonIcon,
   SunIcon,
+  SettingsIcon,
 } from 'lucide-react';
 
 import type {
@@ -247,11 +248,23 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
                     : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
                 }`}
-                to="/profile/activity"
+                to="/activity"
                 onClick={() => setProfileToggle(false)}
                 title="Activity">
                 <Activity size={17} />
                 <span className="ml-2.5 text-sm">Aktivitas</span>
+              </Link>
+              <Link
+                className={`relative flex items-center py-1.5 px-2 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+                  currentPath === 'preferences'
+                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
+                    : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
+                }`}
+                to="/preferences"
+                onClick={() => setProfileToggle(false)}
+                title="Preferences">
+                <SettingsIcon size={17} />
+                <span className="ml-2.5 text-sm">Preferences</span>
               </Link>
             </div>
             <hr className="mt-2 mb-1.5 dark:border-gray-600/80" />
