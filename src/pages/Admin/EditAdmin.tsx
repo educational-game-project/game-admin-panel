@@ -100,7 +100,7 @@ function EditAdmin() {
       }
     } catch (error) {
       dispatch(setAllowedToast());
-      showErrorToast('Gagal mengambil data admin');
+      showErrorToast('Data admin tidak ditemukan');
       navigate('/admin');
     }
   };
