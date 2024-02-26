@@ -5,10 +5,10 @@ interface UserAddBy {
   role: string;
   email: string;
   phoneNumber: string;
-  deletedAt: string | null;
   image: Image | null;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
   __v: number;
 }
 interface User {
@@ -17,12 +17,12 @@ interface User {
   role: string;
   email: string;
   phoneNumber: string;
-  deletedAt: string | null;
-  addedBy: UserAddBy | null;
   image: Image | null;
   school: School | null;
+  addedBy: UserAddBy | null;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
   __v: number;
 }
 interface Image {
@@ -45,38 +45,14 @@ interface Student {
   email: string;
   phoneNumber: string;
   password?: string;
-  addedBy?: {
-    _id: string;
-    name: string;
-    role: string;
-    email: string;
-    phoneNumber: string;
-    deletedAt: string | null;
-    image: Image | null;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  };
+  addedBy?: UserAddBy | null;
   image: Image | null;
-  school: {
-    _id: string;
-    name: string;
-    address: string;
-    adminsCount: number;
-    studentsCount: number;
-    deletedAt?: string | null;
-    images: Image[];
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-    createdAtString?: string;
-    updatedAtString?: string;
-  };
+  school: School | null;
   createdAt: string;
   deletedAt: string | null;
-  __v: number;
   createdAtString?: string;
   updatedAtString?: string;
+  __v: number;
 }
 interface Admin {
   _id: string;
@@ -87,18 +63,13 @@ interface Admin {
   password: string;
   image: Image | null;
   school: School | null;
+  addedBy: UserAddBy | null;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  isActive: boolean;
   deletedAt?: null;
-  addedBy: UserAddBy | null;
   createdAtString?: string;
   updatedAtString?: string;
-}
-interface AdminState {
-  admin: Admin[] | null;
-  page: PageResponse | null;
-  status: string;
 }
 interface School {
   _id: string;
@@ -106,16 +77,34 @@ interface School {
   address: string;
   adminsCount: number;
   studentsCount: number;
-  deletedAt: string | null;
+  images: Image[];
+  admins?: Admin[] | null;
+  addedBy?: UserAddBy | null;
   createdAt: string;
   updatedAt: string;
-  __v: number;
-  lastUpdatedBy?: string | null;
-  admins?: Admin[] | null;
-  images: Image[];
-  addedBy?: string | null;
+  deletedAt?: string | null;
   createdAtString?: string;
   updatedAtString?: string;
+  lastUpdatedBy?: string | null;
+  __v: number;
+}
+interface Game {
+  _id: string;
+  name: string;
+  author: string;
+  description: string;
+  category: string;
+  maxLevel: number;
+  maxRetry: number;
+  maxTime?: number;
+  images: Image[];
+  addedBy: UserAddBy;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  createdAtString?: string;
+  updatedAtString?: string;
+  __v: number;
 }
 
 // RESPONSE
@@ -159,6 +148,13 @@ interface SchoolListSuccessResponse extends SuccessResponse {
 }
 interface SchoolSuccessResponse extends SuccessResponse {
   data: School;
+}
+interface GameListSuccessResponse extends SuccessResponse {
+  data: Game[];
+  page: PageResponse;
+}
+interface GameSuccessResponse extends SuccessResponse {
+  data: Game;
 }
 
 // CHECK DULU ========================================
@@ -249,22 +245,24 @@ interface StudentProps {
 // ====================
 
 export type {
+  Admin,
   AdminListSuccessResponse,
   AdminSuccessResponse,
-  SuccessResponse,
   ErrorResponse,
+  Image,
+  Game,
+  GameListSuccessResponse,
+  GameSuccessResponse,
+  PageResponse,
   ProfileSuccessResponse,
-  StudentSuccessResponse,
-  StudentListSuccessResponse,
+  School,
   SchoolListSuccessResponse,
   SchoolSuccessResponse,
   Student,
-  School,
-  Image,
+  StudentListSuccessResponse,
+  StudentSuccessResponse,
+  SuccessResponse,
   User,
-  Admin,
-  AdminState,
-  PageResponse,
   // CHECK DULU =================
   ScoreProps,
   ScoreResponse,
