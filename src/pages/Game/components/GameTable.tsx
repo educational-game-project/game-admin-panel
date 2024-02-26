@@ -526,7 +526,7 @@ function GameTable() {
             </button>
             {/* hapus */}
             <button
-              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
+              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={isLoadingDelete}
               onClick={() => {
                 const selectedRow = table.getSelectedRowModel().flatRows;
