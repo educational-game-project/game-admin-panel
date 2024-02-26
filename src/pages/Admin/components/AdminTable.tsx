@@ -371,7 +371,7 @@ function AdminTable() {
                     <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3.5">
+                    <td className="px-3 py-3.5 w-24">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
                   </tr>

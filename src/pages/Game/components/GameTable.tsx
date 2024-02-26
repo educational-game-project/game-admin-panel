@@ -9,6 +9,7 @@ import {
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
+import { useUser } from '../../../hook/authHooks';
 import {
   useDeleteGameMutation,
   useGetGameMutation,
@@ -77,6 +78,7 @@ function GameTable() {
     window.innerWidth > 1024
   );
 
+  const { user } = useUser();
   const [getGame, { isLoading, isError, data: games }] = useGetGameMutation();
   const [deleteGame, { isLoading: isLoadingDelete }] = useDeleteGameMutation();
   const game = useMemo(() => games?.data ?? [], [games]);
@@ -207,22 +209,26 @@ function GameTable() {
                 className="text-violet-500 hover:text-violet-600"
               />
             </Link>
-            <Link
-              className=""
-              to={`/game/edit/${info.row.original._id}`}>
-              <PenSquareIcon
-                size={16}
-                className="text-sky-500 hover:text-sky-600"
-              />
-            </Link>
-            <button
-              className=""
-              onClick={() => openDeleteDialog(info.row.original._id)}>
-              <Trash2Icon
-                size={16}
-                className="text-red-500 hover:text-red-600"
-              />
-            </button>
+            {user?.role === 'Super Admin' && (
+              <>
+                <Link
+                  className=""
+                  to={`/game/edit/${info.row.original._id}`}>
+                  <PenSquareIcon
+                    size={16}
+                    className="text-sky-500 hover:text-sky-600"
+                  />
+                </Link>
+                <button
+                  className=""
+                  onClick={() => openDeleteDialog(info.row.original._id)}>
+                  <Trash2Icon
+                    size={16}
+                    className="text-red-500 hover:text-red-600"
+                  />
+                </button>
+              </>
+            )}
           </div>
         ),
       }),
@@ -359,7 +365,7 @@ function GameTable() {
                     <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3.5">
+                    <td className="px-3 py-3.5 w-34">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
                   </tr>
@@ -524,37 +530,38 @@ function GameTable() {
               onClick={() => console.log('rowSelection', rowSelection)}>
               Log
             </button>
-            {/* hapus */}
-            <button
-              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled={isLoadingDelete}
-              onClick={() => {
-                const selectedRow = table.getSelectedRowModel().flatRows;
-                const selectedRowOriginal = selectedRow.map(
-                  (row) => row.original
-                );
-                handleSelectedDelete(selectedRowOriginal);
-              }}>
-              {isLoadingDelete ? (
-                <>
-                  <span className="translate-y-px">
-                    <Loader2Icon
-                      size={18}
-                      className="mr-1.5 animate-spin-fast"
+            {user?.role === 'Super Admin' && (
+              <button
+                className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={isLoadingDelete}
+                onClick={() => {
+                  const selectedRow = table.getSelectedRowModel().flatRows;
+                  const selectedRowOriginal = selectedRow.map(
+                    (row) => row.original
+                  );
+                  handleSelectedDelete(selectedRowOriginal);
+                }}>
+                {isLoadingDelete ? (
+                  <>
+                    <span className="translate-y-px">
+                      <Loader2Icon
+                        size={18}
+                        className="mr-1.5 animate-spin-fast"
+                      />
+                    </span>
+                    <span>Menghapus...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2Icon
+                      size={16}
+                      className="mr-1"
                     />
-                  </span>
-                  <span>Menghapus...</span>
-                </>
-              ) : (
-                <>
-                  <Trash2Icon
-                    size={16}
-                    className="mr-1"
-                  />
-                  Hapus
-                </>
-              )}
-            </button>
+                    Hapus
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
