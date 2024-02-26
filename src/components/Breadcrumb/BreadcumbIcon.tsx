@@ -1,5 +1,6 @@
 import {
   CopyPlusIcon,
+  Gamepad2Icon,
   HeadphonesIcon,
   HomeIcon,
   LineChartIcon,
@@ -90,7 +91,7 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
     },
     {
       id: 8,
-      name: 'school_add',
+      name: 'add',
       icon: (
         <CopyPlusIcon
           size={16}
@@ -143,6 +144,16 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
       name: 'user_add',
       icon: (
         <UserPlusIcon
+          size={16}
+          className="mr-1.5"
+        />
+      ),
+    },
+    {
+      id: 14,
+      name: 'game',
+      icon: (
+        <Gamepad2Icon
           size={16}
           className="mr-1.5"
         />

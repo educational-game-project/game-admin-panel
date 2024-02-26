@@ -8,7 +8,6 @@ const ButtonClipboard = ({ linkToCopy, children }: ButtonClipboardProps) => {
       navigator.clipboard.writeText(linkToCopy);
       showDefaultToast('Link copied to clipboard');
     } catch (error) {
-      console.log('🚀 ~ handleCopyClick ~ error:', error);
       showErrorToast('Failed to copy link');
     }
   };
