@@ -375,7 +375,7 @@ function GameTable() {
                   <td
                     colSpan={7}
                     className="text-center py-3 text-gray-500 dark:text-gray-400">
-                    Tidak ada data sekolah yang ditemukan.
+                    Tidak ada data permainan yang ditemukan.
                     {isError && (
                       <span
                         aria-label="button"
