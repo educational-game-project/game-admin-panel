@@ -30,6 +30,10 @@ import EditSchool from './pages/School/EditSchool';
 import DetailSchool from './pages/School/DetailSchool';
 import AddAdmin from './pages/Admin/AddAdmin';
 import EditAdmin from './pages/Admin/EditAdmin';
+import Game from './pages/Game';
+import AddGame from './pages/Game/AddGame';
+import EditGame from './pages/Game/EditGame';
+import DetailGame from './pages/Game/DetailGame';
 
 import images from './assets/img';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -70,6 +74,22 @@ function App() {
                     <Route
                       path="/admin/edit/:adminId"
                       element={<EditAdmin />}
+                    />
+                    <Route
+                      path="/game"
+                      element={<Game />}
+                    />
+                    <Route
+                      path="/game/add"
+                      element={<AddGame />}
+                    />
+                    <Route
+                      path="/game/edit/:gameId"
+                      element={<EditGame />}
+                    />
+                    <Route
+                      path="/game/:gameId"
+                      element={<DetailGame />}
                     />
                     <Route
                       path="/school"
