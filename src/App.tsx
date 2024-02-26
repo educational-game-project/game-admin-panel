@@ -76,20 +76,12 @@ function App() {
                       element={<EditAdmin />}
                     />
                     <Route
-                      path="/game"
-                      element={<Game />}
-                    />
-                    <Route
                       path="/game/add"
                       element={<AddGame />}
                     />
                     <Route
                       path="/game/edit/:gameId"
                       element={<EditGame />}
-                    />
-                    <Route
-                      path="/game/:gameId"
-                      element={<DetailGame />}
                     />
                     <Route
                       path="/school"
@@ -108,6 +100,14 @@ function App() {
                       element={<DetailSchool />}
                     />
                   </Route>
+                  <Route
+                    path="/game"
+                    element={<Game />}
+                  />
+                  <Route
+                    path="/game/:gameId"
+                    element={<DetailGame />}
+                  />
                   <Route
                     path="/student"
                     element={<Students />}
