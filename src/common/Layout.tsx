@@ -1,5 +1,11 @@
 import { Outlet, useLocation } from 'react-router-dom';
+import { useAppSelector } from '../app/hooks';
+import { useUser } from '../hook/authHooks';
+import { selectExpanded } from '../features/sidebarSlice';
+import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
+import Navbar from './Navbar';
 import {
+  Gamepad2Icon,
   Headphones,
   HomeIcon,
   LineChart,
@@ -9,11 +15,6 @@ import {
   UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
-import { useAppSelector } from '../app/hooks';
-import { selectExpanded } from '../features/sidebarSlice';
-import { useUser } from '../hook/authHooks';
-import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
-import Navbar from './Navbar';
 
 function Layout() {
   const currentLocation: string = useLocation()?.pathname;
@@ -67,6 +68,13 @@ function Layout() {
                 path="/admin"
                 alert={false}
                 active={isCurrentLocation('admin')}
+              />
+              <SidebarItem
+                icon={<Gamepad2Icon size={20} />}
+                text="Game"
+                path="/game"
+                alert={false}
+                active={isCurrentLocation('game')}
               />
               <SidebarItem
                 icon={<SchoolIcon size={20} />}
