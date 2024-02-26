@@ -59,7 +59,7 @@ function HeaderProfile({ isProfilePage }: HeaderProfileProps) {
             </Link>
           )}
           <Link
-            to="/profile/activity"
+            to="/activity"
             className="leading-normal ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-3 py-1.5 text-sm font-medium text-gray-100 hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-indigo-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-indigo-500 disabled:focus-visible:ring-offset-2 transition-all dark:bg-indigo-700 dark:hover:bg-indigo-600 h-[35px] xl:h-auto items-center">
             <span className="hidden xl:block">Aktivitas</span>
             <span className="block xl:hidden">

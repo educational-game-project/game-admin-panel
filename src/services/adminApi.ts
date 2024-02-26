@@ -24,6 +24,9 @@ export const adminApi = coreApi.injectEndpoints({
         body: id,
       }),
     }),
+    getActiveAdmin: builder.query({
+      query: () => '/user/active',
+    }),
     addAdmin: builder.mutation({
       query: (data) => {
         const formAddAdmin = new FormData();
@@ -74,6 +77,7 @@ export const adminApi = coreApi.injectEndpoints({
 });
 
 export const {
+  useGetActiveAdminQuery,
   useAddAdminMutation,
   useDeleteAdminMutation,
   useGetAdminByIdMutation,

@@ -30,7 +30,7 @@ function DetailSchool() {
       }
     } catch (error) {
       dispatch(setAllowedToast());
-      showErrorToast('Gagal mengambil data sekolah');
+      showErrorToast('Data sekolah tidak ditemukan');
       navigate('/school');
     }
   };
@@ -43,7 +43,7 @@ function DetailSchool() {
         path: '/school',
       },
       {
-        icon: 'school_detail',
+        icon: 'detail',
         label: 'Detail School',
         path: `/school/${schoolId}`,
       },
@@ -158,7 +158,7 @@ function DetailSchool() {
                   school?.data?.admins.map((admin) => (
                     <div
                       className="w-full flex items-center p-3 rounded-md bg-gray-100 dark:bg-gray-900/90"
-                      key={admin?.image?.fileName}>
+                      key={admin?._id}>
                       <figure className="w-9 h-9 rounded-full overflow-hidden mr-2">
                         <img
                           src={

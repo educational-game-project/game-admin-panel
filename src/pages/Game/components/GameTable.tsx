@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type HTMLProps } from 'react';
-import { Link } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
+import { Link } from 'react-router-dom';
 import {
   createColumnHelper,
   flexRender,
@@ -9,10 +9,11 @@ import {
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
+import { useUser } from '../../../hook/authHooks';
 import {
-  useDeleteAdminMutation,
-  useGetAdminMutation,
-} from '../../../services/adminApi';
+  useDeleteGameMutation,
+  useGetGameMutation,
+} from '../../../services/gameApi';
 import {
   showErrorToast,
   showSuccessToast,
@@ -25,14 +26,14 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  EyeIcon,
   Loader2Icon,
   PenSquareIcon,
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { transformStringPlus } from '../../../utilities/stringUtils';
 
-import type { Admin, DataTableGetRequest } from '../../../types';
+import type { DataTableGetRequest, Game } from '../../../types';
 
 function IndeterminateCheckbox({
   isHeader,
@@ -65,7 +66,7 @@ function IndeterminateCheckbox({
   );
 }
 
-function AdminTable() {
+function GameTable() {
   const [search, setSearch] = useState('');
   const [limitPage, setLimitPage] = useState(10);
   const [querySearch] = useDebounce(search, 500);
@@ -77,12 +78,11 @@ function AdminTable() {
     window.innerWidth > 1024
   );
 
-  const [getAdmin, { isLoading, isError, data: admins }] =
-    useGetAdminMutation();
-  const [deleteAdmin, { isLoading: isLoadingDelete }] =
-    useDeleteAdminMutation();
-  const admin = useMemo(() => admins?.data ?? [], [admins]);
-  const adminPages = admins?.page;
+  const { user } = useUser();
+  const [getGame, { isLoading, isError, data: games }] = useGetGameMutation();
+  const [deleteGame, { isLoading: isLoadingDelete }] = useDeleteGameMutation();
+  const game = useMemo(() => games?.data ?? [], [games]);
+  const gamePages = games?.page;
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string>('');
   const headerClass: Record<string, string> = {
@@ -90,11 +90,11 @@ function AdminTable() {
     row_number: 'w-12',
   };
 
-  const fetchAdmin = async (credentials: DataTableGetRequest) => {
+  const fetchGame = async (credentials: DataTableGetRequest) => {
     try {
-      await getAdmin(credentials).unwrap();
+      await getGame(credentials).unwrap();
     } catch (error) {
-      showErrorToast('Gagal mengambil data admin');
+      showErrorToast('Gagal mengambil data sekolah');
     }
   };
 
@@ -108,28 +108,28 @@ function AdminTable() {
 
   const handleDelete = async () => {
     try {
-      const responseDelete = await deleteAdmin({ id: deleteId }).unwrap();
+      const responseDelete = await deleteGame({ id: deleteId }).unwrap();
       if (responseDelete.success) {
-        showSuccessToast('Berhasil menghapus data admin');
-        fetchAdmin({ search: querySearch, limit: limitPage });
+        showSuccessToast('Berhasil menghapus data permainan');
+        fetchGame({ search: querySearch, limit: limitPage });
       }
     } catch (error) {
-      showErrorToast('Gagal menghapus data admin');
+      showErrorToast('Gagal menghapus data permainan');
     }
     setIsOpenDeleteDialog(false);
   };
 
-  const handleSelectedDelete = async (admin: Admin[]) => {
-    const adminId = admin[0]._id;
-    if (admin.length === 1) {
+  const handleSelectedDelete = async (game: Game[]) => {
+    const gameId = game[0]._id;
+    if (game.length === 1) {
       try {
-        const responseDelete = await deleteAdmin({ id: adminId }).unwrap();
+        const responseDelete = await deleteGame({ id: gameId }).unwrap();
         if (responseDelete.success) {
-          showSuccessToast('Berhasil menghapus data admin');
-          fetchAdmin({ search: querySearch, limit: limitPage });
+          showSuccessToast('Berhasil menghapus data permainan');
+          fetchGame({ search: querySearch, limit: limitPage });
         }
       } catch (error) {
-        showErrorToast('Gagal menghapus data admin');
+        showErrorToast('Gagal menghapus data permainan');
       }
     } else {
       showWarningToast('Maaf, fitur ini belum tersedia');
@@ -137,7 +137,7 @@ function AdminTable() {
     table.setRowSelection({});
   };
 
-  const columnHelper = createColumnHelper<Admin>();
+  const columnHelper = createColumnHelper<Game>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -168,9 +168,9 @@ function AdminTable() {
         id: 'row_number',
         header: '#',
         cell: (info) => {
-          if (adminPages) {
+          if (gamePages) {
             const orderedNumber =
-              (adminPages?.currentPage - 1) * adminPages?.perPage +
+              (gamePages?.currentPage - 1) * gamePages?.perPage +
               info?.row?.index +
               1;
             return orderedNumber;
@@ -180,39 +180,20 @@ function AdminTable() {
         },
       }),
       columnHelper.accessor('name', {
-        header: 'Nama Lengkap',
-        cell: (info) => (
-          <div className="flex items-center">
-            <div className="">
-              <figure className="mr-3 size-6 rounded-full block overflow-hidden">
-                <img
-                  src={
-                    info?.row?.original?.image?.fileLink ??
-                    `https://ui-avatars.com/api/?name=${transformStringPlus(
-                      info.getValue()
-                    )}&background=6d5Acd&color=fff`
-                  }
-                  alt={`${info?.getValue()} Profile`}
-                  className="w-full h-full object-cover object-center block"
-                />
-              </figure>
-            </div>
-            <p className="pr-3">{info?.getValue()}</p>
-          </div>
-        ),
-      }),
-      columnHelper.accessor('email', {
-        header: 'Email',
+        header: 'Nama Permainan',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('phoneNumber', {
-        header: 'Telepon',
+      columnHelper.accessor('category', {
+        header: 'Kategori',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor((data) => data?.school?.name || '', {
-        id: 'school',
-        header: 'Sekolah',
-        cell: (info) => info?.row?.original?.school?.name ?? '-',
+      columnHelper.accessor('maxLevel', {
+        header: 'Level Maks.',
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('author', {
+        header: 'Pembuat',
+        cell: (info) => info.getValue(),
       }),
       // action edit and delete
       columnHelper.display({
@@ -222,36 +203,48 @@ function AdminTable() {
           <div className="flex space-x-5 px-2">
             <Link
               className=""
-              to={`/admin/edit/${info?.row?.original?._id}`}>
-              <PenSquareIcon
-                size={16}
-                className="text-sky-500 hover:text-sky-600"
+              to={`/game/${info.row.original._id}`}>
+              <EyeIcon
+                size={18}
+                className="text-violet-500 hover:text-violet-600"
               />
             </Link>
-            <button
-              type="button"
-              className=""
-              onClick={() => openDeleteDialog(info?.row?.original?._id)}>
-              <Trash2Icon
-                size={16}
-                className="text-red-500 hover:text-red-600"
-              />
-            </button>
+            {user?.role === 'Super Admin' && (
+              <>
+                <Link
+                  className=""
+                  to={`/game/edit/${info.row.original._id}`}>
+                  <PenSquareIcon
+                    size={16}
+                    className="text-sky-500 hover:text-sky-600"
+                  />
+                </Link>
+                <button
+                  className=""
+                  onClick={() => openDeleteDialog(info.row.original._id)}>
+                  <Trash2Icon
+                    size={16}
+                    className="text-red-500 hover:text-red-600"
+                  />
+                </button>
+              </>
+            )}
           </div>
         ),
       }),
     ],
     [columnHelper]
   );
+
   const table = useReactTable({
-    data: admin,
+    data: game,
     columns: defaultColumns,
     state: {
       rowSelection,
       sorting,
     },
     enableRowSelection: true,
-    getCoreRowModel: getCoreRowModel<Admin>(),
+    getCoreRowModel: getCoreRowModel<Game>(),
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -260,6 +253,7 @@ function AdminTable() {
   const handleResize = () => {
     setIsLargeView(window.innerWidth > 1024);
   };
+
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => {
@@ -268,7 +262,7 @@ function AdminTable() {
   }, []);
 
   useEffect(() => {
-    fetchAdmin({ search: querySearch, limit: limitPage });
+    fetchGame({ search: querySearch, limit: limitPage });
   }, [querySearch, limitPage]);
 
   return (
@@ -277,7 +271,7 @@ function AdminTable() {
         <div className="flex space-x-3 my-4 px-5 items-center justify-between">
           <div className="relative w-full">
             <input
-              id="searchAdmin"
+              id="searchGame"
               type="text"
               placeholder="Cari berdasarkan nama..."
               className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"
@@ -293,7 +287,7 @@ function AdminTable() {
           </div>
           <div className="">
             <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
-              {adminPages?.currentPage ?? 1}/{adminPages?.totalPage ?? 1}
+              {gamePages?.currentPage ?? 1}/{gamePages?.totalPage ?? 1}
             </p>
           </div>
         </div>
@@ -348,7 +342,7 @@ function AdminTable() {
             <tbody>
               {isLoading ? (
                 Array.from({
-                  length: admin.length !== 0 ? admin.length : 5,
+                  length: game.length !== 0 ? game.length : 5,
                 }).map((_, index) => (
                   <tr
                     className="animate-pulse-fast border-b border-gray-20 dark:border-gray-600"
@@ -371,23 +365,23 @@ function AdminTable() {
                     <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3.5 w-24">
+                    <td className="px-3 py-3.5 w-34">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
                   </tr>
                 ))
-              ) : admin.length === 0 ? (
+              ) : game.length === 0 ? (
                 <tr>
                   <td
                     colSpan={7}
                     className="text-center py-3 text-gray-500 dark:text-gray-400">
-                    Tidak ada data admin yang ditemukan.
+                    Tidak ada data sekolah yang ditemukan.
                     {isError && (
                       <span
                         aria-label="button"
                         className="cursor-pointer text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
                         onClick={() =>
-                          fetchAdmin({ search: querySearch, limit: limitPage })
+                          fetchGame({ search: querySearch, limit: limitPage })
                         }>
                         {' '}
                         Coba lagi.
@@ -423,8 +417,8 @@ function AdminTable() {
             <p className="text-gray-500 mr-3 dark:text-gray-400">Menampilkan</p>
             <div className="relative">
               <select
-                id="tableAdmin_paginate"
-                name="tableAdmin_paginate"
+                id="tableGame_paginate"
+                name="tableGame_paginate"
                 className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
                 value={limitPage}
                 disabled={isLoading}
@@ -439,7 +433,7 @@ function AdminTable() {
               </select>
               <div className="absolute right-1.5 top-1.5 pointer-events-none">
                 <label
-                  htmlFor="tableAdmin_paginate"
+                  htmlFor="tableGame_paginate"
                   className="block">
                   <ChevronDownIcon
                     size={20}
@@ -450,7 +444,7 @@ function AdminTable() {
             </div>
             {/* total data */}
             <p className="text-gray-500 ml-3 dark:text-gray-400">
-              dari {adminPages?.totalData ?? 0} data
+              dari {gamePages?.totalData ?? 0} data
             </p>
           </div>
           <div className="flex space-x-3">
@@ -458,22 +452,22 @@ function AdminTable() {
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
-                  fetchAdmin({ search: '', page: 1, limit: limitPage })
+                  fetchGame({ search: '', page: 1, limit: limitPage })
                 }
-                disabled={Number(adminPages?.currentPage) <= 1 || isLoading}>
+                disabled={Number(gamePages?.currentPage) <= 1 || isLoading}>
                 First
               </button>
             )}
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
-                fetchAdmin({
+                fetchGame({
                   search: '',
-                  page: Number(adminPages?.currentPage) - 1,
+                  page: Number(gamePages?.currentPage) - 1,
                   limit: limitPage,
                 })
               }
-              disabled={Number(adminPages?.currentPage) <= 1 || isLoading}>
+              disabled={Number(gamePages?.currentPage) <= 1 || isLoading}>
               <ArrowLeftIcon
                 size={16}
                 className={isLargeView ? 'mr-1' : ''}
@@ -483,15 +477,15 @@ function AdminTable() {
             <button
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
-                fetchAdmin({
+                fetchGame({
                   search: '',
-                  page: Number(adminPages?.currentPage) + 1,
+                  page: Number(gamePages?.currentPage) + 1,
                   limit: limitPage,
                 })
               }
               disabled={
-                Number(adminPages?.currentPage) >=
-                  Number(adminPages?.totalPage) || isLoading
+                Number(gamePages?.currentPage) >=
+                  Number(gamePages?.totalPage) || isLoading
               }>
               {isLargeView ? 'Next' : ''}
               <ArrowRightIcon
@@ -503,15 +497,15 @@ function AdminTable() {
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
-                  fetchAdmin({
+                  fetchGame({
                     search: '',
-                    page: Number(adminPages?.totalPage),
+                    page: Number(gamePages?.totalPage),
                     limit: limitPage,
                   })
                 }
                 disabled={
-                  Number(adminPages?.currentPage) >=
-                    Number(adminPages?.totalPage) || isLoading
+                  Number(gamePages?.currentPage) >=
+                    Number(gamePages?.totalPage) || isLoading
                 }>
                 Last
               </button>
@@ -536,37 +530,38 @@ function AdminTable() {
               onClick={() => console.log('rowSelection', rowSelection)}>
               Log
             </button>
-            {/* hapus */}
-            <button
-              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled={isLoadingDelete}
-              onClick={() => {
-                const selectedRow = table.getSelectedRowModel().flatRows;
-                const selectedRowOriginal = selectedRow.map(
-                  (row) => row.original
-                );
-                handleSelectedDelete(selectedRowOriginal);
-              }}>
-              {isLoadingDelete ? (
-                <>
-                  <span className="translate-y-px">
-                    <Loader2Icon
-                      size={18}
-                      className="mr-1.5 animate-spin-fast"
+            {user?.role === 'Super Admin' && (
+              <button
+                className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={isLoadingDelete}
+                onClick={() => {
+                  const selectedRow = table.getSelectedRowModel().flatRows;
+                  const selectedRowOriginal = selectedRow.map(
+                    (row) => row.original
+                  );
+                  handleSelectedDelete(selectedRowOriginal);
+                }}>
+                {isLoadingDelete ? (
+                  <>
+                    <span className="translate-y-px">
+                      <Loader2Icon
+                        size={18}
+                        className="mr-1.5 animate-spin-fast"
+                      />
+                    </span>
+                    <span>Menghapus...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2Icon
+                      size={16}
+                      className="mr-1"
                     />
-                  </span>
-                  <span>Menghapus...</span>
-                </>
-              ) : (
-                <>
-                  <Trash2Icon
-                    size={16}
-                    className="mr-1"
-                  />
-                  Hapus
-                </>
-              )}
-            </button>
+                    Hapus
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -574,7 +569,7 @@ function AdminTable() {
       {/* dialog delete */}
       <AlertDelete
         isOpen={isOpenDeleteDialog}
-        message="admin"
+        message="permainan"
         isLoading={isLoadingDelete}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
@@ -583,4 +578,4 @@ function AdminTable() {
   );
 }
 
-export default AdminTable;
+export default GameTable;

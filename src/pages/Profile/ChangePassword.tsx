@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { useChangePasswordMutation } from '../../services/authApi';
 import { showErrorToast, showSuccessToast } from '../../components/Toast';

@@ -1,19 +1,18 @@
 import { Outlet, useLocation } from 'react-router-dom';
+import { useAppSelector } from '../app/hooks';
+import { useUser } from '../hook/authHooks';
+import { selectExpanded } from '../features/sidebarSlice';
+import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
+import Navbar from './Navbar';
 import {
-  Headphones,
+  Gamepad2Icon,
   HomeIcon,
   LineChart,
   MousePointerClick,
   SchoolIcon,
-  Settings,
   UserCogIcon,
   UserSquare2,
 } from 'lucide-react';
-import { useAppSelector } from '../app/hooks';
-import { selectExpanded } from '../features/sidebarSlice';
-import { useUser } from '../hook/authHooks';
-import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
-import Navbar from './Navbar';
 
 function Layout() {
   const currentLocation: string = useLocation()?.pathname;
@@ -34,6 +33,13 @@ function Layout() {
             path="/"
             alert={true}
             active={isCurrentLocation('')}
+          />
+          <SidebarItem
+            icon={<Gamepad2Icon size={20} />}
+            text="Game"
+            path="/game"
+            alert={false}
+            active={isCurrentLocation('game')}
           />
           <SidebarItem
             icon={<UserSquare2 size={20} />}
@@ -77,22 +83,6 @@ function Layout() {
               />
             </>
           ) : null}
-          <hr className="mb-6 mt-5 dark:border-gray-600/80" />
-          <SeparateSidebar caption="Settings" />
-          <SidebarItem
-            icon={<Settings size={20} />}
-            text="Preferences"
-            path="/preferences"
-            alert={false}
-            active={isCurrentLocation('preferences')}
-          />
-          <SidebarItem
-            icon={<Headphones size={20} />}
-            text="Support"
-            path="/support"
-            alert={false}
-            active={isCurrentLocation('support')}
-          />
         </Sidebar>
         {/* main content */}
         <section

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Link, useNavigate } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '../../app/hooks';
@@ -90,7 +90,7 @@ function AddSchool() {
         path: '/school',
       },
       {
-        icon: 'school_add',
+        icon: 'add',
         label: 'Add School',
         path: '/school/add',
       },

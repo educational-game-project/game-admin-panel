@@ -1,30 +1,56 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useDropzone } from 'react-dropzone';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '../../app/hooks';
 import {
-  useGetSchoolByIdMutation,
-  useUpdateSchoolMutation,
-} from '../../services/schoolApi';
+  useGetGameByIdMutation,
+  useUpdateGameMutation,
+} from '../../services/gameApi';
 import { setAllowedToast } from '../../features/toastSlice';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
-import Breadcrumb from '../../components/Breadcrumb';
 import {
   showErrorToast,
   showSuccessToast,
   showWarningToast,
 } from '../../components/Toast';
+import Breadcrumb from '../../components/Breadcrumb';
 import { Loader2Icon, TrashIcon, UploadCloudIcon, XIcon } from 'lucide-react';
 
-import type { School, SchoolUpdateRequest } from '../../types';
+import type { Game, GameUpdateRequest } from '../../types';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const schema = yup.object().shape({
   name: yup.string().required('Nama harus diisi'),
-  address: yup.string().required('Alamat harus diisi'),
+  author: yup.string().required('Nama Pembuat harus diisi'),
+  description: yup.string().required('Deskripsi harus diisi'),
+  category: yup.string().required('Kategori harus diisi'),
+  maxLevel: yup
+    .number()
+    .required('Maksimal Level harus diisi')
+    .integer('Maksimal Level harus berupa bilangan bulat')
+    .positive('Maksimal Level harus lebih besar dari 0')
+    .min(1, 'Maksimal Level minimal 1')
+    .max(100, 'Maksimal Level maksimal 100')
+    .typeError('Maksimal Level harus berupa angka'),
+  maxRetry: yup
+    .number()
+    .required('Maksimal Retry harus diisi')
+    .integer('Maksimal Retry harus berupa bilangan bulat')
+    .positive('Maksimal Retry harus lebih besar dari 0')
+    .min(1, 'Maksimal Retry minimal 1')
+    .max(10, 'Maksimal Retry maksimal 10')
+    .typeError('Maksimal Retry harus berupa angka'),
+  maxTime: yup
+    .number()
+    .required('Maksimal Waktu harus diisi')
+    .integer('Maksimal Waktu harus berupa bilangan bulat')
+    .positive('Maksimal Waktu harus lebih besar dari 0')
+    .min(1, 'Maksimal Waktu minimal 1')
+    .max(60, 'Maksimal Waktu maksimal 60')
+    .typeError('Maksimal Waktu harus berupa angka'),
   media: yup
     .array()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,33 +66,37 @@ const schema = yup.object().shape({
     .nullable(),
 });
 
-function EditSchool() {
+function EditGame() {
   const [newImages, setNewImages] = useState<File[]>([]);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { schoolId } = useParams();
-  const [getSchoolById, { data: school, isLoading: isLoadingGet }] =
-    useGetSchoolByIdMutation();
-  const [updateSchool, { isLoading: isLoadingUpdate }] =
-    useUpdateSchoolMutation();
+  const { gameId } = useParams();
+  const [getGameById, { data: game, isLoading: isLoadingGet }] =
+    useGetGameByIdMutation();
+  const [updateGame, { isLoading: isLoadingUpdate }] = useUpdateGameMutation();
 
-  const setFormValue = (response: School) => {
+  const setFormValue = (response: Game) => {
     if (response) {
       setValue('name', response.name);
-      setValue('address', response.address);
+      setValue('category', response.category);
+      setValue('author', response.author);
+      setValue('description', response.description);
+      setValue('maxLevel', response.maxLevel);
+      setValue('maxRetry', response.maxRetry);
+      setValue('maxTime', response.maxTime || 0);
     }
   };
 
-  const fetchSchoolById = async (id: string) => {
+  const fetchGameById = async (id: string) => {
     try {
-      const response = await getSchoolById({ id }).unwrap();
+      const response = await getGameById({ id }).unwrap();
       if (response.success) {
         setFormValue(response.data);
       }
     } catch (error) {
       dispatch(setAllowedToast());
-      showErrorToast('Data sekolah tidak ditemukan');
-      navigate('/school');
+      showErrorToast('Data permainan tidak ditemukan');
+      navigate('/game');
     }
   };
 
@@ -75,7 +105,7 @@ function EditSchool() {
     handleSubmit,
     register,
     setValue,
-  } = useForm<SchoolUpdateRequest>({
+  } = useForm<GameUpdateRequest>({
     mode: 'all',
     resolver: yupResolver(schema),
   });
@@ -102,14 +132,14 @@ function EditSchool() {
     setValue('media', filteredImg);
   };
 
-  const onSubmit: SubmitHandler<SchoolUpdateRequest> = async (data) => {
+  const onSubmit: SubmitHandler<GameUpdateRequest> = async (data) => {
     try {
-      await updateSchool({ ...data, id: schoolId }).unwrap();
+      await updateGame({ ...data, id: gameId }).unwrap();
       dispatch(setAllowedToast());
-      showSuccessToast('Data sekolah berhasil diperbarui!');
-      navigate('/school');
+      showSuccessToast('Data permainan berhasil diperbarui!');
+      navigate('/game');
     } catch (error) {
-      showErrorToast('Data sekolah gagal disimpan');
+      showErrorToast('Data permainan gagal disimpan');
     }
   };
   const handleDeletePhoto = () => {
@@ -119,23 +149,23 @@ function EditSchool() {
   useEffect(() => {
     const newBreadcrumb = [
       {
-        icon: 'school',
-        label: 'School',
-        path: '/school',
+        icon: 'game',
+        label: 'Game',
+        path: '/game',
       },
       {
         icon: 'edit',
-        label: 'Edit School',
-        path: `/school/edit/${schoolId}`,
+        label: 'Edit Game',
+        path: `/game/edit/${gameId}`,
       },
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
-  }, [dispatch, schoolId]);
+  }, [dispatch, gameId]);
   useEffect(() => {
-    if (schoolId) {
-      fetchSchoolById(schoolId);
+    if (gameId) {
+      fetchGameById(gameId);
     }
-  }, [schoolId]);
+  }, [gameId]);
 
   return (
     <div>
@@ -144,7 +174,7 @@ function EditSchool() {
         <div className="flex items-center justify-between">
           <div className="">
             <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
-              Edit Sekolah
+              Edit Game
               {isLoadingGet && (
                 <span className="translate-y-px">
                   <Loader2Icon
@@ -154,7 +184,7 @@ function EditSchool() {
                 </span>
               )}
             </h5>
-            <p className="text-gray-500">Edit data sekolah.</p>
+            <p className="text-gray-500">Edit data permainan.</p>
           </div>
           <div className="flex justify-end">
             <Link
@@ -164,7 +194,7 @@ function EditSchool() {
                   ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
                   : 'bg-gray-50 hover:bg-gray-100'
               } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
-              to="/school">
+              to="/game">
               Kembali
             </Link>
             <button
@@ -190,24 +220,24 @@ function EditSchool() {
         </div>
       </div>
       <form className="grid grid-cols-12 gap-6">
-        <div className="col-span-full xl:col-span-8">
+        <div className="col-span-full xl:col-span-6">
           <div className="bg-white rounded-xl dark:bg-gray-800">
             <div className="px-5 pt-4">
               <h4 className="font-semibold text-xl mb-0.5">
-                Informasi Sekolah
+                Informasi Permainan
               </h4>
               <p className="text-gray-500">
-                Informasi sekolah yang akan ditambahkan ke dalam sistem.
+                Informasi permainan yang akan ditambahkan ke dalam sistem.
               </p>
             </div>
             <div className="p-5">
-              <div className="">
+              <div>
                 {/* name */}
                 <div className="mb-4">
                   <label
                     htmlFor="name"
                     className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
-                    Nama Sekolah
+                    Nama Permainan
                   </label>
                   <input
                     id="name"
@@ -217,10 +247,9 @@ function EditSchool() {
                         ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
                         : ''
                     } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
-                    placeholder="Masukkan nama sekolah"
+                    placeholder="Masukkan nama permainan"
                     aria-required="true"
                     aria-invalid={errors.name ? 'true' : 'false'}
-                    disabled={isLoadingGet || isLoadingUpdate}
                     {...register('name')}
                   />
                   {errors.name && (
@@ -229,30 +258,81 @@ function EditSchool() {
                     </p>
                   )}
                 </div>
-                {/* address */}
+                {/* author */}
                 <div className="mb-4">
                   <label
-                    htmlFor="address"
+                    htmlFor="author"
                     className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
-                    Alamat
+                    Nama Pembuat
+                  </label>
+                  <input
+                    id="author"
+                    type="text"
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors.author
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
+                    placeholder="Masukkan nama pembuat permainan"
+                    aria-required="true"
+                    aria-invalid={errors.author ? 'true' : 'false'}
+                    {...register('author')}
+                  />
+                  {errors.author && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.author.message}
+                    </p>
+                  )}
+                </div>
+                {/* category */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="category"
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
+                    Kategori
+                  </label>
+                  <input
+                    id="category"
+                    type="text"
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors.category
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
+                    placeholder="Masukkan kategori permainan"
+                    aria-required="true"
+                    aria-invalid={errors.category ? 'true' : 'false'}
+                    {...register('category')}
+                  />
+                  {errors.category && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.category.message}
+                    </p>
+                  )}
+                </div>
+                {/* description */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="description"
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
+                    Deskripsi
                   </label>
                   <textarea
-                    id="address"
+                    id="description"
                     className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
-                      errors.address
+                      errors.description
                         ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
                         : ''
                     } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
                     rows={3}
-                    placeholder="Masukkan alamat sekolah"
+                    placeholder="Masukkan deskripsi permainan"
                     aria-required="true"
-                    aria-invalid={errors.address ? 'true' : 'false'}
-                    disabled={isLoadingGet || isLoadingUpdate}
-                    {...register('address')}
+                    aria-invalid={errors.description ? 'true' : 'false'}
+                    {...register('description')}
                   />
-                  {errors.address && (
+                  {errors.description && (
                     <p className="mt-1 -mb-1.5 text-red-500">
-                      {errors.address.message}
+                      {errors.description.message}
                     </p>
                   )}
                 </div>
@@ -260,22 +340,114 @@ function EditSchool() {
             </div>
           </div>
         </div>
-        <div className="col-span-full xl:col-span-4">
+        <div className="col-span-full xl:col-span-6">
           <div className="bg-white rounded-xl dark:bg-gray-800">
             <div className="px-5 pt-4">
-              <h4 className="font-semibold text-xl mb-0.5">Foto Sekolah</h4>
+              <h4 className="font-semibold text-xl mb-0.5">Aturan Permainan</h4>
               <p className="text-gray-500">
-                Foto sekolah yang akan ditambahkan ke dalam sistem.
+                Aturan permainan yang akan ditambahkan ke dalam sistem.
               </p>
             </div>
             <div className="p-5">
-              {school?.data?.images && school?.data?.images.length > 0 && (
-                <div className="grid grid-cols-6 gap-4 mb-6">
-                  {school?.data?.images.map((image) => (
+              <div>
+                {/* maxLevel */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="maxLevel"
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
+                    Maksimal Level
+                  </label>
+                  <input
+                    id="maxLevel"
+                    type="text"
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors.maxLevel
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
+                    placeholder="Masukkan maksimal level permainan"
+                    aria-required="true"
+                    aria-invalid={errors.maxLevel ? 'true' : 'false'}
+                    {...register('maxLevel')}
+                  />
+                  {errors.maxLevel && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.maxLevel.message}
+                    </p>
+                  )}
+                </div>
+                {/* maxRetry */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="maxRetry"
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
+                    Maksimal Retry
+                  </label>
+                  <input
+                    id="maxRetry"
+                    type="text"
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors.maxRetry
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
+                    placeholder="Masukkan maksimal retry permainan"
+                    aria-required="true"
+                    aria-invalid={errors.maxRetry ? 'true' : 'false'}
+                    {...register('maxRetry')}
+                  />
+                  {errors.maxRetry && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.maxRetry.message}
+                    </p>
+                  )}
+                </div>
+                {/* maxTime */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="maxTime"
+                    className="block mb-2 font-medium text-gray-500 dark:text-gray-400">
+                    Maksimal Waktu
+                  </label>
+                  <input
+                    id="maxTime"
+                    type="text"
+                    className={`px-3 py-2.5 rounded-lg border bg-gray-50 border-gray-300 w-full focus:bg-white focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 ${
+                      errors.maxTime
+                        ? 'bg-red-50 border-red-400 focus:outline-red-500/30 focus:border-red-500 dark:border-gray-700 dark:focus:outline-red-500/30 dark:focus:border-red-500'
+                        : ''
+                    } dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:disabled:text-gray-300 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600`}
+                    placeholder="Masukkan maksimal waktu permainan"
+                    aria-required="true"
+                    aria-invalid={errors.maxTime ? 'true' : 'false'}
+                    {...register('maxTime')}
+                  />
+                  {errors.maxTime && (
+                    <p className="mt-1 -mb-1.5 text-red-500">
+                      {errors.maxTime.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-full">
+          <div className="bg-white rounded-xl dark:bg-gray-800">
+            <div className="px-5 pt-4">
+              <h4 className="font-semibold text-xl mb-0.5">Foto Permainan</h4>
+              <p className="text-gray-500">
+                Tambahkan foto permainan untuk ditampilkan di halaman permainan.
+              </p>
+            </div>
+            <div className="p-5">
+              {game?.data?.images && game?.data?.images.length > 0 && (
+                <div className="grid grid-cols-12 gap-4 mb-6">
+                  {game?.data?.images.map((image) => (
                     <div
-                      className="col-span-3 lg:col-span-2 xl:col-span-3"
+                      className="col-span-3"
                       key={image?._id}>
-                      <figure className="group overflow-hidden h-36 xl:h-24 w-full rounded-md mr-3 relative">
+                      <figure className="group overflow-hidden h-36 xl:h-48 w-full rounded-md mr-3 relative">
                         <img
                           src={image?.fileLink}
                           alt={image?.fileName}
@@ -335,12 +507,12 @@ function EditSchool() {
               )}
               {newImages.length > 0 && (
                 <div className="mt-6">
-                  <div className="grid grid-cols-6 gap-4">
+                  <div className="grid grid-cols-12 gap-4">
                     {newImages.map((file) => (
                       <div
-                        className="col-span-3 lg:col-span-2 xl:col-span-3"
+                        className="col-span-3"
                         key={file.name}>
-                        <figure className="h-36 xl:h-24 w-full rounded-md overflow-hidden relative">
+                        <figure className="h-36 xl:h-48 w-full rounded-md overflow-hidden relative">
                           <img
                             src={URL.createObjectURL(file)}
                             alt={file.name}
@@ -366,4 +538,4 @@ function EditSchool() {
   );
 }
 
-export default EditSchool;
+export default EditGame;

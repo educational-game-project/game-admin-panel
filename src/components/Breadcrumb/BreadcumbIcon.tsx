@@ -1,6 +1,7 @@
 import {
+  ActivityIcon,
   CopyPlusIcon,
-  HeadphonesIcon,
+  Gamepad2Icon,
   HomeIcon,
   LineChartIcon,
   MousePointerClickIcon,
@@ -90,7 +91,7 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
     },
     {
       id: 8,
-      name: 'school_add',
+      name: 'add',
       icon: (
         <CopyPlusIcon
           size={16}
@@ -100,7 +101,7 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
     },
     {
       id: 9,
-      name: 'school_detail',
+      name: 'detail',
       icon: (
         <MousePointerSquareIcon
           size={16}
@@ -130,9 +131,9 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
     },
     {
       id: 12,
-      name: 'support',
+      name: 'user_add',
       icon: (
-        <HeadphonesIcon
+        <UserPlusIcon
           size={16}
           className="mr-1.5"
         />
@@ -140,9 +141,19 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
     },
     {
       id: 13,
-      name: 'user_add',
+      name: 'game',
       icon: (
-        <UserPlusIcon
+        <Gamepad2Icon
+          size={16}
+          className="mr-1.5"
+        />
+      ),
+    },
+    {
+      id: 14,
+      name: 'activity',
+      icon: (
+        <ActivityIcon
           size={16}
           className="mr-1.5"
         />

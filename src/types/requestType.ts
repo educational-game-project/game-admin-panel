@@ -1,9 +1,10 @@
-interface DataTableGetRequest {
-  search: string;
-  schoolId?: string;
-  page?: number;
-  limit?: number;
+interface idRequest {
+  id: string;
 }
+interface AdminIdRequest extends idRequest {}
+interface GameIdRequest extends idRequest {}
+interface SchoolIdRequest extends idRequest {}
+interface StudentIdRequest extends idRequest {}
 interface StudentAddRequest {
   name: string;
   email: string;
@@ -12,27 +13,11 @@ interface StudentAddRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any;
 }
-interface StudentIdRequest {
-  id: string;
-}
 interface SchoolAddRequest {
   name: string;
   address: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any;
-}
-interface SchoolUpdateRequest {
-  id?: string;
-  name: string;
-  address: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  media?: File | Blob | any | undefined;
-}
-interface SchoolIdRequest {
-  id: string;
-}
-interface AdminIdRequest {
-  id: string;
 }
 interface AdminAddRequest {
   name: string;
@@ -42,6 +27,36 @@ interface AdminAddRequest {
   school: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any;
+}
+interface GameAddRequest {
+  name: string;
+  author: string;
+  description: string;
+  category: string;
+  maxLevel: number;
+  maxRetry: number;
+  maxTime: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media: File[] | any[];
+}
+interface GameUpdateRequest {
+  id?: string;
+  name: string;
+  author: string;
+  description: string;
+  category: string;
+  maxLevel: number;
+  maxRetry: number;
+  maxTime: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: File[] | any[] | undefined | null;
+}
+interface SchoolUpdateRequest {
+  id?: string;
+  name: string;
+  address: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: File | Blob | any | undefined;
 }
 interface AdminUpdateRequest {
   id?: string;
@@ -57,16 +72,25 @@ interface ChangePasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
+interface DataTableGetRequest {
+  search: string;
+  schoolId?: string;
+  page?: number;
+  limit?: number;
+}
 
 export type {
   AdminAddRequest,
-  AdminUpdateRequest,
   AdminIdRequest,
+  AdminUpdateRequest,
   ChangePasswordRequest,
   DataTableGetRequest,
+  GameAddRequest,
+  GameIdRequest,
+  GameUpdateRequest,
+  SchoolAddRequest,
+  SchoolIdRequest,
+  SchoolUpdateRequest,
   StudentAddRequest,
   StudentIdRequest,
-  SchoolAddRequest,
-  SchoolUpdateRequest,
-  SchoolIdRequest,
 };

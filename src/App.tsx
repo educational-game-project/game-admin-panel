@@ -15,8 +15,8 @@ import Home from './pages/Home';
 import Students from './pages/Students';
 import Score from './pages/Score';
 import Analysis from './pages/Analysis';
+import Activity from './pages/Activity';
 import Preferences from './pages/Preferences';
-import Support from './pages/Support';
 import Profile from './pages/Profile';
 import ChangePassword from './pages/Profile/ChangePassword';
 import ErrorPage from './pages/Error';
@@ -30,6 +30,10 @@ import EditSchool from './pages/School/EditSchool';
 import DetailSchool from './pages/School/DetailSchool';
 import AddAdmin from './pages/Admin/AddAdmin';
 import EditAdmin from './pages/Admin/EditAdmin';
+import Game from './pages/Game';
+import AddGame from './pages/Game/AddGame';
+import EditGame from './pages/Game/EditGame';
+import DetailGame from './pages/Game/DetailGame';
 
 import images from './assets/img';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -72,6 +76,14 @@ function App() {
                       element={<EditAdmin />}
                     />
                     <Route
+                      path="/game/add"
+                      element={<AddGame />}
+                    />
+                    <Route
+                      path="/game/edit/:gameId"
+                      element={<EditGame />}
+                    />
+                    <Route
                       path="/school"
                       element={<School />}
                     />
@@ -88,6 +100,14 @@ function App() {
                       element={<DetailSchool />}
                     />
                   </Route>
+                  <Route
+                    path="/game"
+                    element={<Game />}
+                  />
+                  <Route
+                    path="/game/:gameId"
+                    element={<DetailGame />}
+                  />
                   <Route
                     path="/student"
                     element={<Students />}
@@ -113,12 +133,12 @@ function App() {
                     element={<Preferences />}
                   />
                   <Route
-                    path="/support"
-                    element={<Support />}
-                  />
-                  <Route
                     path="/profile/account"
                     element={<Profile />}
+                  />
+                  <Route
+                    path="/activity"
+                    element={<Activity />}
                   />
                   <Route
                     path="/profile/change-password"

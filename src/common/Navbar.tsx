@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
-import { BellRingIcon, CommandIcon, SearchIcon } from 'lucide-react';
 import { useUser } from '../hook/authHooks';
-import { transformStringPlus } from '../utilities/stringUtils';
 import { useAppSelector } from '../app/hooks';
 import { selectExpanded } from '../features/sidebarSlice';
+import { transformStringPlus } from '../utilities/stringUtils';
+import { BellRingIcon, CommandIcon, SearchIcon } from 'lucide-react';
 
 function Navbar() {
   const [isOpenGlobalSearch, setIsOpenGlobalSearch] = useState(false);

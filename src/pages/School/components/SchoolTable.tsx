@@ -1,13 +1,13 @@
-import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type HTMLProps } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Link } from 'react-router-dom';
 import {
-  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from '@tanstack/react-table';
 import {
   useDeleteSchoolMutation,
@@ -361,7 +361,7 @@ function SchoolTable() {
                     <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
-                    <td className="px-3 py-3.5">
+                    <td className="px-3 py-3.5 w-34">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
                   </tr>
@@ -528,7 +528,7 @@ function SchoolTable() {
             </button>
             {/* hapus */}
             <button
-              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
+              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={isLoadingDelete}
               onClick={() => {
                 const selectedRow = table.getSelectedRowModel().flatRows;
