@@ -39,6 +39,18 @@ interface GameAddRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media: File[] | any[];
 }
+interface GameUpdateRequest {
+  id?: string;
+  name: string;
+  author: string;
+  description: string;
+  category: string;
+  maxLevel: number;
+  maxRetry: number;
+  maxTime: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: File[] | any[] | undefined | null;
+}
 interface SchoolUpdateRequest {
   id?: string;
   name: string;
@@ -75,6 +87,7 @@ export type {
   DataTableGetRequest,
   GameAddRequest,
   GameIdRequest,
+  GameUpdateRequest,
   SchoolAddRequest,
   SchoolIdRequest,
   SchoolUpdateRequest,
