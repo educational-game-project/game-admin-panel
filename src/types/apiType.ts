@@ -106,6 +106,27 @@ interface Game {
   updatedAtString?: string;
   __v: number;
 }
+interface Score {
+  level: number;
+  value: number;
+  createdAt: string;
+}
+interface Leaderboard {
+  _id: string;
+  value: number;
+  user: {
+    _id: string;
+    name: string;
+    role: string;
+    email: string | null;
+    phoneNumber: string | null;
+    image: Image;
+    school: string;
+    deletedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
 
 // RESPONSE
 interface DefaultResponse {
@@ -155,6 +176,50 @@ interface GameListSuccessResponse extends SuccessResponse {
 }
 interface GameSuccessResponse extends SuccessResponse {
   data: Game;
+}
+interface ScoreResponse {
+  scores: Score[];
+  game: {
+    _id: string;
+    name: string;
+    author: string;
+    description: string;
+    category: string;
+    maxLevel: number;
+    maxRetry: number;
+    deletedAt: string | null;
+    images: string[];
+    addedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+}
+interface ScoreSuccessResponse extends SuccessResponse {
+  data: ScoreResponse[];
+}
+interface LeaderboardResponse {
+  game: {
+    maxTime: number;
+    _id: string;
+    name: string;
+    author: string;
+    description: string;
+    category: string;
+    maxLevel: number;
+    maxRetry: number;
+    deletedAt: string | null;
+    images: string[];
+    addedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  school: School;
+  leaderboard: Leaderboard[];
+}
+interface LeaderboardSuccessResponse extends SuccessResponse {
+  data: LeaderboardResponse[];
 }
 
 // CHECK DULU ========================================
@@ -253,11 +318,13 @@ export type {
   Game,
   GameListSuccessResponse,
   GameSuccessResponse,
+  LeaderboardSuccessResponse,
   PageResponse,
   ProfileSuccessResponse,
   School,
   SchoolListSuccessResponse,
   SchoolSuccessResponse,
+  ScoreSuccessResponse,
   Student,
   StudentListSuccessResponse,
   StudentSuccessResponse,

@@ -59,7 +59,7 @@ function Layout() {
             icon={<LineChart size={20} />}
             text="Analisis"
             path="/analysis"
-            alert={false}
+            alert={true}
             active={isCurrentLocation('analysis')}
           />
           {user?.role === 'Super Admin' ? (

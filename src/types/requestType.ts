@@ -67,6 +67,12 @@ interface AdminUpdateRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any | undefined;
 }
+interface ScoreGetRequest {
+  userId: string;
+}
+interface LeaderboardGetRequest {
+  gameId: string;
+}
 interface ChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
@@ -88,9 +94,11 @@ export type {
   GameAddRequest,
   GameIdRequest,
   GameUpdateRequest,
+  LeaderboardGetRequest,
   SchoolAddRequest,
   SchoolIdRequest,
   SchoolUpdateRequest,
+  ScoreGetRequest,
   StudentAddRequest,
   StudentIdRequest,
 };
