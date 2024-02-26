@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
-import Breadcrumb from '../components/Breadcrumb';
 import { useAppDispatch } from '../app/hooks';
 import { setBreadcrumb } from '../features/breadcrumbSlice';
+import Breadcrumb from '../components/Breadcrumb';
 import HeaderContainer from '../components/HeaderContainer';
 
-function Support() {
+function Activity() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const newBreadcrumb = [
       {
-        icon: 'support',
-        label: 'Support',
-        path: '/support',
+        icon: 'activity',
+        label: 'Activity',
+        path: '/activity',
       },
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
@@ -23,8 +23,8 @@ function Support() {
       <div className="mb-6">
         <Breadcrumb />
         <HeaderContainer
-          title="Support"
-          subtitle="Hubungi kami untuk bantuan lebih lanjut."
+          title="Activity"
+          subtitle="Lihat aktivitas terbaru."
         />
       </div>
       <div className="bg-white p-5 rounded-xl dark:bg-gray-800"></div>
@@ -32,4 +32,4 @@ function Support() {
   );
 }
 
-export default Support;
+export default Activity;
