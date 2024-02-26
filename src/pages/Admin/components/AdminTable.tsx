@@ -1,13 +1,13 @@
-import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type HTMLProps } from 'react';
 import { Link } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
 import {
-  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from '@tanstack/react-table';
 import {
   useDeleteAdminMutation,
