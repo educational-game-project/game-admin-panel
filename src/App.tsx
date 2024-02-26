@@ -15,8 +15,8 @@ import Home from './pages/Home';
 import Students from './pages/Students';
 import Score from './pages/Score';
 import Analysis from './pages/Analysis';
+import Activity from './pages/Activity';
 import Preferences from './pages/Preferences';
-import Support from './pages/Support';
 import Profile from './pages/Profile';
 import ChangePassword from './pages/Profile/ChangePassword';
 import ErrorPage from './pages/Error';
@@ -133,12 +133,12 @@ function App() {
                     element={<Preferences />}
                   />
                   <Route
-                    path="/support"
-                    element={<Support />}
-                  />
-                  <Route
                     path="/profile/account"
                     element={<Profile />}
+                  />
+                  <Route
+                    path="/activity"
+                    element={<Activity />}
                   />
                   <Route
                     path="/profile/change-password"
