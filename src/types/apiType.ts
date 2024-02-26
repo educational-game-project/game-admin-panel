@@ -47,7 +47,7 @@ interface Student {
   password?: string;
   addedBy?: UserAddBy | null;
   image: Image | null;
-  school: School | null;
+  school: School;
   createdAt: string;
   deletedAt: string | null;
   createdAtString?: string;

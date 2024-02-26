@@ -28,6 +28,17 @@ interface AdminAddRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any;
 }
+interface GameAddRequest {
+  name: string;
+  author: string;
+  description: string;
+  category: string;
+  maxLevel: number;
+  maxRetry: number;
+  maxTime: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media: File[] | any[];
+}
 interface SchoolUpdateRequest {
   id?: string;
   name: string;
@@ -62,6 +73,7 @@ export type {
   AdminUpdateRequest,
   ChangePasswordRequest,
   DataTableGetRequest,
+  GameAddRequest,
   GameIdRequest,
   SchoolAddRequest,
   SchoolIdRequest,
