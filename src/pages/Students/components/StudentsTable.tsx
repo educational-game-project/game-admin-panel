@@ -1,34 +1,47 @@
-import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDebounce } from 'use-debounce';
+import { useEffect, useMemo, useRef, useState, type HTMLProps } from 'react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from '@tanstack/react-table';
+import { Link } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
+import {
+  useDeleteStudentMutation,
+  useGetStudentMutation,
+} from '../../../services/studentApi';
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from '../../../components/Toast';
+import AlertDelete from '../../../components/AlertDialog/AlertDelete';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  Loader2Icon,
   PenSquareIcon,
   SearchIcon,
   Trash2Icon,
 } from 'lucide-react';
-import AlertDelete from '../../../components/AlertDialog/AlertDelete';
+import { transformStringPlus } from '../../../utilities/stringUtils';
 
-import useFetchHook from '../../../hook/useFetchHook';
-import type { SearchQueryType } from '../../../types/search_query';
-import type { StudentProps } from '../../../types';
+import type { DataTableGetRequest, Student } from '../../../types';
 
 function IndeterminateCheckbox({
+  isHeader,
   indeterminate,
   ...rest
-}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+}: {
+  indeterminate?: boolean;
+  isHeader?: boolean;
+} & HTMLProps<HTMLInputElement>) {
   const ref = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
@@ -41,66 +54,37 @@ function IndeterminateCheckbox({
     <input
       type="checkbox"
       ref={ref}
-      className="cursor-pointer forms-checkbox"
+      className={`cursor-pointer form-checkbox h-4 w-4 border-2 border-gray-400 rounded bg-gray-50 focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-indigo-600/20 focus:border-indigo-500/50 focus:ring-offset-0 focus:ring-0 block checked:bg-indigo-500 dark:checked:bg-indigo-600 dark:checked:border-indigo-600 dark:checked:hover:bg-indigo-600 dark:checked:hover:border-indigo-600 ${
+        isHeader
+          ? 'dark:bg-gray-500 dark:border-gray-500'
+          : 'dark:border-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:hover:border-gray-500'
+      }`}
+      autoComplete="off"
       {...rest}
     />
   );
 }
 
 function StudentsTable() {
+  const [search, setSearch] = useState('');
+  const [limitPage, setLimitPage] = useState(10);
+  const [querySearch] = useDebounce(search, 500);
+
   const [rowSelection, setRowSelection] = useState({});
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const [deleteId, setDeleteId] = useState<string>('');
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const [isLargeView, setIsLargeView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const [query, setQuery] = useState<SearchQueryType>({ limit: 10 });
 
-  const { data: datastd, setStartFetching } = useFetchHook<
-    IResponse<StudentProps[]>
-  >({ url: '/user/student/find', payload: query });
-  const { setStartFetching: setStartFetchingDelete, loading: loadingDeleted } =
-    useFetchHook<IResponse<StudentProps[]>>({
-      url: '/user/student',
-      payload: { id: deleteId },
-      method: 'DELETE',
-    });
-
-  const response = useMemo<IResponse<StudentProps[]> | null>(
-    () => datastd,
-    [datastd]
-  );
-  const dataStudent = useMemo<StudentProps[]>(
-    () => response?.data?.filter((data) => data?.role === 'User') ?? [],
-    [response?.data]
-  );
-
-  useEffect(() => setStartFetching(true), []);
-
-  // handle Search
-  const [text] = useDebounce(query.search, 500);
-  useMemo(() => {
-    setQuery((e) => ({ ...e, page: 1 }));
-
-    setStartFetching(true);
-  }, [text]);
-
-  // handle pagination
-  useMemo(() => {
-    setStartFetching(true);
-  }, [query.page]);
-  useMemo(() => {
-    setStartFetching(true);
-  }, [query.page]);
-
-  // handle fetch after deleted student
-  useMemo(() => {
-    if (!loadingDeleted) {
-      setIsOpenDeleteDialog(false);
-      setStartFetching(true);
-    }
-  }, [loadingDeleted]);
-
+  const [getStudent, { isLoading, isError, data: students }] =
+    useGetStudentMutation();
+  const [deleteStudent, { isLoading: isLoadingDelete }] =
+    useDeleteStudentMutation();
+  const student = useMemo(() => students?.data ?? [], [students]);
+  const studentPages = students?.page;
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [deleteId, setDeleteId] = useState<string>('');
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
@@ -108,13 +92,61 @@ function StudentsTable() {
     phoneNumber: 'whitespace-nowrap',
   };
 
-  const columnHelper = createColumnHelper<StudentProps>();
+  const fetchStudent = async (credentials: DataTableGetRequest) => {
+    try {
+      await getStudent(credentials).unwrap();
+    } catch (error) {
+      showErrorToast('Gagal mengambil data siswa');
+    }
+  };
+
+  const openDeleteDialog = (id: string) => {
+    setIsOpenDeleteDialog(true);
+    setDeleteId(id);
+  };
+  const closeDeleteDialog = () => {
+    setIsOpenDeleteDialog(false);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const responseDelete = await deleteStudent({ id: deleteId }).unwrap();
+      if (responseDelete.success) {
+        showSuccessToast('Berhasil menghapus data siswa');
+        fetchStudent({ search: querySearch, limit: limitPage });
+      }
+    } catch (error) {
+      showErrorToast('Gagal menghapus data siswa');
+    }
+    setIsOpenDeleteDialog(false);
+  };
+
+  const handleSelectedDelete = async (student: Student[]) => {
+    const studentId = student[0]._id;
+    if (student.length === 1) {
+      try {
+        const responseDelete = await deleteStudent({ id: studentId }).unwrap();
+        if (responseDelete.success) {
+          showSuccessToast('Berhasil menghapus data siswa');
+          fetchStudent({ search: querySearch, limit: limitPage });
+        }
+      } catch (error) {
+        showErrorToast('Gagal menghapus data siswa');
+      }
+    } else {
+      showWarningToast('Maaf, fitur ini belum tersedia');
+    }
+    table.setRowSelection({});
+  };
+
+  const columnHelper = createColumnHelper<Student>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
         id: 'checkboxs',
         header: ({ table }) => (
           <IndeterminateCheckbox
+            isHeader
             {...{
               checked: table.getIsAllRowsSelected(),
               indeterminate: table.getIsSomeRowsSelected(),
@@ -137,35 +169,50 @@ function StudentsTable() {
       columnHelper.display({
         id: 'row_number',
         header: '#',
-        cell: (info) => info.row.index + 1,
+        cell: (info) => {
+          if (studentPages) {
+            const orderedNumber =
+              (studentPages?.currentPage - 1) * studentPages?.perPage +
+              info?.row?.index +
+              1;
+            return orderedNumber;
+          } else {
+            return info.row.index + 1;
+          }
+        },
       }),
       columnHelper.accessor('name', {
         header: 'Nama Lengkap',
         cell: (info) => (
           <div className="flex items-center">
-            <img
-              src={info?.row?.original?.image?.fileLink}
-              alt={`${info.getValue()} Profile`}
-              className="mr-3 w-6 h-6 object-cover object-center rounded-full"
-            />
-            <p className="pr-3">{info.getValue()}</p>
+            <div className="">
+              <figure className="mr-3 size-6 rounded-full block overflow-hidden">
+                <img
+                  src={
+                    info?.row?.original?.image?.fileLink ??
+                    `https://ui-avatars.com/api/?name=${transformStringPlus(
+                      info.getValue()
+                    )}&background=6d5Acd&color=fff`
+                  }
+                  alt={`${info?.getValue()} Profile`}
+                  className="w-full h-full object-cover object-center block"
+                />
+              </figure>
+            </div>
+            <p className="pr-3">{info?.getValue()}</p>
           </div>
         ),
       }),
       columnHelper.accessor('email', {
         header: 'Email',
-        cell: (info) => info.getValue(),
+        cell: (info) => <>{info.getValue() ?? '-'}</>,
       }),
       columnHelper.accessor('phoneNumber', {
         header: 'Telepon',
-        cell: (info) => info.getValue(),
+        cell: (info) => <>{info.getValue() ?? '-'}</>,
       }),
       columnHelper.accessor('school.name', {
         header: 'Sekolah',
-        cell: (info) => info.getValue(),
-      }),
-      columnHelper.accessor('school.address', {
-        header: 'Alamat Sekolah',
         cell: (info) => info.getValue(),
       }),
       // action edit and delete
@@ -173,18 +220,19 @@ function StudentsTable() {
         id: 'action',
         header: '',
         cell: (info) => (
-          <div className="flex space-x-4 px-2">
+          <div className="flex space-x-5 px-2">
             <Link
               className=""
-              to={`/student/edit/${info.row.original._id}`}>
+              to={`/student/edit/${info?.row?.original?._id}`}>
               <PenSquareIcon
                 size={16}
                 className="text-sky-500 hover:text-sky-600"
               />
             </Link>
             <button
+              type="button"
               className=""
-              onClick={() => openDeleteDialog(info.row.original._id)}>
+              onClick={() => openDeleteDialog(info?.row?.original?._id)}>
               <Trash2Icon
                 size={16}
                 className="text-red-500 hover:text-red-600"
@@ -196,42 +244,23 @@ function StudentsTable() {
     ],
     [columnHelper]
   );
-
   const table = useReactTable({
-    data: dataStudent,
+    data: student,
     columns: defaultColumns,
     state: {
-      globalFilter: query.search,
       rowSelection,
-      pagination: {
-        pageIndex: 0,
-        pageSize: query.limit ?? 10,
-      },
+      sorting,
     },
-
-    getCoreRowModel: getCoreRowModel<StudentProps>(),
-    getPaginationRowModel: getPaginationRowModel(),
+    enableRowSelection: true,
+    getCoreRowModel: getCoreRowModel<Student>(),
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
   });
 
   const handleResize = () => {
     setIsLargeView(window.innerWidth > 1024);
   };
-
-  const openDeleteDialog = (id: string) => {
-    setIsOpenDeleteDialog(true);
-    setDeleteId(id);
-  };
-
-  const closeDeleteDialog = () => {
-    setIsOpenDeleteDialog(false);
-  };
-
-  const handleDelete = () => {
-    setStartFetchingDelete(true);
-  };
-
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => {
@@ -239,17 +268,22 @@ function StudentsTable() {
     };
   }, []);
 
+  useEffect(() => {
+    fetchStudent({ search: querySearch, limit: limitPage });
+  }, [querySearch, limitPage]);
+
   return (
     <div className="">
-      <div className="w-full border border-gray-200 rounded-lg overflow-hidden">
+      <div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
         <div className="flex space-x-3 my-4 px-5 items-center justify-between">
           <div className="relative w-full">
             <input
+              id="searchStudent"
               type="text"
               placeholder="Cari berdasarkan nama..."
-              className="w-3/4 pl-10 focus:outline-none focus:ring-0"
-              value={query.search ?? ''}
-              onChange={(e) => setQuery({ ...query, search: e.target.value })}
+              className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"
+              value={search ?? ''}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <div className="absolute left-0 top-0">
               <SearchIcon
@@ -258,6 +292,11 @@ function StudentsTable() {
               />
             </div>
           </div>
+          <div className="">
+            <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
+              {studentPages?.currentPage ?? 1}/{studentPages?.totalPage ?? 1}
+            </p>
+          </div>
         </div>
         <div className="pb-3 overflow-x-auto">
           <table className="w-full pb-4">
@@ -265,13 +304,13 @@ function StudentsTable() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr
                   key={headerGroup.id}
-                  className="border-y border-gray-200 bg-indigo-50/50">
+                  className="border-y border-gray-200 bg-indigo-50/50 dark:border-gray-600 dark:bg-gray-600">
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       className={`font-bold text-xs text-gray-500 tracking-wide px-3 py-3 text-left ${
                         headerClass[header.id] ?? ''
-                      }`}>
+                      } dark:text-gray-300`}>
                       {header.isPlaceholder ? null : (
                         <div
                           {...{
@@ -308,42 +347,92 @@ function StudentsTable() {
               ))}
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-gray-200 hover:bg-gray-100">
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className={`text-sm px-3 py-3 text-gray-500 ${
-                        cell.column.id === 'score' ? 'font-semibold' : ''
-                      } ${headerClass[cell.column.id] ?? ''}`}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              {isLoading ? (
+                Array.from({
+                  length: student.length !== 0 ? student.length : 5,
+                }).map((_, index) => (
+                  <tr
+                    className="animate-pulse-fast border-b border-gray-20 dark:border-gray-600"
+                    key={index}>
+                    <td className="px-3 py-3.5 text-center">
+                      <div className="skeleton-loader skeleton-sm !size-4.5 !rounded mx-auto" />
                     </td>
-                  ))}
+                    <td className="px-3 py-3.5 text-center">
+                      <div className="skeleton-loader skeleton-sm w-4/5 mx-auto" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                    <td className="px-3 py-3.5 w-24">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
+                  </tr>
+                ))
+              ) : student.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="text-center py-3 text-gray-500 dark:text-gray-400">
+                    Tidak ada data siswa yang ditemukan.
+                    {isError && (
+                      <span
+                        aria-label="button"
+                        className="cursor-pointer text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                        onClick={() =>
+                          fetchStudent({
+                            search: querySearch,
+                            limit: limitPage,
+                          })
+                        }>
+                        {' '}
+                        Coba lagi.
+                      </span>
+                    )}
+                  </td>
                 </tr>
-              ))}
+              ) : (
+                table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="border-b border-gray-200 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600/40">
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className={`text-sm px-3 py-3 text-gray-500 dark:text-gray-400 ${
+                          headerClass[cell.column.id] ?? ''
+                        }`}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
         <div className="flex items-center justify-between mb-3 px-5">
           <div className="flex items-center">
-            <p className="text-gray-500 mr-3">Menampilkan</p>
+            <p className="text-gray-500 mr-3 dark:text-gray-400">Menampilkan</p>
             <div className="relative">
               <select
-                id="tableScore_paginate"
-                name="tableScore_paginate"
-                className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none"
-                value={query.limit}
-                onChange={(e) =>
-                  setQuery((query) => ({
-                    ...query,
-                    limit: Number(e.target.value),
-                  }))
-                }>
+                id="tableStudent_paginate"
+                name="tableStudent_paginate"
+                className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                value={limitPage}
+                disabled={isLoading}
+                onChange={(e) => setLimitPage(Number(e.target.value))}>
                 {[10, 20, 50, 100].map((pageSize) => (
                   <option
                     key={pageSize}
@@ -354,7 +443,7 @@ function StudentsTable() {
               </select>
               <div className="absolute right-1.5 top-1.5 pointer-events-none">
                 <label
-                  htmlFor="tableScore_paginate"
+                  htmlFor="tableStudent_paginate"
                   className="block">
                   <ChevronDownIcon
                     size={20}
@@ -364,28 +453,31 @@ function StudentsTable() {
               </div>
             </div>
             {/* total data */}
-            <p className="text-gray-500 ml-3">
-              dari {response?.page?.totalData} data
+            <p className="text-gray-500 ml-3 dark:text-gray-400">
+              dari {studentPages?.totalData ?? 0} data
             </p>
           </div>
           <div className="flex space-x-3">
             {isLargeView && (
               <button
-                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-                onClick={() => setQuery((e) => ({ ...e, page: 1 }))}
-                disabled={Number(response?.page.currentPage) <= 1}>
+                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
+                onClick={() =>
+                  fetchStudent({ search: '', page: 1, limit: limitPage })
+                }
+                disabled={Number(studentPages?.currentPage) <= 1 || isLoading}>
                 First
               </button>
             )}
             <button
-              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
-                setQuery((e) => ({
-                  ...e,
-                  page: Number(Number(response?.page.currentPage) - 1),
-                }))
+                fetchStudent({
+                  search: '',
+                  page: Number(studentPages?.currentPage) - 1,
+                  limit: limitPage,
+                })
               }
-              disabled={Number(response?.page.currentPage) <= 1}>
+              disabled={Number(studentPages?.currentPage) <= 1 || isLoading}>
               <ArrowLeftIcon
                 size={16}
                 className={isLargeView ? 'mr-1' : ''}
@@ -393,16 +485,17 @@ function StudentsTable() {
               {isLargeView ? 'Previous' : ''}
             </button>
             <button
-              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+              className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
-                setQuery((e) => ({
-                  ...e,
-                  page: Number(Number(response?.page.currentPage) + 1),
-                }))
+                fetchStudent({
+                  search: '',
+                  page: Number(studentPages?.currentPage) + 1,
+                  limit: limitPage,
+                })
               }
               disabled={
-                Number(response?.page.currentPage) >=
-                Number(response?.page.totalPage)
+                Number(studentPages?.currentPage) >=
+                  Number(studentPages?.totalPage) || isLoading
               }>
               {isLargeView ? 'Next' : ''}
               <ArrowRightIcon
@@ -412,13 +505,17 @@ function StudentsTable() {
             </button>
             {isLargeView && (
               <button
-                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
+                className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
-                  setQuery((e) => ({ ...e, page: response?.page.totalPage }))
+                  fetchStudent({
+                    search: '',
+                    page: Number(studentPages?.totalPage),
+                    limit: limitPage,
+                  })
                 }
                 disabled={
-                  Number(response?.page.currentPage) >=
-                  Number(response?.page.totalPage)
+                  Number(studentPages?.currentPage) >=
+                    Number(studentPages?.totalPage) || isLoading
                 }>
                 Last
               </button>
@@ -445,19 +542,34 @@ function StudentsTable() {
             </button>
             {/* hapus */}
             <button
-              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:bg-red-300 disabled:border-red-300 disabled:cursor-not-allowed"
+              className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              disabled={isLoadingDelete}
               onClick={() => {
-                const selectedIds = Object.keys(rowSelection);
-                const newData = dataStudent.filter(
-                  (item) => !selectedIds.includes(item._id)
+                const selectedRow = table.getSelectedRowModel().flatRows;
+                const selectedRowOriginal = selectedRow.map(
+                  (row) => row.original
                 );
-                console.log('newData', newData);
+                handleSelectedDelete(selectedRowOriginal);
               }}>
-              <Trash2Icon
-                size={16}
-                className="mr-1"
-              />
-              Hapus
+              {isLoadingDelete ? (
+                <>
+                  <span className="translate-y-px">
+                    <Loader2Icon
+                      size={18}
+                      className="mr-1.5 animate-spin-fast"
+                    />
+                  </span>
+                  <span>Menghapus...</span>
+                </>
+              ) : (
+                <>
+                  <Trash2Icon
+                    size={16}
+                    className="mr-1"
+                  />
+                  Hapus
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -467,7 +579,7 @@ function StudentsTable() {
       <AlertDelete
         isOpen={isOpenDeleteDialog}
         message="siswa"
-        isLoading={loadingDeleted}
+        isLoading={isLoadingDelete}
         onCancel={closeDeleteDialog}
         onConfirm={handleDelete}
       />
