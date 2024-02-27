@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import StudentsTable from './components/StudentsTable';
-import Breadcrumb from '../../components/Breadcrumb';
-import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { useAppDispatch } from '../../app/hooks';
+import { setBreadcrumb } from '../../features/breadcrumbSlice';
+import Breadcrumb from '../../components/Breadcrumb';
 import HeaderContainer from '../../components/HeaderContainer';
+import StudentsTable from './components/StudentsTable';
 
 function Students() {
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ function Students() {
           btnText="Tambah Siswa"
         />
       </div>
-      <div className="bg-white p-5 rounded-xl">
+      <div className="bg-white p-5 rounded-xl dark:bg-gray-800">
         <StudentsTable />
       </div>
     </div>
