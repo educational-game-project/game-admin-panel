@@ -9,7 +9,7 @@ interface StudentAddRequest {
   name: string;
   email: string;
   phoneNumber: string;
-  schoolId: string;
+  school: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any;
 }
@@ -67,6 +67,15 @@ interface AdminUpdateRequest {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: File | Blob | any | undefined;
 }
+interface StudentUpdateRequest {
+  id?: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  school: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: File | Blob | any | undefined;
+}
 interface ScoreGetRequest {
   userId: string;
 }
@@ -101,4 +110,5 @@ export type {
   ScoreGetRequest,
   StudentAddRequest,
   StudentIdRequest,
+  StudentUpdateRequest,
 };

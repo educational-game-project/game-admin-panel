@@ -45,11 +45,13 @@ interface Student {
   email: string;
   phoneNumber: string;
   password?: string;
+  isActive?: boolean;
   addedBy?: UserAddBy | null;
   image: Image | null;
   school: School;
   createdAt: string;
-  deletedAt: string | null;
+  updatedAt: string;
+  deletedAt?: string | null;
   createdAtString?: string;
   updatedAtString?: string;
   __v: number;
