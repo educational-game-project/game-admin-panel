@@ -5,8 +5,10 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '../../app/hooks';
+import { useUser } from '../../hook/authHooks';
 import { useGetSchoolMutation } from '../../services/schoolApi';
 import { useAddStudentMutation } from '../../services/studentApi';
+import { useGetProfileQuery } from '../../services/profileApi';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { setAllowedToast } from '../../features/toastSlice';
 import Breadcrumb from '../../components/Breadcrumb';
@@ -45,12 +47,14 @@ const schema = yup.object().shape({
 });
 
 function AddStudent() {
+  const { user: currentUser } = useUser();
   const mediaRef = useRef<HTMLImageElement>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [addStudent, { isLoading }] = useAddStudentMutation();
   const [getSchool, { isLoading: isLoadingGet, data: schools }] =
     useGetSchoolMutation();
+  const { data: user, isLoading: isLoadingProfile } = useGetProfileQuery();
 
   const fetchSchool = async () => {
     try {
@@ -113,8 +117,8 @@ function AddStudent() {
   };
 
   useEffect(() => {
-    fetchSchool();
-  }, []);
+    if (currentUser?.role === 'Super Admin') fetchSchool();
+  }, [currentUser]);
 
   useEffect(() => {
     const newBreadcrumb = [
@@ -140,13 +144,15 @@ function AddStudent() {
           <div className="">
             <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
               Tambah Siswa
-              {isLoadingGet && (
+              {isLoadingGet || isLoadingProfile ? (
                 <span className="translate-y-px">
                   <Loader2Icon
                     size={22}
                     className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
                   />
                 </span>
+              ) : (
+                ''
               )}
             </h5>
             <p className="text-gray-500">
@@ -157,7 +163,7 @@ function AddStudent() {
             <Link
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition ${
-                isLoading || isLoadingGet
+                isLoading || isLoadingGet || isLoadingProfile
                   ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
                   : 'bg-gray-50 hover:bg-gray-100'
               } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
@@ -167,7 +173,7 @@ function AddStudent() {
             <button
               type="button"
               className="leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent bg-violet-600 px-6 py-3 text-sm font-medium text-gray-100 transition hover:bg-violet-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-violet-500 disabled:focus-visible:ring-2 disabled:focus-visible:ring-violet-500 disabled:focus-visible:ring-offset-2 dark:hover:bg-violet-700 dark:disabled:bg-violet-700"
-              disabled={isLoading || isLoadingGet}
+              disabled={isLoading || isLoadingGet || isLoadingProfile}
               onClick={handleSubmit(onSubmit)}>
               {isLoading ? (
                 <>
@@ -294,13 +300,19 @@ function AddStudent() {
                       aria-invalid={errors.school ? 'true' : 'false'}
                       {...register('school')}>
                       <option value="">Pilih Sekolah</option>
-                      {schools?.data.map((school: School) => (
-                        <option
-                          key={school._id}
-                          value={school._id}>
-                          {school.name}
+                      {currentUser?.role === 'Super Admin' ? (
+                        schools?.data.map((school: School) => (
+                          <option
+                            key={school._id}
+                            value={school._id}>
+                            {school.name}
+                          </option>
+                        ))
+                      ) : (
+                        <option value={user?.data?.school?._id}>
+                          {user?.data?.school?.name}
                         </option>
-                      ))}
+                      )}
                     </select>
                     <div className="absolute inset-y-0 right-1 flex items-center px-2 pointer-events-none">
                       <ChevronDownIcon
