@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
 import { Share2Icon } from 'lucide-react';
-import { useResponsiveLayout } from './hook/responsiveHoks';
+import { useResponsiveLayout } from './hook/responsiveHooks';
 
 import Layout from './common/Layout';
 import AuthMiddleware from './common/middleware/AuthMiddleware';
