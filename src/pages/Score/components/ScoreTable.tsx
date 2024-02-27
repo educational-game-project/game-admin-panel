@@ -20,7 +20,12 @@ import {
 } from 'lucide-react';
 
 import scoreData from '../../../data/SCORE_DATA.json';
-import type { ScoreProps } from '../../../types';
+
+interface ScoreProps {
+  id: string;
+  name: string;
+  score: number;
+}
 
 function IndeterminateCheckbox({
   isHeader,
