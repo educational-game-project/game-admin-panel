@@ -19,7 +19,6 @@ export const studentApi = coreApi.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Student'],
     }),
     getStudentById: builder.mutation<StudentSuccessResponse, StudentIdRequest>({
       query: (id) => ({
@@ -27,7 +26,9 @@ export const studentApi = coreApi.injectEndpoints({
         method: 'POST',
         body: id,
       }),
-      invalidatesTags: ['Student'],
+    }),
+    getActiveStudent: builder.query({
+      query: () => '/user/student/active',
     }),
     addStudent: builder.mutation({
       query: (data) => {
@@ -35,8 +36,10 @@ export const studentApi = coreApi.injectEndpoints({
         formAddStudent.append('name', data.name);
         formAddStudent.append('email', data.email);
         formAddStudent.append('phoneNumber', data.phoneNumber);
-        formAddStudent.append('schoolId', data.schoolId);
-        formAddStudent.append('media', data.media[0]);
+        formAddStudent.append('schoolId', data.school);
+        if (data?.media) {
+          formAddStudent.append('media', data?.media[0] || '');
+        }
         return {
           url: '/user/student',
           method: 'POST',
@@ -44,16 +47,18 @@ export const studentApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ['Student'],
     }),
     updateStudent: builder.mutation({
       query: (data) => {
         const formEditStudent = new FormData();
+        formEditStudent.append('id', data.id);
         formEditStudent.append('name', data.name);
         formEditStudent.append('email', data.email);
         formEditStudent.append('phoneNumber', data.phoneNumber);
-        formEditStudent.append('schoolId', data.schoolId);
-        formEditStudent.append('media', data.media[0]);
+        formEditStudent.append('schoolId', data.school);
+        if (data?.media) {
+          formEditStudent.append('media', data?.media[0] || '');
+        }
         return {
           url: '/user/student',
           method: 'PUT',
@@ -61,7 +66,6 @@ export const studentApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ['Student'],
     }),
     deleteStudent: builder.mutation<SuccessResponse, StudentIdRequest>({
       query: (id) => ({
@@ -75,6 +79,7 @@ export const studentApi = coreApi.injectEndpoints({
 });
 
 export const {
+  useGetActiveStudentQuery,
   useGetStudentMutation,
   useGetStudentByIdMutation,
   useAddStudentMutation,
