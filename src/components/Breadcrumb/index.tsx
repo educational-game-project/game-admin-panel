@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, HomeIcon } from 'lucide-react';
 import { useAppSelector } from '../../app/hooks';
 import { selectBreadcrumb } from '../../features/breadcrumbSlice';
-import BreadcumbIcon from './BreadcumbIcon';
+import BreadcrumbIcon from './BreadcrumbIcon';
 
 function Breadcrumb() {
   const [isOnTop, setIsOnTop] = useState(true);
@@ -59,7 +59,7 @@ function Breadcrumb() {
                 ? 'text-violet-800 font-medium dark:text-violet-600'
                 : 'text-gray-500 dark:text-gray-400'
             } group-hover/breadcrumb:text-violet-700 dark:group-hover/breadcrumb:text-violet-600`}>
-            <BreadcumbIcon name={breadcrumb?.icon} />
+            <BreadcrumbIcon name={breadcrumb?.icon} />
             <span className="leading-none">{breadcrumb?.label}</span>
           </Link>
           {index + 1 !== breadcrumbs.length && (

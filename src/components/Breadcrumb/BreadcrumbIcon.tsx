@@ -1,6 +1,7 @@
 import {
   ActivityIcon,
   CopyPlusIcon,
+  CrownIcon,
   Gamepad2Icon,
   HomeIcon,
   LineChartIcon,
@@ -17,7 +18,7 @@ import {
 
 import type { BreadcrumbIconProps } from '../../types';
 
-function BreadcumbIcon({ name }: BreadcrumbIconProps) {
+function BreadcrumbIcon({ name }: BreadcrumbIconProps) {
   const breadcrumbConfig = [
     {
       id: 1,
@@ -159,6 +160,16 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
         />
       ),
     },
+    {
+      id: 15,
+      name: 'leaderboard',
+      icon: (
+        <CrownIcon
+          size={16}
+          className="mr-1.5"
+        />
+      ),
+    },
   ];
 
   const breadcrumb = breadcrumbConfig.find(
@@ -168,4 +179,4 @@ function BreadcumbIcon({ name }: BreadcrumbIconProps) {
   return <>{breadcrumb?.icon}</>;
 }
 
-export default BreadcumbIcon;
+export default BreadcrumbIcon;
