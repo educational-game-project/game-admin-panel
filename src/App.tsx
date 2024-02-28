@@ -11,29 +11,30 @@ import AutoTopProvider from './components/AutoTopProvider';
 import ToastProvider from './components/ToastProvider';
 import ButtonClipboard from './components/ButtonClipboard';
 
-import Home from './pages/Home';
-import Students from './pages/Students';
-import Score from './pages/Score';
-import Analysis from './pages/Analysis';
 import Activity from './pages/Activity';
-import Preferences from './pages/Preferences';
-import Profile from './pages/Profile';
-import ChangePassword from './pages/Profile/ChangePassword';
-import ErrorPage from './pages/Error';
-import Login from './pages/Auth/Login';
-import EditStudent from './pages/Students/EditStudent';
+import AddAdmin from './pages/Admin/AddAdmin';
+import AddGame from './pages/Game/AddGame';
+import AddSchool from './pages/School/AddSchool';
 import AddStudent from './pages/Students/AddStudent';
 import Admin from './pages/Admin';
-import School from './pages/School';
-import AddSchool from './pages/School/AddSchool';
-import EditSchool from './pages/School/EditSchool';
-import DetailSchool from './pages/School/DetailSchool';
-import AddAdmin from './pages/Admin/AddAdmin';
-import EditAdmin from './pages/Admin/EditAdmin';
-import Game from './pages/Game';
-import AddGame from './pages/Game/AddGame';
-import EditGame from './pages/Game/EditGame';
+import Analysis from './pages/Analysis';
+import ChangePassword from './pages/Profile/ChangePassword';
 import DetailGame from './pages/Game/DetailGame';
+import DetailSchool from './pages/School/DetailSchool';
+import EditAdmin from './pages/Admin/EditAdmin';
+import EditGame from './pages/Game/EditGame';
+import EditSchool from './pages/School/EditSchool';
+import EditStudent from './pages/Students/EditStudent';
+import ErrorPage from './pages/Error';
+import Game from './pages/Game';
+import Home from './pages/Home';
+import Leaderboard from './pages/Game/Leaderboard';
+import Login from './pages/Auth/Login';
+import Preferences from './pages/Preferences';
+import Profile from './pages/Profile';
+import Score from './pages/Score';
+import Students from './pages/Students';
+import School from './pages/School';
 
 import images from './assets/img';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -107,6 +108,10 @@ function App() {
                   <Route
                     path="/game/:gameId"
                     element={<DetailGame />}
+                  />
+                  <Route
+                    path="/game/leaderboard/:gameId"
+                    element={<Leaderboard />}
                   />
                   <Route
                     path="/student"
