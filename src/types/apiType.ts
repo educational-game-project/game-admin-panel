@@ -233,6 +233,7 @@ export type {
   Game,
   GameListSuccessResponse,
   GameSuccessResponse,
+  LeaderboardResponse,
   LeaderboardSuccessResponse,
   PageResponse,
   ProfileSuccessResponse,
