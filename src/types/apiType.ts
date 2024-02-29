@@ -240,6 +240,8 @@ export type {
   School,
   SchoolListSuccessResponse,
   SchoolSuccessResponse,
+  Score,
+  ScoreResponse,
   ScoreSuccessResponse,
   Student,
   StudentListSuccessResponse,
