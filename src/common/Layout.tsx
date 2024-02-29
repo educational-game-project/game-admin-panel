@@ -5,10 +5,10 @@ import { selectExpanded } from '../features/sidebarSlice';
 import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
 import {
+  AwardIcon,
   Gamepad2Icon,
   HomeIcon,
   LineChart,
-  MousePointerClick,
   SchoolIcon,
   UserCogIcon,
   UserSquare2,
@@ -49,7 +49,7 @@ function Layout() {
             active={isCurrentLocation('student')}
           />
           <SidebarItem
-            icon={<MousePointerClick size={20} />}
+            icon={<AwardIcon size={20} />}
             text="Skor"
             path="/score"
             alert={true}
