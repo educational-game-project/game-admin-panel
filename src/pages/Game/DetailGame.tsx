@@ -91,6 +91,16 @@ function DetailGame() {
               to="/game">
               Kembali
             </Link>
+            <Link
+              to={`/game/leaderboard/${gameId}`}
+              type="button"
+              className={`leading-normal ml-4 inline-flex justify-center rounded-lg border border-transparent px-6 py-3 text-sm font-medium text-gray-50 dark:text-gray-100 transition ${
+                isLoading
+                  ? 'opacity-50 cursor-not-allowed bg-amber-500 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 dark:bg-amber-700'
+                  : 'bg-gradient-to-br from-yellow-400 to-amber-500 hover:from-amber-400 hover:to-yellow-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 dark:from-yellow-500 dark:to-amber-600 dark:hover:from-amber-500 dark:hover:to-yellow-700'
+              }`}>
+              Leaderboard
+            </Link>
           </div>
         </div>
       </div>
