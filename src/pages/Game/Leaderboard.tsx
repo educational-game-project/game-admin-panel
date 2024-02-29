@@ -1,20 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
-import { setBreadcrumb } from '../../features/breadcrumbSlice';
-import Breadcrumb from '../../components/Breadcrumb';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useGetLeaderboardMutation } from '../../services/scoreApi';
-import { setAllowedToast } from '../../features/toastSlice';
-import { showErrorToast } from '../../components/Toast';
-import {
-  ArrowDownIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  ChevronDownIcon,
-  Loader2Icon,
-  SearchIcon,
-} from 'lucide-react';
 import {
   createColumnHelper,
   flexRender,
@@ -25,6 +10,21 @@ import {
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
+import { useAppDispatch } from '../../app/hooks';
+import { useGetLeaderboardMutation } from '../../services/scoreApi';
+import { setBreadcrumb } from '../../features/breadcrumbSlice';
+import { setAllowedToast } from '../../features/toastSlice';
+import Breadcrumb from '../../components/Breadcrumb';
+import { showErrorToast } from '../../components/Toast';
+import {
+  ArrowDownIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowUpIcon,
+  ChevronDownIcon,
+  SearchIcon,
+} from 'lucide-react';
+
 import type { LeaderboardResponse } from '../../types';
 
 function Leaderboard() {
@@ -134,17 +134,7 @@ function Leaderboard() {
         <Breadcrumb />
         <div className="flex items-center justify-between">
           <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
-              Leaderboard
-              {isLoading && (
-                <span className="translate-y-px">
-                  <Loader2Icon
-                    size={22}
-                    className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
-                  />
-                </span>
-              )}
-            </h5>
+            <h5 className="font-semibold text-3xl mb-1.5">Leaderboard</h5>
             <p className="text-gray-500">
               Lihat peringkat pemain game{' '}
               {isLoading ? '...' : leaderboard[0]?.game?.name} dengan skor
