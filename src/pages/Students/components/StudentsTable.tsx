@@ -24,6 +24,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpIcon,
+  AwardIcon,
   ChevronDownIcon,
   Loader2Icon,
   PenSquareIcon,
@@ -222,21 +223,38 @@ function StudentsTable() {
         cell: (info) => (
           <div className="flex space-x-5 px-2">
             <Link
-              className=""
+              className="relative group/tooltip_score"
+              to={`/student/score/${info?.row?.original?._id}`}>
+              <AwardIcon
+                size={16}
+                className="text-lime-500 hover:text-lime-600"
+              />
+              <div className="absolute -top-0.75 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-800 text-slate-100 dark:bg-gray-950 dark:text-slate-300 px-2 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover/tooltip_score:opacity-100 transition-all-200 pointer-events-none">
+                <p className="text-center">Skor</p>
+              </div>
+            </Link>
+            <Link
+              className="relative group/tooltip_edit"
               to={`/student/edit/${info?.row?.original?._id}`}>
               <PenSquareIcon
                 size={16}
                 className="text-sky-500 hover:text-sky-600"
               />
+              <div className="absolute -top-0.75 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-800 text-slate-100 dark:bg-gray-950 dark:text-slate-300 px-2 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover/tooltip_edit:opacity-100 transition-all-200 pointer-events-none">
+                <p className="text-center">Edit</p>
+              </div>
             </Link>
             <button
               type="button"
-              className=""
+              className="relative group/tooltip_delete"
               onClick={() => openDeleteDialog(info?.row?.original?._id)}>
               <Trash2Icon
                 size={16}
                 className="text-red-500 hover:text-red-600"
               />
+              <div className="absolute -top-0.75 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-800 text-slate-100 dark:bg-gray-950 dark:text-slate-300 px-2 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover/tooltip_delete:opacity-100 transition-all-200 pointer-events-none">
+                <p className="text-center">Hapus</p>
+              </div>
             </button>
           </div>
         ),

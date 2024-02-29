@@ -1,11 +1,11 @@
 import {
   ActivityIcon,
+  AwardIcon,
   CopyPlusIcon,
   CrownIcon,
   Gamepad2Icon,
   HomeIcon,
   LineChartIcon,
-  MousePointerClickIcon,
   MousePointerSquareIcon,
   PenBoxIcon,
   SchoolIcon,
@@ -114,7 +114,7 @@ function BreadcrumbIcon({ name }: BreadcrumbIconProps) {
       id: 10,
       name: 'score',
       icon: (
-        <MousePointerClickIcon
+        <AwardIcon
           size={16}
           className="mr-1.5"
         />

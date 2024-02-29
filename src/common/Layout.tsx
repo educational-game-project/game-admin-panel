@@ -8,7 +8,6 @@ import {
   Gamepad2Icon,
   HomeIcon,
   LineChart,
-  MousePointerClick,
   SchoolIcon,
   UserCogIcon,
   UserSquare2,
@@ -47,13 +46,6 @@ function Layout() {
             path="/student"
             alert={true}
             active={isCurrentLocation('student')}
-          />
-          <SidebarItem
-            icon={<MousePointerClick size={20} />}
-            text="Skor"
-            path="/score"
-            alert={true}
-            active={isCurrentLocation('score')}
           />
           <SidebarItem
             icon={<LineChart size={20} />}

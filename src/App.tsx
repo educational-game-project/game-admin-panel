@@ -32,7 +32,7 @@ import Leaderboard from './pages/Game/Leaderboard';
 import Login from './pages/Auth/Login';
 import Preferences from './pages/Preferences';
 import Profile from './pages/Profile';
-import Score from './pages/Score';
+import ScoreStudent from './pages/Students/ScoreStudent';
 import Students from './pages/Students';
 import School from './pages/School';
 
@@ -126,8 +126,8 @@ function App() {
                     element={<EditStudent />}
                   />
                   <Route
-                    path="/score"
-                    element={<Score />}
+                    path="/student/score/:studentId"
+                    element={<ScoreStudent />}
                   />
                   <Route
                     path="/analysis"

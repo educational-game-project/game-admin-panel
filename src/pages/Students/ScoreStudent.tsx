@@ -11,23 +11,28 @@ import {
   type SortingState,
 } from '@tanstack/react-table';
 import { useAppDispatch } from '../../app/hooks';
-import { useGetLeaderboardMutation } from '../../services/scoreApi';
-import { setBreadcrumb } from '../../features/breadcrumbSlice';
+import { useGetScoreMutation } from '../../services/scoreApi';
+import { useGetStudentByIdMutation } from '../../services/studentApi';
 import { setAllowedToast } from '../../features/toastSlice';
-import Breadcrumb from '../../components/Breadcrumb';
+import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { showErrorToast } from '../../components/Toast';
+import Breadcrumb from '../../components/Breadcrumb';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  Loader2Icon,
   SearchIcon,
 } from 'lucide-react';
+import { transformInteger } from '../../utilities/numberUtils';
+import { longMonthDate } from '../../utilities/dateUtils';
+import { transformStringPlus } from '../../utilities/stringUtils';
 
-import type { LeaderboardResponse } from '../../types';
+import type { NormalizedScore, Score, ScoreResponse } from '../../types';
 
-function Leaderboard() {
+function ScoreStudent() {
   const [filter, setFilter] = useState('');
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLargeView, setIsLargeView] = useState<boolean>(
@@ -35,26 +40,55 @@ function Leaderboard() {
   );
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { gameId } = useParams();
-  const [getLeaderboard, { data: leaderboards, isError, isLoading }] =
-    useGetLeaderboardMutation();
-  const leaderboard = useMemo(() => leaderboards?.data ?? [], [leaderboards]);
+  const { studentId } = useParams();
+  const [getScore, { data: scores, isError, isLoading }] =
+    useGetScoreMutation();
+  const [getStudentById, { data: student, isLoading: isLoadingGet }] =
+    useGetStudentByIdMutation();
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
   };
 
-  const fetchLeaderboard = async (id: string) => {
+  const normalizeScores = (data: ScoreResponse[]): NormalizedScore[] => {
+    return data.flatMap((item) => {
+      const { scores, game } = item;
+      return scores.map((score: Score) => ({
+        level: score.level,
+        value: score.value,
+        createdAt: score.createdAt,
+        gameId: game._id,
+        gameName: game.name,
+      }));
+    });
+  };
+  const score = useMemo(() => {
+    if (!scores || scores?.data.length === 0) {
+      return [];
+    }
+    return normalizeScores(scores.data);
+  }, [scores]);
+
+  const fetchScore = async (id: string) => {
     try {
-      await getLeaderboard({ gameId: id }).unwrap();
+      await getScore({ userId: id }).unwrap();
     } catch (error) {
       dispatch(setAllowedToast());
-      showErrorToast('Data leaderboard tidak ditemukan');
-      navigate('/game');
+      showErrorToast('Data skor tidak ditemukan');
+      navigate('/student');
+    }
+  };
+  const fetchStudentById = async (id: string) => {
+    try {
+      await getStudentById({ id }).unwrap();
+    } catch (error) {
+      dispatch(setAllowedToast());
+      showErrorToast('Data siswa tidak ditemukan');
+      navigate('/student');
     }
   };
 
-  const columnHelper = createColumnHelper<LeaderboardResponse>();
+  const columnHelper = createColumnHelper<NormalizedScore>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -62,33 +96,35 @@ function Leaderboard() {
         header: '#',
         cell: (info) => info?.row?.index + 1,
       }),
-      columnHelper.accessor('game.name', {
+      columnHelper.accessor('gameName', {
         header: 'Nama Permainan',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor((data) => data?.leaderboard[0]?.user?.name || '', {
-        id: 'player_name',
-        header: 'Nama Pemain',
-        cell: (info) => info?.getValue() || '',
+      columnHelper.accessor('level', {
+        header: 'Level',
+        cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor((data) => data?.leaderboard[0]?.value || '', {
-        id: 'score',
+      columnHelper.accessor('value', {
         header: 'Skor',
-        cell: (info) => info?.getValue() || '',
+        cell: (info) => transformInteger(info.getValue()),
+      }),
+      columnHelper.accessor('createdAt', {
+        header: 'Tanggal',
+        cell: (info) => longMonthDate(info.getValue()),
       }),
     ],
     [columnHelper]
   );
 
   const table = useReactTable({
-    data: leaderboard,
+    data: score,
     columns: defaultColumns,
     state: {
       globalFilter: filter,
       sorting,
     },
     enableRowSelection: true,
-    getCoreRowModel: getCoreRowModel<LeaderboardResponse>(),
+    getCoreRowModel: getCoreRowModel<NormalizedScore>(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -110,49 +146,105 @@ function Leaderboard() {
   useEffect(() => {
     const newBreadcrumb = [
       {
-        icon: 'game',
-        label: 'Game',
-        path: '/game',
+        icon: 'student',
+        label: 'Student',
+        path: '/student',
       },
       {
-        icon: 'leaderboard',
-        label: 'Leaderboard',
-        path: `/game/leaderboard/${gameId}`,
+        icon: 'score',
+        label: 'Score',
+        path: `/student/score/${studentId}`,
       },
     ];
     dispatch(setBreadcrumb(newBreadcrumb));
-  }, [dispatch, gameId]);
+  }, [dispatch, studentId]);
   useEffect(() => {
-    if (gameId) {
-      fetchLeaderboard(gameId);
+    if (studentId) {
+      fetchScore(studentId);
+      fetchStudentById(studentId);
     }
-  }, [gameId]);
+  }, [studentId]);
 
   return (
-    <div className="">
-      <div className="mb-6">
+    <div>
+      <div className="mb-5">
         <Breadcrumb />
         <div className="flex items-center justify-between">
           <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5">Leaderboard</h5>
+            <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
+              Skor
+              {isLoading || isLoadingGet ? (
+                <span className="translate-y-px">
+                  <Loader2Icon
+                    size={22}
+                    className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
+                  />
+                </span>
+              ) : (
+                ''
+              )}
+            </h5>
             <p className="text-gray-500">
-              Lihat peringkat pemain game{' '}
-              {isLoading ? '...' : leaderboard[0]?.game?.name} dengan skor
-              tertinggi.
+              Lihat riwayat skor pemain di setiap permainan.
             </p>
           </div>
           <div className="flex justify-end">
             <Link
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition ${
-                isLoading
+                isLoading || isLoadingGet
                   ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
                   : 'bg-gray-50 hover:bg-gray-100'
               } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
-              to="/game">
+              to="/student">
               Kembali
             </Link>
           </div>
+        </div>
+      </div>
+      <div className="mb-5 flex">
+        <div
+          className={`bg-white p-5 rounded-xl dark:bg-gray-800 flex items-center ${
+            isLoading || isLoadingGet ? 'animate-pulse-fast' : ''
+          }`}>
+          {isLoading || isLoadingGet ? (
+            <>
+              <div className="">
+                <div className="skeleton-loader skeleton-sm !size-18 !rounded-full mr-3" />
+              </div>
+              <div className="">
+                <div className="skeleton-loader skeleton-sm w-40 mb-3" />
+                <div className="skeleton-loader skeleton-sm w-58 mb-2.5" />
+                <div className="skeleton-loader skeleton-sm w-58" />
+              </div>
+            </>
+          ) : (
+            <>
+              <figure className="mr-3 size-18 rounded-full block overflow-hidden">
+                <img
+                  src={
+                    student?.data?.image?.fileLink ??
+                    `https://ui-avatars.com/api/?name=${transformStringPlus(
+                      student?.data?.name
+                    )}&background=6d5Acd&color=fff`
+                  }
+                  alt={`${student?.data?.name} Profile`}
+                  className="w-full h-full object-cover object-center block"
+                />
+              </figure>
+              <div className="">
+                <p className="font-semibold text-lg mb-0.5">
+                  {student?.data?.name}
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">
+                  📧 {student?.data?.email || '-'}
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">
+                  💼 {student?.data?.school?.name || '-'}
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
       <div className="bg-white p-5 rounded-xl dark:bg-gray-800">
@@ -161,9 +253,9 @@ function Leaderboard() {
             <div className="flex space-x-3 my-4 px-5 items-center justify-between">
               <div className="relative w-full">
                 <input
-                  id="searchLeaderboard"
+                  id="searchScore"
                   type="text"
-                  placeholder="Cari data leaderboard..."
+                  placeholder="Cari data skor..."
                   className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"
                   value={filter ?? ''}
                   onChange={(e) => setFilter(String(e.target.value))}
@@ -234,7 +326,7 @@ function Leaderboard() {
                 <tbody>
                   {isLoading ? (
                     Array.from({
-                      length: leaderboard.length !== 0 ? leaderboard.length : 5,
+                      length: score.length !== 0 ? score.length : 5,
                     }).map((_, index) => (
                       <tr
                         className="animate-pulse-fast border-b border-gray-20 dark:border-gray-600"
@@ -251,20 +343,22 @@ function Leaderboard() {
                         <td className="px-3 py-3.5">
                           <div className="skeleton-loader skeleton-sm w-full" />
                         </td>
+                        <td className="px-3 py-3.5">
+                          <div className="skeleton-loader skeleton-sm w-full" />
+                        </td>
                       </tr>
                     ))
-                  ) : leaderboard.length === 0 ||
-                    Object.keys(leaderboard).length === 0 ? (
+                  ) : score.length === 0 || Object.keys(score).length === 0 ? (
                     <tr>
                       <td
-                        colSpan={4}
+                        colSpan={5}
                         className="text-center py-3 text-gray-500 dark:text-gray-400">
-                        Tidak ada data leaderboard yang ditemukan.
+                        Tidak ada data skor yang ditemukan.
                         {isError && (
                           <span
                             aria-label="button"
                             className="cursor-pointer text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-                            onClick={() => fetchLeaderboard(gameId ?? '')}>
+                            onClick={() => fetchScore(studentId ?? '')}>
                             {' '}
                             Coba lagi.
                           </span>
@@ -301,8 +395,8 @@ function Leaderboard() {
                 </p>
                 <div className="relative">
                   <select
-                    id="tableLeaderboard_paginate"
-                    name="tableLeaderboard_paginate"
+                    id="tableScore_paginate"
+                    name="tableScore_paginate"
                     className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
                     value={table.getState().pagination.pageSize}
                     onChange={(e) => {
@@ -318,7 +412,7 @@ function Leaderboard() {
                   </select>
                   <div className="absolute right-1.5 top-1.5 pointer-events-none">
                     <label
-                      htmlFor="tableLeaderboard_paginate"
+                      htmlFor="tableScore_paginate"
                       className="block">
                       <ChevronDownIcon
                         size={20}
@@ -329,7 +423,7 @@ function Leaderboard() {
                 </div>
                 {/* total data */}
                 <p className="text-gray-500 ml-3 dark:text-gray-400">
-                  dari {leaderboard.length ?? 0} data
+                  dari {score.length ?? 0} data
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -378,4 +472,4 @@ function Leaderboard() {
   );
 }
 
-export default Leaderboard;
+export default ScoreStudent;
