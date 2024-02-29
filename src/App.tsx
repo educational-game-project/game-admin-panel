@@ -33,6 +33,7 @@ import Login from './pages/Auth/Login';
 import Preferences from './pages/Preferences';
 import Profile from './pages/Profile';
 import Score from './pages/Score';
+import ScoreStudent from './pages/Students/ScoreStudent';
 import Students from './pages/Students';
 import School from './pages/School';
 
@@ -124,6 +125,10 @@ function App() {
                   <Route
                     path="/student/edit/:studentId"
                     element={<EditStudent />}
+                  />
+                  <Route
+                    path="/student/score/:studentId"
+                    element={<ScoreStudent />}
                   />
                   <Route
                     path="/score"
