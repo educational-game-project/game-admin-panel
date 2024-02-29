@@ -5,7 +5,6 @@ import { selectExpanded } from '../features/sidebarSlice';
 import Sidebar, { SeparateSidebar, SidebarItem } from './Sidebar';
 import Navbar from './Navbar';
 import {
-  AwardIcon,
   Gamepad2Icon,
   HomeIcon,
   LineChart,
@@ -47,13 +46,6 @@ function Layout() {
             path="/student"
             alert={true}
             active={isCurrentLocation('student')}
-          />
-          <SidebarItem
-            icon={<AwardIcon size={20} />}
-            text="Skor"
-            path="/score"
-            alert={true}
-            active={isCurrentLocation('score')}
           />
           <SidebarItem
             icon={<LineChart size={20} />}
