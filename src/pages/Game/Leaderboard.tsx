@@ -161,7 +161,7 @@ function Leaderboard() {
             <div className="flex space-x-3 my-4 px-5 items-center justify-between">
               <div className="relative w-full">
                 <input
-                  id="searchGame"
+                  id="searchLeaderboard"
                   type="text"
                   placeholder="Cari data leaderboard..."
                   className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"

@@ -12,6 +12,7 @@ import {
 } from '@tanstack/react-table';
 import { useAppDispatch } from '../../app/hooks';
 import { useGetScoreMutation } from '../../services/scoreApi';
+import { useGetStudentByIdMutation } from '../../services/studentApi';
 import { setAllowedToast } from '../../features/toastSlice';
 import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { showErrorToast } from '../../components/Toast';
@@ -22,10 +23,12 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  Loader2Icon,
   SearchIcon,
 } from 'lucide-react';
 import { transformInteger } from '../../utilities/numberUtils';
 import { longMonthDate } from '../../utilities/dateUtils';
+import { transformStringPlus } from '../../utilities/stringUtils';
 
 import type { NormalizedScore, Score, ScoreResponse } from '../../types';
 
@@ -40,6 +43,8 @@ function ScoreStudent() {
   const { studentId } = useParams();
   const [getScore, { data: scores, isError, isLoading }] =
     useGetScoreMutation();
+  const [getStudentById, { data: student, isLoading: isLoadingGet }] =
+    useGetStudentByIdMutation();
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
@@ -70,6 +75,15 @@ function ScoreStudent() {
     } catch (error) {
       dispatch(setAllowedToast());
       showErrorToast('Data skor tidak ditemukan');
+      navigate('/student');
+    }
+  };
+  const fetchStudentById = async (id: string) => {
+    try {
+      await getStudentById({ id }).unwrap();
+    } catch (error) {
+      dispatch(setAllowedToast());
+      showErrorToast('Data siswa tidak ditemukan');
       navigate('/student');
     }
   };
@@ -147,16 +161,29 @@ function ScoreStudent() {
   useEffect(() => {
     if (studentId) {
       fetchScore(studentId);
+      fetchStudentById(studentId);
     }
   }, [studentId]);
 
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-5">
         <Breadcrumb />
         <div className="flex items-center justify-between">
           <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5">Skor</h5>
+            <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
+              Skor
+              {isLoading || isLoadingGet ? (
+                <span className="translate-y-px">
+                  <Loader2Icon
+                    size={22}
+                    className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
+                  />
+                </span>
+              ) : (
+                ''
+              )}
+            </h5>
             <p className="text-gray-500">
               Lihat riwayat skor pemain di setiap permainan.
             </p>
@@ -165,7 +192,7 @@ function ScoreStudent() {
             <Link
               type="button"
               className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition ${
-                isLoading
+                isLoading || isLoadingGet
                   ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
                   : 'bg-gray-50 hover:bg-gray-100'
               } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
@@ -175,15 +202,60 @@ function ScoreStudent() {
           </div>
         </div>
       </div>
+      <div className="mb-5 flex">
+        <div
+          className={`bg-white p-5 rounded-xl dark:bg-gray-800 flex items-center ${
+            isLoading || isLoadingGet ? 'animate-pulse-fast' : ''
+          }`}>
+          {isLoading || isLoadingGet ? (
+            <>
+              <div className="">
+                <div className="skeleton-loader skeleton-sm !size-18 !rounded-full mr-3" />
+              </div>
+              <div className="">
+                <div className="skeleton-loader skeleton-sm w-40 mb-3" />
+                <div className="skeleton-loader skeleton-sm w-58 mb-2.5" />
+                <div className="skeleton-loader skeleton-sm w-58" />
+              </div>
+            </>
+          ) : (
+            <>
+              <figure className="mr-3 size-18 rounded-full block overflow-hidden">
+                <img
+                  src={
+                    student?.data?.image?.fileLink ??
+                    `https://ui-avatars.com/api/?name=${transformStringPlus(
+                      student?.data?.name
+                    )}&background=6d5Acd&color=fff`
+                  }
+                  alt={`${student?.data?.name} Profile`}
+                  className="w-full h-full object-cover object-center block"
+                />
+              </figure>
+              <div className="">
+                <p className="font-semibold text-lg mb-0.5">
+                  {student?.data?.name}
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">
+                  📧 {student?.data?.email || '-'}
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">
+                  💼 {student?.data?.school?.name || '-'}
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
       <div className="bg-white p-5 rounded-xl dark:bg-gray-800">
         <div className="">
           <div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
             <div className="flex space-x-3 my-4 px-5 items-center justify-between">
               <div className="relative w-full">
                 <input
-                  id="searchGame"
+                  id="searchScore"
                   type="text"
-                  placeholder="Cari data leaderboard..."
+                  placeholder="Cari data skor..."
                   className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"
                   value={filter ?? ''}
                   onChange={(e) => setFilter(String(e.target.value))}
@@ -279,9 +351,9 @@ function ScoreStudent() {
                   ) : score.length === 0 || Object.keys(score).length === 0 ? (
                     <tr>
                       <td
-                        colSpan={4}
+                        colSpan={5}
                         className="text-center py-3 text-gray-500 dark:text-gray-400">
-                        Tidak ada data leaderboard yang ditemukan.
+                        Tidak ada data skor yang ditemukan.
                         {isError && (
                           <span
                             aria-label="button"
@@ -323,8 +395,8 @@ function ScoreStudent() {
                 </p>
                 <div className="relative">
                   <select
-                    id="tableLeaderboard_paginate"
-                    name="tableLeaderboard_paginate"
+                    id="tableScore_paginate"
+                    name="tableScore_paginate"
                     className="bg-gray-50 border border-gray-300 px-2 py-1 rounded-md focus:outline-none focus:ring-0 text-gray-600 cursor-pointer pr-7 appearance-none dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
                     value={table.getState().pagination.pageSize}
                     onChange={(e) => {
@@ -340,7 +412,7 @@ function ScoreStudent() {
                   </select>
                   <div className="absolute right-1.5 top-1.5 pointer-events-none">
                     <label
-                      htmlFor="tableLeaderboard_paginate"
+                      htmlFor="tableScore_paginate"
                       className="block">
                       <ChevronDownIcon
                         size={20}
