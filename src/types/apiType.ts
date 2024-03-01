@@ -218,14 +218,16 @@ interface LeaderboardSuccessResponse extends SuccessResponse {
   data: LeaderboardResponse[];
 }
 interface DashboardSuccessResponse extends SuccessResponse {
-  studentsCount: number;
-  activeStudents: number;
-  adminCount: number;
-  activeAdmin: number;
-  gameCount: number;
-  games: Game[];
-  schoolCount: number;
-  schools: School[];
+  data: {
+    studentsCount: number;
+    activeStudents: number;
+    adminCount: number;
+    activeAdmin: number;
+    gameCount: number;
+    games: Game[];
+    schoolCount: number;
+    schools: School[];
+  };
 }
 
 export type {
