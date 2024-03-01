@@ -10,6 +10,8 @@ import type {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 import type { LoginSuccessData } from '../types';
+import { setAllowedToast } from '../features/toastSlice';
+import { showErrorToast } from '../components/Toast';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: getBaseUrl(),
@@ -32,32 +34,41 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions): Promise<any> => {
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
-  if (result.error && result.error.status === 401) {
-    // checking whether the mutex is locked
-    if (!mutex.isLocked()) {
-      const release = await mutex.acquire();
-      try {
-        const refreshResult = await baseQuery(
-          '/auth/refresh-token',
-          api,
-          extraOptions
-        );
-        if (refreshResult.data) {
-          const { user, tokens } = refreshResult.data as LoginSuccessData;
-          api.dispatch(setAuth({ user, tokens }));
-          // retry the initial query
-          result = await baseQuery(args, api, extraOptions);
-        } else {
-          api.dispatch(setUnAuth());
+  if (result.error) {
+    if (result.error.status === 401) {
+      // checking whether the mutex is locked
+      if (!mutex.isLocked()) {
+        const release = await mutex.acquire();
+        try {
+          const refreshResult = await baseQuery(
+            '/auth/refresh-token',
+            api,
+            extraOptions
+          );
+          if (refreshResult.data) {
+            const { user, tokens } = refreshResult.data as LoginSuccessData;
+            api.dispatch(setAuth({ user, tokens }));
+            // retry the initial query
+            result = await baseQuery(args, api, extraOptions);
+          } else {
+            api.dispatch(setUnAuth());
+          }
+        } finally {
+          // release must be called once the mutex should be released again.
+          release();
         }
-      } finally {
-        // release must be called once the mutex should be released again.
-        release();
+      } else {
+        // wait until the mutex is available without locking it
+        await mutex.waitForUnlock();
+        result = await baseQuery(args, api, extraOptions);
       }
     } else {
-      // wait until the mutex is available without locking it
-      await mutex.waitForUnlock();
-      result = await baseQuery(args, api, extraOptions);
+      api.dispatch(setAllowedToast());
+      if (result.error.status === 403) {
+        showErrorToast('You are not authorized to perform this action');
+      } else {
+        showErrorToast('Token expired');
+      }
     }
   }
   return result;
@@ -66,6 +77,15 @@ const baseQueryWithReauth: BaseQueryFn<
 export const coreApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Auth', 'Profile', 'Student', 'School'],
+  tagTypes: [
+    'Admin',
+    'Auth',
+    'Dashboard',
+    'Game',
+    'Profile',
+    'School',
+    'Score',
+    'Student',
+  ],
   endpoints: () => ({}),
 });
