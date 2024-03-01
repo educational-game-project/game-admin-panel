@@ -63,11 +63,9 @@ const baseQueryWithReauth: BaseQueryFn<
         result = await baseQuery(args, api, extraOptions);
       }
     } else {
-      api.dispatch(setAllowedToast());
       if (result.error.status === 403) {
+        api.dispatch(setAllowedToast());
         showErrorToast('You are not authorized to perform this action');
-      } else {
-        showErrorToast('Token expired');
       }
     }
   }
