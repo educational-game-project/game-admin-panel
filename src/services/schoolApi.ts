@@ -17,7 +17,6 @@ export const schoolApi = coreApi.injectEndpoints({
           method: 'POST',
           body: data,
         }),
-        invalidatesTags: ['School'],
       }
     ),
     getSchoolById: builder.mutation<SchoolSuccessResponse, SchoolIdRequest>({
@@ -26,7 +25,6 @@ export const schoolApi = coreApi.injectEndpoints({
         method: 'POST',
         body: id,
       }),
-      invalidatesTags: ['School'],
     }),
     addSchool: builder.mutation({
       query: (data) => {
@@ -43,7 +41,7 @@ export const schoolApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ['School'],
+      invalidatesTags: ['School', 'Dashboard'],
     }),
     updateSchool: builder.mutation({
       query: (data) => {
@@ -61,7 +59,7 @@ export const schoolApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ['School'],
+      invalidatesTags: ['School', 'Dashboard'],
     }),
     deleteSchool: builder.mutation<SuccessResponse, SchoolIdRequest>({
       query: (id) => ({
@@ -69,7 +67,7 @@ export const schoolApi = coreApi.injectEndpoints({
         method: 'DELETE',
         body: id,
       }),
-      invalidatesTags: ['School'],
+      invalidatesTags: ['School', 'Dashboard'],
     }),
   }),
 });

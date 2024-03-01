@@ -26,6 +26,7 @@ export const adminApi = coreApi.injectEndpoints({
     }),
     getActiveAdmin: builder.query({
       query: () => '/user/active',
+      providesTags: ['Admin'],
     }),
     addAdmin: builder.mutation({
       query: (data) => {
@@ -45,6 +46,7 @@ export const adminApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
+      invalidatesTags: ['Admin', 'Dashboard'],
     }),
     updateAdmin: builder.mutation({
       query: (data) => {
@@ -64,7 +66,7 @@ export const adminApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ['Student'],
+      invalidatesTags: ['Admin', 'Dashboard'],
     }),
     deleteAdmin: builder.mutation<SuccessResponse, AdminIdRequest>({
       query: (id) => ({
@@ -72,6 +74,7 @@ export const adminApi = coreApi.injectEndpoints({
         method: 'DELETE',
         body: id,
       }),
+      invalidatesTags: ['Admin', 'Dashboard'],
     }),
   }),
 });

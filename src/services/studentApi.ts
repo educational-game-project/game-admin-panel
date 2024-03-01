@@ -29,6 +29,7 @@ export const studentApi = coreApi.injectEndpoints({
     }),
     getActiveStudent: builder.query({
       query: () => '/user/student/active',
+      providesTags: ['Student'],
     }),
     addStudent: builder.mutation({
       query: (data) => {
@@ -47,6 +48,7 @@ export const studentApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
+      invalidatesTags: ['Student', 'Dashboard'],
     }),
     updateStudent: builder.mutation({
       query: (data) => {
@@ -66,6 +68,7 @@ export const studentApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
+      invalidatesTags: ['Student', 'Dashboard'],
     }),
     deleteStudent: builder.mutation<SuccessResponse, StudentIdRequest>({
       query: (id) => ({
@@ -73,7 +76,7 @@ export const studentApi = coreApi.injectEndpoints({
         method: 'DELETE',
         body: id,
       }),
-      invalidatesTags: ['Student'],
+      invalidatesTags: ['Student', 'Dashboard'],
     }),
   }),
 });
