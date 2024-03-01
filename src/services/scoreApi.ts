@@ -2,6 +2,8 @@ import { coreApi } from '../api/coreApi';
 import type {
   LeaderboardGetRequest,
   LeaderboardSuccessResponse,
+  ScoreChartRequest,
+  ScoreChartSuccessResponse,
   ScoreGetRequest,
   ScoreSuccessResponse,
 } from '../types';
@@ -25,7 +27,21 @@ export const scoreApi = coreApi.injectEndpoints({
         body: data,
       }),
     }),
+    getScoreChart: builder.mutation<
+      ScoreChartSuccessResponse,
+      ScoreChartRequest
+    >({
+      query: (data) => ({
+        url: '/score/chart',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetLeaderboardMutation, useGetScoreMutation } = scoreApi;
+export const {
+  useGetLeaderboardMutation,
+  useGetScoreChartMutation,
+  useGetScoreMutation,
+} = scoreApi;
