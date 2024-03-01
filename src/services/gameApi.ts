@@ -46,6 +46,7 @@ export const gameApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
+      invalidatesTags: ['Game', 'Dashboard'],
     }),
     updateGame: builder.mutation({
       query: (data) => {
@@ -70,6 +71,7 @@ export const gameApi = coreApi.injectEndpoints({
           formData: true,
         };
       },
+      invalidatesTags: ['Game', 'Dashboard'],
     }),
     deleteGame: builder.mutation<SuccessResponse, GameIdRequest>({
       query: (id) => ({
@@ -77,6 +79,7 @@ export const gameApi = coreApi.injectEndpoints({
         method: 'DELETE',
         body: id,
       }),
+      invalidatesTags: ['Game', 'Dashboard'],
     }),
   }),
 });
