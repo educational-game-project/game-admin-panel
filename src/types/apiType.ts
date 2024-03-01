@@ -88,6 +88,22 @@ interface School {
   createdAtString?: string;
   updatedAtString?: string;
   lastUpdatedBy?: string | null;
+  __v?: number;
+}
+interface GameLite {
+  _id: string;
+  name: string;
+  author: string;
+  description: string;
+  category: string;
+  maxLevel: number;
+  maxRetry: number;
+  maxTime?: number;
+  deletedAt: string | null;
+  images: string[];
+  addedBy: string;
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }
 interface Game {
@@ -112,6 +128,7 @@ interface Score {
   level: number;
   value: number;
   createdAt: string;
+  gamePlayed?: number;
 }
 interface Leaderboard {
   _id: string;
@@ -181,53 +198,41 @@ interface GameSuccessResponse extends SuccessResponse {
 }
 interface ScoreResponse {
   scores: Score[];
-  game: {
-    _id: string;
-    name: string;
-    author: string;
-    description: string;
-    category: string;
-    maxLevel: number;
-    maxRetry: number;
-    deletedAt: string | null;
-    images: string[];
-    addedBy: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  };
+  game: GameLite;
 }
 interface ScoreSuccessResponse extends SuccessResponse {
   data: ScoreResponse[];
 }
-interface LeaderboardResponse {
-  game: {
-    maxTime: number;
-    _id: string;
-    name: string;
-    author: string;
-    description: string;
-    category: string;
-    maxLevel: number;
-    maxRetry: number;
-    deletedAt: string | null;
-    images: string[];
-    addedBy: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
+interface ScoreChartSuccessResponse extends SuccessResponse {
+  data: {
+    scores: Score[][];
+    game: GameLite;
   };
+}
+interface LeaderboardResponse {
+  game: GameLite;
   school: School;
   leaderboard: Leaderboard[];
 }
 interface LeaderboardSuccessResponse extends SuccessResponse {
   data: LeaderboardResponse[];
 }
+interface DashboardSuccessResponse extends SuccessResponse {
+  studentsCount: number;
+  activeStudents: number;
+  adminCount: number;
+  activeAdmin: number;
+  gameCount: number;
+  games: Game[];
+  schoolCount: number;
+  schools: School[];
+}
 
 export type {
   Admin,
   AdminListSuccessResponse,
   AdminSuccessResponse,
+  DashboardSuccessResponse,
   ErrorResponse,
   Image,
   Game,
@@ -242,6 +247,7 @@ export type {
   SchoolSuccessResponse,
   Score,
   ScoreResponse,
+  ScoreChartSuccessResponse,
   ScoreSuccessResponse,
   Student,
   StudentListSuccessResponse,

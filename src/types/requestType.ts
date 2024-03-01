@@ -82,6 +82,10 @@ interface ScoreGetRequest {
 interface LeaderboardGetRequest {
   gameId: string;
 }
+interface ScoreChartRequest {
+  userId: string;
+  gameId: string;
+}
 interface ChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
@@ -108,6 +112,7 @@ export type {
   SchoolIdRequest,
   SchoolUpdateRequest,
   ScoreGetRequest,
+  ScoreChartRequest,
   StudentAddRequest,
   StudentIdRequest,
   StudentUpdateRequest,
