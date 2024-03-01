@@ -30,7 +30,6 @@ import Game from './pages/Game';
 import Home from './pages/Home';
 import Leaderboard from './pages/Game/Leaderboard';
 import Login from './pages/Auth/Login';
-import Preferences from './pages/Preferences';
 import Profile from './pages/Profile';
 import ScoreStudent from './pages/Students/ScoreStudent';
 import Students from './pages/Students';
@@ -132,10 +131,6 @@ function App() {
                   <Route
                     path="/analysis"
                     element={<Analysis />}
-                  />
-                  <Route
-                    path="/preferences"
-                    element={<Preferences />}
                   />
                   <Route
                     path="/profile/account"
