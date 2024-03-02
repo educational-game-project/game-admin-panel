@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   createColumnHelper,
@@ -23,6 +23,7 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  FilterIcon,
   Loader2Icon,
   SearchIcon,
 } from 'lucide-react';
@@ -31,6 +32,7 @@ import { longMonthDate } from '../../utilities/dateUtils';
 import { transformStringPlus } from '../../utilities/stringUtils';
 
 import type { NormalizedScore, Score, ScoreResponse } from '../../types';
+import { Menu, Transition } from '@headlessui/react';
 
 function ScoreStudent() {
   const [filter, setFilter] = useState('');
@@ -41,7 +43,7 @@ function ScoreStudent() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { studentId } = useParams();
-  const [getScore, { data: scores, isError, isLoading }] =
+  const [getScore, { data: scores, isSuccess, isError, isLoading }] =
     useGetScoreMutation();
   const [getStudentById, { data: student, isLoading: isLoadingGet }] =
     useGetStudentByIdMutation();
@@ -67,6 +69,18 @@ function ScoreStudent() {
       return [];
     }
     return normalizeScores(scores.data);
+  }, [scores]);
+  const listGame: string[] = useMemo(() => {
+    if (!scores || scores?.data.length === 0) {
+      return [];
+    }
+    const uniqueGameNames = new Set<string>();
+
+    scores.data.forEach((item) => {
+      uniqueGameNames.add(item.game.name);
+    });
+
+    return Array.from(uniqueGameNames);
   }, [scores]);
 
   const fetchScore = async (id: string) => {
@@ -267,7 +281,68 @@ function ScoreStudent() {
                   />
                 </div>
               </div>
-              <div className="">
+              <div className="flex items-center space-x-8">
+                {/* filter */}
+                <div className="">
+                  <Menu
+                    as="div"
+                    className="relative inline-block text-right">
+                    <div>
+                      <Menu.Button className="group/filter inline-flex w-full items-center justify-center rounded-md px-2 py-1.5 font-medium text-3.25xs text-gray-600 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 dark:bg-gray-700 dark:hover:bg-indigo-600 dark:text-gray-200 dark:hover:text-indigo-100">
+                        <FilterIcon
+                          className="mr-1.5 stroke-gray-600 group-hover/filter:stroke-indigo-600 transition dark:stroke-gray-200 dark:group-hover/filter:stroke-indigo-100"
+                          aria-hidden="true"
+                          size={17}
+                        />
+                        Filter
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95">
+                      <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+                        <div className="px-1 py-1 ">
+                          {isLoading || isLoadingGet ? (
+                            <Menu.Item>
+                              <button className="flex w-full items-center rounded-md px-2 py-2 text-sm">
+                                Loading...
+                              </button>
+                            </Menu.Item>
+                          ) : null}
+                          {isSuccess && listGame.length !== 0
+                            ? listGame?.map((item, index) => (
+                                <Menu.Item key={index}>
+                                  {({ active }) => (
+                                    <button
+                                      className={`${
+                                        active
+                                          ? 'bg-violet-500 text-white'
+                                          : 'text-gray-900'
+                                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                      {active ? 'icon active' : 'icon inactive'}
+                                      {item}
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                              ))
+                            : null}
+                          {isSuccess && listGame.length === 0 ? (
+                            <Menu.Item>
+                              <button className="flex w-full items-center rounded-md px-2 py-2 text-sm">
+                                Tidak ada data permainan.
+                              </button>
+                            </Menu.Item>
+                          ) : null}
+                        </div>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                </div>
                 <p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
                   {table.getState().pagination.pageIndex + 1}/
                   {table.getPageCount()}

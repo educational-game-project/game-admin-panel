@@ -6,6 +6,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import { showErrorToast } from '../components/Toast';
 
 import type { Game, School } from '../types';
+import { getPercentage } from '../utilities/numberUtils';
 
 function Home() {
   const dispatch = useAppDispatch();
@@ -38,30 +39,67 @@ function Home() {
             <h3 className="mb-4 text-lg font-semibold">Analitik</h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               <div className="bg-gray-100 p-4 rounded-lg dark:bg-gray-700">
-                <h5 className="mb-2 text-lg font-semibold">Total Game</h5>
-                <p>{dashboards?.data?.gameCount}</p>
+                <div className="grid grid-cols-2 gap-y-3">
+                  <div className="">
+                    <h5 className="text-2xl font-bold mb-0.5">
+                      {dashboards?.data?.gameCount}
+                    </h5>
+                    <h5 className="mb-0.5">Total Permainan</h5>
+                  </div>
+                </div>
               </div>
               <div className="bg-gray-100 p-4 rounded-lg dark:bg-gray-700">
-                <h5 className="mb-2 text-lg font-semibold">Total Sekolah</h5>
-                <p>{dashboards?.data?.schoolCount}</p>
+                <div className="grid grid-cols-2 gap-y-3">
+                  <div className="">
+                    <h5 className="text-2xl font-bold mb-0.5">
+                      {dashboards?.data?.schoolCount}
+                    </h5>
+                    <h5 className="mb-0.5">Total Sekolah</h5>
+                  </div>
+                </div>
               </div>
               <div className="bg-gray-100 p-4 rounded-lg dark:bg-gray-700">
-                <h5 className="mb-2 text-lg font-semibold">Total Siswa</h5>
-                <p>{dashboards?.data?.studentsCount}</p>
+                <div className="grid grid-cols-2 gap-y-3">
+                  <div className="">
+                    <h5 className="text-2xl font-bold mb-0.5">
+                      {dashboards?.data?.adminCount}
+                    </h5>
+                    <h5 className="mb-0.5">Total Admin</h5>
+                    <p className="text-gray-400 text-xs">
+                      {dashboards?.data?.activeAdmin} admin aktif
+                    </p>
+                  </div>
+                  <div className="">
+                    <p className="text-2xl font-bold">
+                      {getPercentage(
+                        dashboards?.data?.activeAdmin,
+                        dashboards?.data?.adminCount
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
               <div className="bg-gray-100 p-4 rounded-lg dark:bg-gray-700">
-                <h5 className="mb-2 text-lg font-semibold">Admin Aktif</h5>
-                <p>{dashboards?.data?.activeAdmin}</p>
-                <p className="text-gray-500 text-sm">
-                  {dashboards?.data?.adminCount} total admin
-                </p>
-              </div>
-              <div className="bg-gray-100 p-4 rounded-lg dark:bg-gray-700">
-                <h5 className="mb-2 text-lg font-semibold">Siswa Aktif</h5>
-                <p>{dashboards?.data?.activeStudents}</p>
-                <p className="text-gray-500 text-sm">
-                  {dashboards?.data?.studentsCount} total siswa
-                </p>
+                <div className="grid grid-cols-2 gap-y-3">
+                  <div className="">
+                    <h5 className="text-2xl font-bold mb-0.5">
+                      {dashboards?.data?.studentsCount}
+                    </h5>
+                    <h5 className="mb-0.5">Total Siswa</h5>
+                    <p className="text-gray-400 text-xs">
+                      {dashboards?.data?.activeStudents} siswa aktif
+                    </p>
+                  </div>
+                  <div className="">
+                    <p className="text-2xl font-bold">
+                      {' '}
+                      {getPercentage(
+                        dashboards?.data?.activeStudents,
+                        dashboards?.data?.studentsCount
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -75,7 +113,7 @@ function Home() {
                   key={game._id}
                   className="bg-gray-100 p-4 rounded-lg dark:bg-gray-700">
                   <h5 className="mb-2 text-lg font-semibold">{game.name}</h5>
-                  <p>{game.description}</p>
+                  <p className="text-gray-400">{game.description}</p>
                 </div>
               ))}
             </div>
@@ -90,7 +128,7 @@ function Home() {
                   key={school._id}
                   className="bg-gray-100 p-4 rounded-lg dark:bg-gray-700">
                   <h5 className="mb-2 text-lg font-semibold">{school.name}</h5>
-                  <p>{school.address}</p>
+                  <p className="text-gray-400">{school.address}</p>
                 </div>
               ))}
             </div>
