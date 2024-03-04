@@ -52,6 +52,7 @@ const baseQueryWithReauth: BaseQueryFn<
             result = await baseQuery(args, api, extraOptions);
           } else {
             api.dispatch(setUnAuth());
+            showErrorToast('Your session has expired');
           }
         } finally {
           // release must be called once the mutex should be released again.
