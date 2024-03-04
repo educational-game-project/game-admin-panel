@@ -8,11 +8,11 @@ import { setBreadcrumb } from '../../features/breadcrumbSlice';
 import { showErrorToast } from '../../components/Toast';
 import Breadcrumb from '../../components/Breadcrumb';
 import ScoreTable from './components/ScoreTable';
+import GameTable from './components/GameTable';
 import UserScore from './components/UserScore';
 import { Loader2Icon } from 'lucide-react';
 
 import type { Score } from '../../types';
-import GameTable from './components/GameTable';
 
 function Score() {
   const [isLargeView, setIsLargeView] = useState<boolean>(

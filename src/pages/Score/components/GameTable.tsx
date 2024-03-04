@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { AxisOptions, Chart } from 'react-charts';
 import {
   createColumnHelper,
   flexRender,
@@ -9,7 +10,11 @@ import {
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
+import { useAppDispatch } from '../../../app/hooks';
+import { useGetScoreChartMutation } from '../../../services/scoreApi';
 import ModalDisplay from '../../../components/ModalDisplay';
+import { setAllowedToast } from '../../../features/toastSlice';
+import { showErrorToast } from '../../../components/Toast';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -21,10 +26,7 @@ import {
 } from 'lucide-react';
 
 import type { GameTableProps, GameTableState } from '../../../types';
-import { useGetScoreChartMutation } from '../../../services/scoreApi';
-import { useAppDispatch } from '../../../app/hooks';
-import { setAllowedToast } from '../../../features/toastSlice';
-import { showErrorToast } from '../../../components/Toast';
+import useDemoConfig from './UseDemoConfig';
 
 function GameTable({
   scores,
@@ -132,6 +134,38 @@ function GameTable({
     setIsOpenChart(true);
     fetchScoreChart(gameId);
   };
+
+  // ====================================
+  const { data, randomizeData } = useDemoConfig({
+    series: 1,
+    // dataType: 'ordinal',
+    dataType: 'time',
+    datums: 20,
+  });
+
+  const primaryAxis = useMemo<
+    AxisOptions<(typeof data)[number]['data'][number]>
+  >(
+    () => ({
+      // getValue: (datum) => datum.primary,
+      getValue: (datum) => datum.primary as Date,
+    }),
+    []
+  );
+
+  const secondaryAxes = useMemo<
+    AxisOptions<(typeof data)[number]['data'][number]>[]
+  >(
+    () => [
+      {
+        getValue: (datum) => datum.secondary,
+        stacked: true,
+        // or
+        // elementType: 'area',
+      },
+    ],
+    []
+  );
 
   return (
     <>
@@ -356,16 +390,34 @@ function GameTable({
       </div>
       <ModalDisplay
         title="Analisis Skor"
-        closeModal={closeModalChart}
+        onCloseModal={closeModalChart}
         isOpen={isOpenChart}>
         <div className="">
           {isLoadingChart && <p>Loading...</p>}
           {isSuccessChart && (
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Your request has been successfully processed. Here is the chart of{' '}
-              {scoreCharts?.data?.game?.name} game score. . You can close this
-              modal by clicking the close button.
-            </p>
+            <div className="">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                Your request has been successfully processed. Here is the chart
+                of {scoreCharts?.data?.game?.name} game score. . You can close
+                this modal by clicking the close button.
+              </p>
+              <div className="mb-6">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={randomizeData}>
+                  Randomize Data
+                </button>
+              </div>
+              <div className="w-full h-96">
+                <Chart
+                  options={{
+                    data,
+                    primaryAxis,
+                    secondaryAxes,
+                  }}
+                />
+              </div>
+            </div>
           )}
         </div>
       </ModalDisplay>
