@@ -6,7 +6,7 @@ import type { ModalDisplayProps } from '../types';
 function ModalDisplay({
   children,
   isOpen,
-  closeModal,
+  onCloseModal,
   title,
 }: ModalDisplayProps) {
   return (
@@ -17,7 +17,7 @@ function ModalDisplay({
       <Dialog
         as="div"
         className="relative z-30"
-        onClose={closeModal}>
+        onClose={() => true}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -46,6 +46,14 @@ function ModalDisplay({
                   {title}
                 </Dialog.Title>
                 <div className="mt-2">{children}</div>
+                <div className="mt-4 flex justify-end">
+                  <button
+                    type="button"
+                    className="leading-normal inline-flex justify-center rounded-md border border-gray-300 bg-transparent px-4 py-1.5 text-sm font-medium text-gray-900 transition hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:focus-visible:ring-2 disabled:focus-visible:ring-gray-500 disabled:focus-visible:ring-offset-2 dark:border-gray-500 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:border-gray-600 dark:disabled:bg-gray-700 dark:disabled:hover:border-gray-500"
+                    onClick={onCloseModal}>
+                    Batal
+                  </button>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
