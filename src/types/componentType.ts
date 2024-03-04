@@ -94,7 +94,7 @@ interface HeaderProfileProps {
 interface ModalDisplayProps {
   children: ReactNode;
   isOpen: boolean;
-  closeModal: () => void;
+  onCloseModal: () => void;
   title: string;
 }
 
