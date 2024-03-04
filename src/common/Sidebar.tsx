@@ -86,9 +86,9 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
         <div className="px-4 py-5 flex justify-between items-center">
           <Link to="/">
             <img
-              src="https://img.logoipsum.com/297.svg"
+              src="https://res.cloudinary.com/sningratt/image/upload/v1709561256/assets/kognitif_game_logo.svg"
               className={`overflow-hidden transition-all ${
-                isExpanded ? 'w-32' : 'w-0'
+                isExpanded ? "w-32" : "w-0"
               } dark:filter-invert dark:grayscale-100`}
               alt="logo admin panel"
             />
@@ -96,9 +96,10 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           <button
             onClick={handleSidebarToggle}
             className={`p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ${
-              isExpanded ? 'm-0' : 'mx-auto'
+              isExpanded ? "m-0" : "mx-auto"
             } dark:bg-gray-700 dark:hover:bg-gray-600`}
-            title={`${isExpanded ? 'Sidebar Close' : 'Sidebar Open'}`}>
+            title={`${isExpanded ? "Sidebar Close" : "Sidebar Open"}`}
+          >
             {isExpanded ? (
               <ChevronFirst className="dark:stroke-gray-300" />
             ) : (
@@ -114,10 +115,11 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             ref={toggleProfileRef}
             className={`flex p-2 rounded-md transition-all-200 text-left group ${
               isProfileLocation
-                ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 dark:from-indigo-600 dark:to-indigo-400'
-                : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600'
+                ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 dark:from-indigo-600 dark:to-indigo-400"
+                : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
             }`}
-            onClick={() => setProfileToggle((curr) => !curr)}>
+            onClick={() => setProfileToggle((curr) => !curr)}
+          >
             <img
               src={
                 user?.image?.fileLink ??
@@ -127,14 +129,15 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               }
               alt={`${user?.name} profile`}
               className={`${
-                isExpanded ? 'w-10 h-10' : 'w-9 h-9'
+                isExpanded ? "w-10 h-10" : "w-9 h-9"
               } rounded-full object-cover object-center`}
             />
             <div
               className={`
               flex justify-between items-center
-              overflow-hidden transition-all ${isExpanded ? 'w-48 ml-3' : 'w-0'}
-          `}>
+              overflow-hidden transition-all ${isExpanded ? "w-48 ml-3" : "w-0"}
+          `}
+            >
               <div className="leading-4 max-w-40">
                 <h4 className="font-semibold mb-0.5 text-sm line-clamp-1 text-ellipsis">
                   {user?.name}
@@ -142,9 +145,10 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                 <span
                   className={`text-xs text-gray-600 line-clamp-1 block text-ellipsis ${
                     isProfileLocation
-                      ? 'dark:text-gray-300'
-                      : 'dark:text-gray-400'
-                  }`}>
+                      ? "dark:text-gray-300"
+                      : "dark:text-gray-400"
+                  }`}
+                >
                   {user?.email}
                 </span>
               </div>
@@ -159,8 +163,9 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           bg-gray-800 text-slate-200 text-sm
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 ${
-            profileToggle ? 'hidden' : 'block'
-          } dark:bg-gray-950 dark:text-slate-300 z-30`}>
+            profileToggle ? "hidden" : "block"
+          } dark:bg-gray-950 dark:text-slate-300 z-30`}
+              >
                 {user?.name}
                 <div className="absolute top-1/2 -left-2 -mt-1 border-4 border-solid border-t-transparent border-r-gray-800 border-b-transparent border-l-transparent dark:border-r-gray-950" />
               </div>
@@ -172,9 +177,10 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
           ref={modalProfileRef}
           className={`absolute bottom-0 -right-60 transition-all-200 -translate-x-3 ${
             profileToggle
-              ? 'visible opacity-100 z-10 translate-x-0'
-              : 'invisible opacity-20 -z-10'
-          }`}>
+              ? "visible opacity-100 z-10 translate-x-0"
+              : "invisible opacity-20 -z-10"
+          }`}
+        >
           <div className="bg-white w-56 rounded-lg p-3 shadow border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex mb-2.5">
               <img
@@ -193,18 +199,19 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     {user?.name}
                   </h4>
                   <span className="text-xs text-gray-600 line-clamp-1 block text-ellipsis dark:text-gray-400/90">
-                    {user?.role === 'Admin'
-                      ? 'Administrator'
-                      : 'Super Administrator'}
+                    {user?.role === "Admin"
+                      ? "Administrator"
+                      : "Super Administrator"}
                   </span>
                 </div>
               </div>
             </div>
             <div
               className="relative flex items-center justify-between py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group text-gray-600 dark:text-gray-400"
-              title="Dark Mode">
+              title="Dark Mode"
+            >
               <div className="flex items-center">
-                {theme === 'dark' ? (
+                {theme === "dark" ? (
                   <MoonIcon size={17} />
                 ) : (
                   <SunIcon size={17} />
@@ -218,7 +225,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                       id="darkMode"
                       name="darkMode"
                       type="checkbox"
-                      checked={theme === 'dark'}
+                      checked={theme === "dark"}
                       onChange={() => dispatch(toggleTheme())}
                       className="peer/darkMode opacity-0 w-0 h-0"
                     />
@@ -231,25 +238,27 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
             <div className="">
               <Link
                 className={`relative flex items-center py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group ${
-                  currentPath === 'profile'
-                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
-                    : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
+                  currentPath === "profile"
+                    ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100"
+                    : "hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400"
                 }`}
                 to="/profile/account"
                 onClick={() => setProfileToggle(false)}
-                title="Account Settings">
+                title="Account Settings"
+              >
                 <UserCog size={17} />
                 <span className="ml-2.5 text-sm">Pengaturan Akun</span>
               </Link>
               <Link
                 className={`relative flex items-center py-1.5 px-2 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
-                  currentPath === 'activity'
-                    ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100'
-                    : 'hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400'
+                  currentPath === "activity"
+                    ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800 dark:from-indigo-600 dark:to-indigo-400 dark:text-gray-100"
+                    : "hover:bg-indigo-50 text-gray-600 dark:hover:bg-gray-700 dark:text-gray-400"
                 }`}
                 to="/activity"
                 onClick={() => setProfileToggle(false)}
-                title="Activity">
+                title="Activity"
+              >
                 <Activity size={17} />
                 <span className="ml-2.5 text-sm">Aktivitas</span>
               </Link>
@@ -259,24 +268,28 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
               className="group profile-logout relative flex items-center py-1.5 px-2 font-medium rounded-md cursor-pointer transition-colors hover:bg-red-50 hover:text-red-500 text-gray-600 w-full dark:text-gray-400 dark:hover:bg-red-700/20 dark:hover:text-red-600"
               title="Logout"
               onClick={handleLogout}
-              role="button">
+              role="button"
+            >
               {isLoading ? (
                 <svg
                   className="animate-spin-fast h-4.5 w-4.5 group-hover-[.profile-logout]:text-red-500 text-gray-600 inline-block dark:group-hover-[.profile-logout]:text-red-600 dark:text-gray-400"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  viewBox="0 0 24 24">
+                  viewBox="0 0 24 24"
+                >
                   <circle
                     className="opacity-25"
                     cx="12"
                     cy="12"
                     r="10"
                     stroke="currentColor"
-                    strokeWidth="4"></circle>
+                    strokeWidth="4"
+                  ></circle>
                   <path
                     className="opacity-75"
                     fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
               ) : (
                 <LogOut size={17} />
