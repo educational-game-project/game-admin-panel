@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
 import type { ModalDisplayProps } from '../types';
+import { XIcon } from 'lucide-react';
 
 function ModalDisplay({
   children,
@@ -39,19 +40,22 @@ function ModalDisplay({
               leave="ease-in duration-200"
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95">
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-gray-800">
+              <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-gray-800 relative">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
                   {title}
                 </Dialog.Title>
                 <div className="mt-2">{children}</div>
-                <div className="mt-4 flex justify-end">
+                <div className="absolute top-5 right-5">
                   <button
                     type="button"
-                    className="leading-normal inline-flex justify-center rounded-md border border-gray-300 bg-transparent px-4 py-1.5 text-sm font-medium text-gray-900 transition hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:focus-visible:ring-2 disabled:focus-visible:ring-gray-500 disabled:focus-visible:ring-offset-2 dark:border-gray-500 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:border-gray-600 dark:disabled:bg-gray-700 dark:disabled:hover:border-gray-500"
+                    className="size-10 rounded-full flex items-center justify-center bg-gray-50 transition hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-700/60"
                     onClick={onCloseModal}>
-                    Batal
+                    <XIcon
+                      size={20}
+                      className="stroke-gray-800 dark:stroke-gray-300"
+                    />
                   </button>
                 </div>
               </Dialog.Panel>
