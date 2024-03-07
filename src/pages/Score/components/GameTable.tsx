@@ -1,5 +1,14 @@
 import { useMemo, useState } from 'react';
-import { AxisOptions, Chart } from 'react-charts';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import {
   createColumnHelper,
   flexRender,
@@ -24,17 +33,24 @@ import {
   ChevronDownIcon,
   SearchIcon,
 } from 'lucide-react';
+import { transformInteger } from '../../../utilities/numberUtils';
 
-import type { GameTableProps, GameTableState } from '../../../types';
-import useDemoConfig from './UseDemoConfig';
+import type {
+  GameTableProps,
+  GameTableState,
+  NormalizeScoreChartDataEntry,
+  ScoreChartSuccessResponse,
+} from '../../../types';
 
 function GameTable({
   scores,
   isLoading,
+  isLoadingUser,
   isLargeView,
   isError,
   fetchScore,
   studentId,
+  userData,
 }: GameTableProps) {
   const [filter, setFilter] = useState('');
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -135,36 +151,36 @@ function GameTable({
     fetchScoreChart(gameId);
   };
 
-  // ====================================
-  const { data, randomizeData } = useDemoConfig({
-    series: 1,
-    // dataType: 'ordinal',
-    dataType: 'time',
-    datums: 20,
-  });
+  const normalizeScoreChart = (
+    data: ScoreChartSuccessResponse['data'] | undefined
+  ) => {
+    if (!data || !data.scores || !Array.isArray(data.scores)) {
+      return [];
+    }
 
-  const primaryAxis = useMemo<
-    AxisOptions<(typeof data)[number]['data'][number]>
-  >(
-    () => ({
-      // getValue: (datum) => datum.primary,
-      getValue: (datum) => datum.primary as Date,
-    }),
-    []
-  );
+    const groupedData: Record<string, NormalizeScoreChartDataEntry> =
+      data.scores.flat().reduce((acc, entry) => {
+        const level = entry.level;
+        const gamePlayedKey = `gamePlayed${entry.gamePlayed}`;
+        const transformedValue = transformInteger(entry.value);
 
-  const secondaryAxes = useMemo<
-    AxisOptions<(typeof data)[number]['data'][number]>[]
-  >(
-    () => [
-      {
-        getValue: (datum) => datum.secondary,
-        stacked: true,
-        // or
-        // elementType: 'area',
-      },
-    ],
-    []
+        if (!acc[level]) {
+          const levelName = `Lvl. ${level}`;
+          acc[level] = { name: levelName } as NormalizeScoreChartDataEntry;
+        }
+
+        acc[level][gamePlayedKey] = transformedValue;
+
+        return acc;
+      }, {} as Record<string, NormalizeScoreChartDataEntry>);
+
+    // Convert the grouped data object into an array
+    return Object.values(groupedData);
+  };
+
+  const dataCharts = useMemo(
+    () => normalizeScoreChart(scoreCharts?.data),
+    [scoreCharts]
   );
 
   return (
@@ -393,29 +409,45 @@ function GameTable({
         onCloseModal={closeModalChart}
         isOpen={isOpenChart}>
         <div className="">
-          {isLoadingChart && <p>Loading...</p>}
+          {isLoadingChart || isLoadingUser ? <p>Loading...</p> : null}
           {isSuccessChart && (
             <div className="">
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                Your request has been successfully processed. Here is the chart
-                of {scoreCharts?.data?.game?.name} game score. . You can close
-                this modal by clicking the close button.
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-7">
+                Grafik perolehan skor{' '}
+                <span className="text-teal-600 dark:text-teal-500">
+                  {userData?.data?.name}
+                </span>{' '}
+                pada permainan{' '}
+                <span className="text-teal-600 dark:text-teal-500">
+                  {scoreCharts?.data?.game?.name}
+                </span>{' '}
+                dalam beberapa waktu terakhir.
               </p>
-              <div className="mb-6">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={randomizeData}>
-                  Randomize Data
-                </button>
-              </div>
-              <div className="w-full h-96">
-                <Chart
-                  options={{
-                    data,
-                    primaryAxis,
-                    secondaryAxes,
-                  }}
-                />
+              <div className="w-full h-96 mb-4">
+                <ResponsiveContainer>
+                  <BarChart
+                    width={730}
+                    height={250}
+                    data={dataCharts}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar
+                      dataKey="gamePlayed1"
+                      fill="#4b44c9"
+                    />
+                    <Bar
+                      dataKey="gamePlayed2"
+                      fill="#44c977"
+                    />
+                    <Bar
+                      dataKey="gamePlayed3"
+                      fill="#c94444"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           )}

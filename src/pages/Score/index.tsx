@@ -135,9 +135,11 @@ function Score() {
         fetchScore={fetchScore}
         isError={isError}
         isLoading={isLoading}
+        isLoadingUser={isLoadingGet}
         isLargeView={isLargeView}
         scores={scores}
         studentId={studentId}
+        userData={students}
       />
     </div>
   );

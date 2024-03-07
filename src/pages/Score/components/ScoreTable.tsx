@@ -56,6 +56,7 @@ function ScoreTable({
         createdAt: score.createdAt,
         gameId: game._id,
         gameName: game.name,
+        gamePlayed: score.gamePlayed,
       }));
     });
   };
@@ -93,6 +94,10 @@ function ScoreTable({
       }),
       columnHelper.accessor('gameName', {
         header: 'Nama Permainan',
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('gamePlayed', {
+        header: '#Gameplay',
         cell: (info) => info.getValue(),
       }),
       columnHelper.accessor('level', {
