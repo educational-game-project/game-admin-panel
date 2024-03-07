@@ -7,6 +7,10 @@ interface NormalizedScore {
   createdAt: string;
   gameId: string;
   gameName: string;
+  gamePlayed: number | undefined;
+}
+interface NormalizeScoreChartDataEntry {
+  [key: string]: number | string | undefined;
 }
 
-export type { NormalizedScore, ThemeState };
+export type { NormalizedScore, NormalizeScoreChartDataEntry, ThemeState };

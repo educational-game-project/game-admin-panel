@@ -73,16 +73,17 @@ interface UserScoreProps {
 interface GameTableProps {
   scores: ScoreSuccessResponse | undefined;
   isLoading: boolean;
+  isLoadingUser: boolean;
   isLargeView: boolean;
   isError: boolean;
   fetchScore: () => void;
   studentId: string | undefined;
+  userData: StudentSuccessResponse | undefined;
 }
 interface GameTableState {
   id: string;
   name: string;
 }
-
 // profile
 interface ProfileUserProps {
   user: User;
