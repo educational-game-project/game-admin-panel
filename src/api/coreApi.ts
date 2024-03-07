@@ -52,7 +52,7 @@ const baseQueryWithReauth: BaseQueryFn<
             result = await baseQuery(args, api, extraOptions);
           } else {
             api.dispatch(setAllowedToast());
-            showErrorToast('Your session has expired');
+            showErrorToast('Token expired. Silahkan login kembali');
             api.dispatch(setUnAuth());
           }
         } finally {
