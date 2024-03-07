@@ -1,5 +1,10 @@
 import type { ReactNode } from 'react';
-import type { Student, User } from './apiType';
+import type {
+  ScoreSuccessResponse,
+  Student,
+  StudentSuccessResponse,
+  User,
+} from './apiType';
 
 // alert dialog
 interface AlertDialogProps {
@@ -51,6 +56,34 @@ interface StudentTableProps {
   refetchStudent: () => void;
 }
 
+// score
+interface ScoreTableProps {
+  scores: ScoreSuccessResponse | undefined;
+  isLoading: boolean;
+  isLargeView: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  fetchScore: () => void;
+}
+interface UserScoreProps {
+  isLoading: boolean;
+  isLoadingGet: boolean;
+  students: StudentSuccessResponse | undefined;
+}
+interface GameTableProps {
+  scores: ScoreSuccessResponse | undefined;
+  isLoading: boolean;
+  isLoadingUser: boolean;
+  isLargeView: boolean;
+  isError: boolean;
+  fetchScore: () => void;
+  studentId: string | undefined;
+  userData: StudentSuccessResponse | undefined;
+}
+interface GameTableState {
+  id: string;
+  name: string;
+}
 // profile
 interface ProfileUserProps {
   user: User;
@@ -59,16 +92,28 @@ interface HeaderProfileProps {
   isProfilePage: boolean;
 }
 
+interface ModalDisplayProps {
+  children: ReactNode;
+  isOpen: boolean;
+  onCloseModal: () => void;
+  title: string;
+}
+
 export type {
   AlertDialogProps,
   Breadcrumb,
   BreadcrumbState,
   BreadcrumbIconProps,
   ButtonClipboardProps,
+  GameTableProps,
+  GameTableState,
   HeaderContainerProps,
   HeaderProfileProps,
+  ModalDisplayProps,
   ProfileUserProps,
+  ScoreTableProps,
   StudentTableProps,
   ToastState,
   ToastProviderProps,
+  UserScoreProps,
 };

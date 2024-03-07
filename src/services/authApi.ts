@@ -15,14 +15,14 @@ export const authApi = coreApi.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['Profile'],
+      invalidatesTags: ['Dashboard', 'Profile'],
     }),
     logout: builder.mutation<SuccessResponse, void>({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
       }),
-      invalidatesTags: ['Profile'],
+      invalidatesTags: ['Dashboard', 'Profile'],
     }),
     changePassword: builder.mutation<SuccessResponse, ChangePasswordRequest>({
       query: (data) => ({
@@ -30,7 +30,7 @@ export const authApi = coreApi.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Profile'],
+      invalidatesTags: ['Dashboard', 'Profile'],
     }),
   }),
 });

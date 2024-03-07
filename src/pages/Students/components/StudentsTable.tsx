@@ -216,6 +216,23 @@ function StudentsTable() {
         header: 'Sekolah',
         cell: (info) => info.getValue(),
       }),
+      columnHelper.accessor('isActive', {
+        header: 'Status',
+        cell: (info) => (
+          <div className="flex">
+            <div className="flex items-center space-x-1.5 px-2 py-0.75 rounded-full bg-gradient-to-b from-slate-50 via-gray-100 to-gray-200 to-90% dark:from-slate-800 dark:to-gray-900">
+              <div
+                className={`size-2.5 rounded-full blur-[2px] ${
+                  info.getValue() ? 'bg-green-500' : 'bg-red-400'
+                }`}
+              />
+              <div className="text-xs text-nowrap">
+                {info.getValue() ? 'Aktif' : 'Tidak aktif'}
+              </div>
+            </div>
+          </div>
+        ),
+      }),
       // action edit and delete
       columnHelper.display({
         id: 'action',
@@ -390,6 +407,9 @@ function StudentsTable() {
                     <td className="px-3 py-3.5">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
+                    <td className="px-3 py-3.5">
+                      <div className="skeleton-loader skeleton-sm w-full" />
+                    </td>
                     <td className="px-3 py-3.5 w-24">
                       <div className="skeleton-loader skeleton-sm w-full" />
                     </td>
@@ -398,7 +418,7 @@ function StudentsTable() {
               ) : student.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="text-center py-3 text-gray-500 dark:text-gray-400">
                     Tidak ada data siswa yang ditemukan.
                     {isError && (

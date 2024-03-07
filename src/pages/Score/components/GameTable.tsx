@@ -1,5 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import {
   createColumnHelper,
   flexRender,
@@ -10,85 +19,66 @@ import {
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
-import { useAppDispatch } from '../../app/hooks';
-import { useGetScoreMutation } from '../../services/scoreApi';
-import { useGetStudentByIdMutation } from '../../services/studentApi';
-import { setAllowedToast } from '../../features/toastSlice';
-import { setBreadcrumb } from '../../features/breadcrumbSlice';
-import { showErrorToast } from '../../components/Toast';
-import Breadcrumb from '../../components/Breadcrumb';
+import { useAppDispatch } from '../../../app/hooks';
+import { useGetScoreChartMutation } from '../../../services/scoreApi';
+import ModalDisplay from '../../../components/ModalDisplay';
+import { setAllowedToast } from '../../../features/toastSlice';
+import { showErrorToast } from '../../../components/Toast';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpIcon,
+  BarChart2Icon,
   ChevronDownIcon,
-  Loader2Icon,
   SearchIcon,
 } from 'lucide-react';
-import { transformInteger } from '../../utilities/numberUtils';
-import { longMonthDate } from '../../utilities/dateUtils';
-import { transformStringPlus } from '../../utilities/stringUtils';
+import { transformInteger } from '../../../utilities/numberUtils';
 
-import type { NormalizedScore, Score, ScoreResponse } from '../../types';
+import type {
+  GameTableProps,
+  GameTableState,
+  NormalizeScoreChartDataEntry,
+  ScoreChartSuccessResponse,
+} from '../../../types';
 
-function ScoreStudent() {
+function GameTable({
+  scores,
+  isLoading,
+  isLoadingUser,
+  isLargeView,
+  isError,
+  fetchScore,
+  studentId,
+  userData,
+}: GameTableProps) {
   const [filter, setFilter] = useState('');
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [isLargeView, setIsLargeView] = useState<boolean>(
-    window.innerWidth > 1024
-  );
-  const navigate = useNavigate();
+  const [isOpenChart, setIsOpenChart] = useState(false);
+
   const dispatch = useAppDispatch();
-  const { studentId } = useParams();
-  const [getScore, { data: scores, isError, isLoading }] =
-    useGetScoreMutation();
-  const [getStudentById, { data: student, isLoading: isLoadingGet }] =
-    useGetStudentByIdMutation();
+  const [
+    getScoreChart,
+    { data: scoreCharts, isLoading: isLoadingChart, isSuccess: isSuccessChart },
+  ] = useGetScoreChartMutation();
+
   const headerClass: Record<string, string> = {
     checkboxs: 'w-14 text-center',
     row_number: 'w-12',
   };
 
-  const normalizeScores = (data: ScoreResponse[]): NormalizedScore[] => {
-    return data.flatMap((item) => {
-      const { scores, game } = item;
-      return scores.map((score: Score) => ({
-        level: score.level,
-        value: score.value,
-        createdAt: score.createdAt,
-        gameId: game._id,
-        gameName: game.name,
-      }));
-    });
-  };
-  const score = useMemo(() => {
-    if (!scores || scores?.data.length === 0) {
-      return [];
+  const games: GameTableState[] = useMemo(() => {
+    if (scores?.data?.length) {
+      return scores.data.map((item) => {
+        const { _id, name } = item.game;
+        return { id: _id, name };
+      });
     }
-    return normalizeScores(scores.data);
+
+    return [];
   }, [scores]);
 
-  const fetchScore = async (id: string) => {
-    try {
-      await getScore({ userId: id }).unwrap();
-    } catch (error) {
-      dispatch(setAllowedToast());
-      showErrorToast('Data skor tidak ditemukan');
-      navigate('/student');
-    }
-  };
-  const fetchStudentById = async (id: string) => {
-    try {
-      await getStudentById({ id }).unwrap();
-    } catch (error) {
-      dispatch(setAllowedToast());
-      showErrorToast('Data siswa tidak ditemukan');
-      navigate('/student');
-    }
-  };
-
-  const columnHelper = createColumnHelper<NormalizedScore>();
+  const columnHelper = createColumnHelper<GameTableState>();
   const defaultColumns = useMemo(
     () => [
       columnHelper.display({
@@ -96,35 +86,44 @@ function ScoreStudent() {
         header: '#',
         cell: (info) => info?.row?.index + 1,
       }),
-      columnHelper.accessor('gameName', {
+      columnHelper.accessor('name', {
         header: 'Nama Permainan',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('level', {
-        header: 'Level',
-        cell: (info) => info.getValue(),
-      }),
-      columnHelper.accessor('value', {
-        header: 'Skor',
-        cell: (info) => transformInteger(info.getValue()),
-      }),
-      columnHelper.accessor('createdAt', {
-        header: 'Tanggal',
-        cell: (info) => longMonthDate(info.getValue()),
+      // action
+      columnHelper.display({
+        id: 'action',
+        header: '',
+        cell: (info) => (
+          <div className="flex space-x-5 px-2">
+            <button
+              className="relative group/tooltip_delete flex items-center px-2 py-0.75 rounded-md bg-lime-500/10"
+              onClick={() => openModalChart(info.row.original.id)}>
+              <BarChart2Icon
+                size={16}
+                className="text-lime-500 hover:text-lime-600 mr-1.5"
+              />
+              <span className="text-lime-600">Analisis</span>
+              <div className="absolute -top-0.75 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-800 text-slate-100 dark:bg-gray-950 dark:text-slate-300 px-2 py-1 rounded-md text-xs whitespace-nowrap opacity-0 group-hover/tooltip_delete:opacity-100 transition-all-200 pointer-events-none">
+                <p className="text-center">Tampilkan Chart</p>
+              </div>
+            </button>
+          </div>
+        ),
       }),
     ],
     [columnHelper]
   );
 
   const table = useReactTable({
-    data: score,
+    data: games,
     columns: defaultColumns,
     state: {
       globalFilter: filter,
       sorting,
     },
     enableRowSelection: true,
-    getCoreRowModel: getCoreRowModel<NormalizedScore>(),
+    getCoreRowModel: getCoreRowModel<GameTableState>(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -132,130 +131,73 @@ function ScoreStudent() {
     onSortingChange: setSorting,
   });
 
-  const handleResize = () => {
-    setIsLargeView(window.innerWidth > 1024);
+  const fetchScoreChart = async (gameId: string) => {
+    try {
+      await getScoreChart({
+        gameId,
+        userId: studentId ?? '',
+      }).unwrap();
+    } catch (error) {
+      dispatch(setAllowedToast());
+      showErrorToast('Data analisis skor tidak ditemukan.');
+    }
   };
 
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const closeModalChart = () => {
+    setIsOpenChart(false);
+  };
+  const openModalChart = (gameId: string) => {
+    setIsOpenChart(true);
+    fetchScoreChart(gameId);
+  };
 
-  useEffect(() => {
-    const newBreadcrumb = [
-      {
-        icon: 'student',
-        label: 'Student',
-        path: '/student',
-      },
-      {
-        icon: 'score',
-        label: 'Score',
-        path: `/student/score/${studentId}`,
-      },
-    ];
-    dispatch(setBreadcrumb(newBreadcrumb));
-  }, [dispatch, studentId]);
-  useEffect(() => {
-    if (studentId) {
-      fetchScore(studentId);
-      fetchStudentById(studentId);
+  const normalizeScoreChart = (
+    data: ScoreChartSuccessResponse['data'] | undefined
+  ) => {
+    if (!data || !data.scores || !Array.isArray(data.scores)) {
+      return [];
     }
-  }, [studentId]);
+
+    const groupedData: Record<string, NormalizeScoreChartDataEntry> =
+      data.scores.flat().reduce((acc, entry) => {
+        const level = entry.level;
+        const gamePlayedKey = `gamePlayed${entry.gamePlayed}`;
+        const transformedValue = transformInteger(entry.value);
+
+        if (!acc[level]) {
+          const levelName = `Lvl. ${level}`;
+          acc[level] = { name: levelName } as NormalizeScoreChartDataEntry;
+        }
+
+        acc[level][gamePlayedKey] = transformedValue;
+
+        return acc;
+      }, {} as Record<string, NormalizeScoreChartDataEntry>);
+
+    // Convert the grouped data object into an array
+    return Object.values(groupedData);
+  };
+
+  const dataCharts = useMemo(
+    () => normalizeScoreChart(scoreCharts?.data),
+    [scoreCharts]
+  );
 
   return (
-    <div>
-      <div className="mb-5">
-        <Breadcrumb />
-        <div className="flex items-center justify-between">
-          <div className="">
-            <h5 className="font-semibold text-3xl mb-1.5 flex items-center">
-              Skor
-              {isLoading || isLoadingGet ? (
-                <span className="translate-y-px">
-                  <Loader2Icon
-                    size={22}
-                    className="ml-3 animate-spin-fast stroke-gray-900 dark:stroke-gray-300"
-                  />
-                </span>
-              ) : (
-                ''
-              )}
-            </h5>
-            <p className="text-gray-500">
-              Lihat riwayat skor pemain di setiap permainan.
-            </p>
-          </div>
-          <div className="flex justify-end">
-            <Link
-              type="button"
-              className={`leading-normal inline-flex justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition ${
-                isLoading || isLoadingGet
-                  ? 'opacity-50 cursor-not-allowed bg-gray-200 dark:hover:!bg-gray-900'
-                  : 'bg-gray-50 hover:bg-gray-100'
-              } dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700`}
-              to="/student">
-              Kembali
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className="mb-5 flex">
-        <div
-          className={`bg-white p-5 rounded-xl dark:bg-gray-800 flex items-center ${
-            isLoading || isLoadingGet ? 'animate-pulse-fast' : ''
-          }`}>
-          {isLoading || isLoadingGet ? (
-            <>
-              <div className="">
-                <div className="skeleton-loader skeleton-sm !size-18 !rounded-full mr-3" />
-              </div>
-              <div className="">
-                <div className="skeleton-loader skeleton-sm w-40 mb-3" />
-                <div className="skeleton-loader skeleton-sm w-58 mb-2.5" />
-                <div className="skeleton-loader skeleton-sm w-58" />
-              </div>
-            </>
-          ) : (
-            <>
-              <figure className="mr-3 size-18 rounded-full block overflow-hidden">
-                <img
-                  src={
-                    student?.data?.image?.fileLink ??
-                    `https://ui-avatars.com/api/?name=${transformStringPlus(
-                      student?.data?.name
-                    )}&background=6d5Acd&color=fff`
-                  }
-                  alt={`${student?.data?.name} Profile`}
-                  className="w-full h-full object-cover object-center block"
-                />
-              </figure>
-              <div className="">
-                <p className="font-semibold text-lg mb-0.5">
-                  {student?.data?.name}
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  📧 {student?.data?.email || '-'}
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  💼 {student?.data?.school?.name || '-'}
-                </p>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+    <>
       <div className="bg-white p-5 rounded-xl dark:bg-gray-800">
+        <div className="mb-5">
+          <h4 className="font-semibold text-2xl mb-1">Daftar Permainan</h4>
+          <p className="text-gray-500">Tabel daftar permainan oleh pemain.</p>
+        </div>
         <div className="">
           <div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
             <div className="flex space-x-3 my-4 px-5 items-center justify-between">
               <div className="relative w-full">
                 <input
-                  id="searchScore"
+                  id="searchGame"
                   type="text"
-                  placeholder="Cari data skor..."
+                  placeholder="Cari data permainan..."
                   className="w-3/4 pl-10 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 dark:placeholder:text-gray-500"
                   value={filter ?? ''}
                   onChange={(e) => setFilter(String(e.target.value))}
@@ -326,7 +268,7 @@ function ScoreStudent() {
                 <tbody>
                   {isLoading ? (
                     Array.from({
-                      length: score.length !== 0 ? score.length : 5,
+                      length: games.length !== 0 ? games.length : 5,
                     }).map((_, index) => (
                       <tr
                         className="animate-pulse-fast border-b border-gray-20 dark:border-gray-600"
@@ -337,28 +279,22 @@ function ScoreStudent() {
                         <td className="px-3 py-3.5">
                           <div className="skeleton-loader skeleton-sm w-full" />
                         </td>
-                        <td className="px-3 py-3.5">
-                          <div className="skeleton-loader skeleton-sm w-full" />
-                        </td>
-                        <td className="px-3 py-3.5">
-                          <div className="skeleton-loader skeleton-sm w-full" />
-                        </td>
-                        <td className="px-3 py-3.5">
+                        <td className="px-3 py-3.5 w-18">
                           <div className="skeleton-loader skeleton-sm w-full" />
                         </td>
                       </tr>
                     ))
-                  ) : score.length === 0 || Object.keys(score).length === 0 ? (
+                  ) : games.length === 0 || Object.keys(games).length === 0 ? (
                     <tr>
                       <td
-                        colSpan={5}
+                        colSpan={3}
                         className="text-center py-3 text-gray-500 dark:text-gray-400">
-                        Tidak ada data skor yang ditemukan.
+                        Tidak ada data permainan yang ditemukan.
                         {isError && (
                           <span
                             aria-label="button"
                             className="cursor-pointer text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-                            onClick={() => fetchScore(studentId ?? '')}>
+                            onClick={fetchScore}>
                             {' '}
                             Coba lagi.
                           </span>
@@ -423,7 +359,7 @@ function ScoreStudent() {
                 </div>
                 {/* total data */}
                 <p className="text-gray-500 ml-3 dark:text-gray-400">
-                  dari {score.length ?? 0} data
+                  dari {games.length ?? 0} data
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -468,8 +404,57 @@ function ScoreStudent() {
           </div>
         </div>
       </div>
-    </div>
+      <ModalDisplay
+        title="Analisis Skor"
+        onCloseModal={closeModalChart}
+        isOpen={isOpenChart}>
+        <div className="">
+          {isLoadingChart || isLoadingUser ? <p>Loading...</p> : null}
+          {isSuccessChart && (
+            <div className="">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-7">
+                Grafik perolehan skor{' '}
+                <span className="text-teal-600 dark:text-teal-500">
+                  {userData?.data?.name}
+                </span>{' '}
+                pada permainan{' '}
+                <span className="text-teal-600 dark:text-teal-500">
+                  {scoreCharts?.data?.game?.name}
+                </span>{' '}
+                dalam beberapa waktu terakhir.
+              </p>
+              <div className="w-full h-96 mb-4">
+                <ResponsiveContainer>
+                  <BarChart
+                    width={730}
+                    height={250}
+                    data={dataCharts}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar
+                      dataKey="gamePlayed1"
+                      fill="#4b44c9"
+                    />
+                    <Bar
+                      dataKey="gamePlayed2"
+                      fill="#44c977"
+                    />
+                    <Bar
+                      dataKey="gamePlayed3"
+                      fill="#c94444"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+        </div>
+      </ModalDisplay>
+    </>
   );
 }
 
-export default ScoreStudent;
+export default GameTable;

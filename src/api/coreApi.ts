@@ -51,6 +51,8 @@ const baseQueryWithReauth: BaseQueryFn<
             // retry the initial query
             result = await baseQuery(args, api, extraOptions);
           } else {
+            api.dispatch(setAllowedToast());
+            showErrorToast('Token expired. Silahkan login kembali');
             api.dispatch(setUnAuth());
           }
         } finally {

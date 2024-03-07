@@ -31,7 +31,7 @@ import Home from './pages/Home';
 import Leaderboard from './pages/Game/Leaderboard';
 import Login from './pages/Auth/Login';
 import Profile from './pages/Profile';
-import ScoreStudent from './pages/Students/ScoreStudent';
+import Score from './pages/Score';
 import Students from './pages/Students';
 import School from './pages/School';
 
@@ -126,7 +126,7 @@ function App() {
                   />
                   <Route
                     path="/student/score/:studentId"
-                    element={<ScoreStudent />}
+                    element={<Score />}
                   />
                   <Route
                     path="/analysis"
