@@ -93,3 +93,8 @@ button {
 .skeleton-base {
   @apply h-5;
 }
+
+/* recharts */
+.score-game-chart .recharts-rectangle.recharts-tooltip-cursor {
+  fill: #64748b32;
+}
