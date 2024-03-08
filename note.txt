@@ -1,5 +1,6 @@
 💡!!BACKLOG!!
-- SCORE CHART
+- LOADING CHART
+- HOVER LEGEND CHART
 - CHART
 - HOME
 - ACTIVE STUDENT/ADMIN
@@ -10,4 +11,3 @@
 - GLOBAL SEARCH
 - NOTIFICATION
 - PROFILE
-- TABLE SISWA : "name" in deeply nested key "school.name" returned undefined.
