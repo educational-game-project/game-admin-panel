@@ -212,10 +212,15 @@ function StudentsTable() {
         header: 'Telepon',
         cell: (info) => <>{info.getValue() ?? '-'}</>,
       }),
-      columnHelper.accessor('school.name', {
+      columnHelper.accessor((data) => data?.school?.name || '', {
+        id: 'school',
         header: 'Sekolah',
-        cell: (info) => info.getValue(),
+        cell: (info) => info?.row?.original?.school?.name ?? '-',
       }),
+      // columnHelper.accessor('school.name', {
+      //   header: 'Sekolah',
+      //   cell: (info) => info.getValue(),
+      // }),
       columnHelper.accessor('isActive', {
         header: 'Status',
         cell: (info) => (

@@ -40,3 +40,26 @@ export const getRandomHexColor = () => {
 
   return hexColor;
 };
+
+export const convertLevelLegend = (
+  inputString: string | number | undefined,
+  mode: 'short' | 'long'
+) => {
+  if (inputString === undefined) {
+    return '';
+  }
+  const initialText = inputString.toString();
+  const match = initialText.match(/lvl_(\d+)/);
+
+  if (match) {
+    if (mode === 'long') {
+      const formattedString = `Level ${match[1]}`;
+      return formattedString;
+    } else if (mode === 'short') {
+      const formattedString = `Lvl.${match[1]}`;
+      return formattedString;
+    }
+  } else {
+    return initialText;
+  }
+};
