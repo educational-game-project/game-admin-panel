@@ -10,3 +10,4 @@
 - GLOBAL SEARCH
 - NOTIFICATION
 - PROFILE
+- TABLE SISWA : "name" in deeply nested key "school.name" returned undefined.
