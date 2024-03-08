@@ -328,13 +328,16 @@ function ScoreTable({
                       <td className="px-3 py-3.5">
                         <div className="skeleton-loader skeleton-sm w-full" />
                       </td>
+                      <td className="px-3 py-3.5">
+                        <div className="skeleton-loader skeleton-sm w-full" />
+                      </td>
                     </tr>
                   ))
                 ) : filteredScore.length === 0 ||
                   Object.keys(filteredScore).length === 0 ? (
                   <tr>
                     <td
-                      colSpan={5}
+                      colSpan={6}
                       className="text-center py-3 text-gray-500 dark:text-gray-400">
                       Tidak ada data skor yang ditemukan.
                       {isError && (

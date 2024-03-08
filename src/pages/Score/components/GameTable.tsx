@@ -19,11 +19,17 @@ import {
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useGetScoreChartMutation } from '../../../services/scoreApi';
 import ModalDisplay from '../../../components/ModalDisplay';
+import { selectTheme } from '../../../features/themeSlice';
 import { setAllowedToast } from '../../../features/toastSlice';
 import { showErrorToast } from '../../../components/Toast';
+import {
+  CustomLegend,
+  CustomTooltip,
+  RoundedBar,
+} from '../../../components/Chart/ChartConfig';
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -41,6 +47,7 @@ import type {
   NormalizeScoreChartDataEntry,
   ScoreChartSuccessResponse,
 } from '../../../types';
+import { getColorLevel } from '../../../utilities/appUtils';
 
 function GameTable({
   scores,
@@ -55,6 +62,8 @@ function GameTable({
   const [filter, setFilter] = useState('');
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isOpenChart, setIsOpenChart] = useState(false);
+  const theme = useAppSelector(selectTheme);
+  const axisColor = theme === 'dark' ? '#6b7280' : '#9ca3af';
 
   const dispatch = useAppDispatch();
   const [
@@ -158,24 +167,17 @@ function GameTable({
       return [];
     }
 
-    const groupedData: Record<string, NormalizeScoreChartDataEntry> =
-      data.scores.flat().reduce((acc, entry) => {
-        const level = entry.level;
-        const gamePlayedKey = `gamePlayed${entry.gamePlayed}`;
-        const transformedValue = transformInteger(entry.value);
+    return data.scores.map((gameplay, index) => {
+      const name = `Gameplay ${index + 1}`;
+      const transformedGameplay: NormalizeScoreChartDataEntry = { name };
 
-        if (!acc[level]) {
-          const levelName = `Lvl. ${level}`;
-          acc[level] = { name: levelName } as NormalizeScoreChartDataEntry;
-        }
+      gameplay.forEach((score) => {
+        const { level, value } = score;
+        transformedGameplay[`lvl_${level}`] = transformInteger(value);
+      });
 
-        acc[level][gamePlayedKey] = transformedValue;
-
-        return acc;
-      }, {} as Record<string, NormalizeScoreChartDataEntry>);
-
-    // Convert the grouped data object into an array
-    return Object.values(groupedData);
+      return transformedGameplay;
+    });
   };
 
   const dataCharts = useMemo(
@@ -408,7 +410,7 @@ function GameTable({
         title="Analisis Skor"
         onCloseModal={closeModalChart}
         isOpen={isOpenChart}>
-        <div className="">
+        <div className="score-game-chart">
           {isLoadingChart || isLoadingUser ? <p>Loading...</p> : null}
           {isSuccessChart && (
             <div className="">
@@ -423,29 +425,36 @@ function GameTable({
                 </span>{' '}
                 dalam beberapa waktu terakhir.
               </p>
-              <div className="w-full h-96 mb-4">
+              <div className="w-full h-96 mb-1.5">
                 <ResponsiveContainer>
                   <BarChart
                     width={730}
                     height={250}
                     data={dataCharts}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis domain={[0, 100]} />
-                    <Tooltip />
-                    <Legend />
-                    <Bar
-                      dataKey="gamePlayed1"
-                      fill="#4b44c9"
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke={axisColor}
                     />
-                    <Bar
-                      dataKey="gamePlayed2"
-                      fill="#44c977"
+                    <XAxis
+                      dataKey="name"
+                      axisLine={{ stroke: axisColor }}
+                      tick={{ fill: axisColor }}
                     />
-                    <Bar
-                      dataKey="gamePlayed3"
-                      fill="#c94444"
+                    <YAxis
+                      domain={[0, 100]}
+                      axisLine={{ stroke: axisColor }}
+                      tick={{ fill: axisColor }}
                     />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend content={<CustomLegend />} />
+                    {dataCharts.map((_, index) => (
+                      <Bar
+                        key={index}
+                        dataKey={`lvl_${index + 1}`}
+                        fill={getColorLevel(index + 1, dataCharts.length)}
+                        shape={<RoundedBar />}
+                      />
+                    ))}
                   </BarChart>
                 </ResponsiveContainer>
               </div>
