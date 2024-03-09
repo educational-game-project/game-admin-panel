@@ -10,7 +10,7 @@ interface NormalizedScore {
   gamePlayed: number | undefined;
 }
 interface NormalizeScoreChartDataEntry {
-  [key: string]: number | string | undefined;
+  [key: string]: number | string;
 }
 
 export type { NormalizedScore, NormalizeScoreChartDataEntry, ThemeState };

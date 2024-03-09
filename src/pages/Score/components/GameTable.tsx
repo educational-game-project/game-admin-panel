@@ -163,27 +163,40 @@ function GameTable({
   const normalizeScoreChart = (
     data: ScoreChartSuccessResponse['data'] | undefined
   ) => {
-    if (!data || !data.scores || !Array.isArray(data.scores)) {
+    if (!data?.scores || !Array.isArray(data.scores)) {
       return [];
     }
 
     return data.scores.map((gameplay, index) => {
       const name = `Gameplay ${index + 1}`;
-      const transformedGameplay: NormalizeScoreChartDataEntry = { name };
-
-      gameplay.forEach((score) => {
-        const { level, value } = score;
-        transformedGameplay[`lvl_${level}`] = transformInteger(value);
-      });
+      const transformedGameplay: NormalizeScoreChartDataEntry = {
+        name,
+        ...gameplay.reduce((acc, { level, value }) => {
+          acc[`lvl_${level}`] = transformInteger(value);
+          return acc;
+        }, {} as Record<string, number>),
+      };
 
       return transformedGameplay;
     });
   };
 
-  const dataCharts = useMemo(
-    () => normalizeScoreChart(scoreCharts?.data),
-    [scoreCharts]
-  );
+  const dataCharts: NormalizeScoreChartDataEntry[] = useMemo(() => {
+    return normalizeScoreChart(scoreCharts?.data) || [];
+  }, [scoreCharts]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const labelCharts: any[] = useMemo(() => {
+    return [
+      ...new Set(
+        dataCharts.flatMap(({ ...labels }) => {
+          if (labels) {
+            return Object.keys(labels).filter((label) => label !== 'name');
+          }
+        })
+      ),
+    ];
+  }, [dataCharts]);
 
   return (
     <>
@@ -447,11 +460,11 @@ function GameTable({
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend content={<CustomLegend />} />
-                    {dataCharts.map((_, index) => (
+                    {labelCharts.map((label, index) => (
                       <Bar
-                        key={index}
-                        dataKey={`lvl_${index + 1}`}
-                        fill={getColorLevel(index + 1, dataCharts.length)}
+                        key={label}
+                        dataKey={label}
+                        fill={getColorLevel(index + 1, labelCharts.length)}
                         shape={<RoundedBar />}
                       />
                     ))}
