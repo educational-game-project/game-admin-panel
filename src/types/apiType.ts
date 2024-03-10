@@ -146,6 +146,30 @@ interface Leaderboard {
     updatedAt: string;
   };
 }
+interface Actor {
+  _id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  image: Image | null;
+  school: School | null;
+  isActive: boolean;
+}
+interface Log {
+  _id: string;
+  actor: Actor | null;
+  target: string;
+  type: string;
+  method: string;
+  userAgent: string;
+  description: string;
+  deletedAt: string | null;
+  summary: string;
+  success: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 // RESPONSE
 interface DefaultResponse {
@@ -229,6 +253,10 @@ interface DashboardSuccessResponse extends SuccessResponse {
     schools: School[];
   };
 }
+interface LogListSuccessResponse extends SuccessResponse {
+  data: Log[];
+  page: PageResponse;
+}
 
 export type {
   Admin,
@@ -242,6 +270,8 @@ export type {
   GameSuccessResponse,
   LeaderboardResponse,
   LeaderboardSuccessResponse,
+  Log,
+  LogListSuccessResponse,
   PageResponse,
   ProfileSuccessResponse,
   School,

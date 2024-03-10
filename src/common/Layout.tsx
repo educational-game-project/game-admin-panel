@@ -7,7 +7,6 @@ import Navbar from './Navbar';
 import {
   Gamepad2Icon,
   HomeIcon,
-  LineChart,
   SchoolIcon,
   UserCogIcon,
   UserSquare2,
@@ -46,13 +45,6 @@ function Layout() {
             path="/student"
             alert={true}
             active={isCurrentLocation('student')}
-          />
-          <SidebarItem
-            icon={<LineChart size={20} />}
-            text="Analisis"
-            path="/analysis"
-            alert={true}
-            active={isCurrentLocation('analysis')}
           />
           {user?.role === 'Super Admin' ? (
             <>

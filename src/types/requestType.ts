@@ -5,6 +5,7 @@ interface AdminIdRequest extends idRequest {}
 interface GameIdRequest extends idRequest {}
 interface SchoolIdRequest extends idRequest {}
 interface StudentIdRequest extends idRequest {}
+interface LogIdRequest extends idRequest {}
 interface StudentAddRequest {
   name: string;
   email: string;
@@ -96,6 +97,7 @@ interface DataTableGetRequest {
   schoolId?: string;
   page?: number;
   limit?: number;
+  status?: boolean;
 }
 
 export type {
@@ -108,6 +110,7 @@ export type {
   GameIdRequest,
   GameUpdateRequest,
   LeaderboardGetRequest,
+  LogIdRequest,
   SchoolAddRequest,
   SchoolIdRequest,
   SchoolUpdateRequest,

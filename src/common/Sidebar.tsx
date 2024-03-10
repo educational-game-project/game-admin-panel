@@ -222,7 +222,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                       onChange={() => dispatch(toggleTheme())}
                       className="peer/darkMode opacity-0 w-0 h-0"
                     />
-                    <span className="slider round absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-gray-300 transition-all duration-400 rounded-8.5 before:absolute before:content-empty before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:transition-all before:duration-400 before:rounded-half peer-checked/darkMode:bg-indigo-500 peer-checked/darkMode:before:translate-x-5"></span>
+                    <span className="slider round absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-gray-300 transition-all duration-400 rounded-8.5 before:absolute before:content-empty before:h-4 before:w-4 before:left-0.5 before:bottom-0.5 before:bg-white before:transition-all before:duration-400 before:rounded-half peer-checked/darkMode:bg-indigo-500 peer-checked/darkMode:before:translate-x-5" />
                   </label>
                 </div>
               )}
@@ -272,11 +272,13 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
                     cy="12"
                     r="10"
                     stroke="currentColor"
-                    strokeWidth="4"></circle>
+                    strokeWidth="4"
+                  />
                   <path
                     className="opacity-75"
                     fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
                 </svg>
               ) : (
                 <LogOut size={17} />
@@ -331,8 +333,8 @@ export function SidebarItem({
               '10'
             ) : (
               <>
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 translate-x-px -translate-y-0.75"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 translate-x-px -translate-y-0.75" />
               </>
             )}
           </div>

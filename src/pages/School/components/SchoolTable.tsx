@@ -457,7 +457,11 @@ function SchoolTable() {
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
-                  fetchSchool({ search: '', page: 1, limit: limitPage })
+                  fetchSchool({
+                    search: querySearch,
+                    page: 1,
+                    limit: limitPage,
+                  })
                 }
                 disabled={Number(schoolPages?.currentPage) <= 1 || isLoading}>
                 First
@@ -467,7 +471,7 @@ function SchoolTable() {
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
                 fetchSchool({
-                  search: '',
+                  search: querySearch,
                   page: Number(schoolPages?.currentPage) - 1,
                   limit: limitPage,
                 })
@@ -483,7 +487,7 @@ function SchoolTable() {
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
                 fetchSchool({
-                  search: '',
+                  search: querySearch,
                   page: Number(schoolPages?.currentPage) + 1,
                   limit: limitPage,
                 })
@@ -503,7 +507,7 @@ function SchoolTable() {
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
                   fetchSchool({
-                    search: '',
+                    search: querySearch,
                     page: Number(schoolPages?.totalPage),
                     limit: limitPage,
                   })

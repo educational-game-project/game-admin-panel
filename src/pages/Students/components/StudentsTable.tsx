@@ -217,10 +217,6 @@ function StudentsTable() {
         header: 'Sekolah',
         cell: (info) => info?.row?.original?.school?.name ?? '-',
       }),
-      // columnHelper.accessor('school.name', {
-      //   header: 'Sekolah',
-      //   cell: (info) => info.getValue(),
-      // }),
       columnHelper.accessor('isActive', {
         header: 'Status',
         cell: (info) => (
@@ -505,7 +501,11 @@ function StudentsTable() {
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
-                  fetchStudent({ search: '', page: 1, limit: limitPage })
+                  fetchStudent({
+                    search: querySearch,
+                    page: 1,
+                    limit: limitPage,
+                  })
                 }
                 disabled={Number(studentPages?.currentPage) <= 1 || isLoading}>
                 First
@@ -515,7 +515,7 @@ function StudentsTable() {
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
                 fetchStudent({
-                  search: '',
+                  search: querySearch,
                   page: Number(studentPages?.currentPage) - 1,
                   limit: limitPage,
                 })
@@ -531,7 +531,7 @@ function StudentsTable() {
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
                 fetchStudent({
-                  search: '',
+                  search: querySearch,
                   page: Number(studentPages?.currentPage) + 1,
                   limit: limitPage,
                 })
@@ -551,7 +551,7 @@ function StudentsTable() {
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
                   fetchStudent({
-                    search: '',
+                    search: querySearch,
                     page: Number(studentPages?.totalPage),
                     limit: limitPage,
                   })
