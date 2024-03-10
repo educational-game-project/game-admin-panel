@@ -78,6 +78,7 @@ export const coreApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
   tagTypes: [
+    'Activity',
     'Admin',
     'Auth',
     'Dashboard',
