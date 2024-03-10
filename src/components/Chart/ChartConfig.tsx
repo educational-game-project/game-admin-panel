@@ -58,7 +58,8 @@ export const CustomTooltip = (props: TooltipProps<string, string>) => {
             className="flex items-center">
             <div
               className="size-3 rounded-full border-2 border-gray-300 mr-2"
-              style={{ backgroundColor: data.color }}></div>
+              style={{ backgroundColor: data.color }}
+            />
             <p className="text-3.25xs">
               <span className="text-gray-400">
                 {convertLevelLegend(data?.dataKey, 'long')}:{' '}
@@ -75,3 +76,21 @@ export const CustomTooltip = (props: TooltipProps<string, string>) => {
 
   return null;
 };
+
+// export const handleMouseEnter = (o) => {
+//   const { dataKey } = o;
+//   const { opacity } = this.state;
+
+//   this.setState({
+//     opacity: { ...opacity, [dataKey]: 0.5 },
+//   });
+// };
+
+// export const handleMouseLeave = (o) => {
+//   const { dataKey } = o;
+//   const { opacity } = this.state;
+
+//   this.setState({
+//     opacity: { ...opacity, [dataKey]: 1 },
+//   });
+// };

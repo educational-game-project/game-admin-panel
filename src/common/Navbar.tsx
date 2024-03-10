@@ -74,8 +74,8 @@ function Navbar() {
                   title="Notification">
                   <BellRingIcon size={18} />
                   <div className="absolute -right-1 w-2.5 h-2.5 -top-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-1.6375 translate-x-0.125"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-1.6375 translate-x-0.125" />
                   </div>
                 </button>
                 <Link
