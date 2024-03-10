@@ -17,7 +17,6 @@ import AddGame from './pages/Game/AddGame';
 import AddSchool from './pages/School/AddSchool';
 import AddStudent from './pages/Students/AddStudent';
 import Admin from './pages/Admin';
-import Analysis from './pages/Analysis';
 import ChangePassword from './pages/Profile/ChangePassword';
 import DetailGame from './pages/Game/DetailGame';
 import DetailSchool from './pages/School/DetailSchool';
@@ -127,10 +126,6 @@ function App() {
                   <Route
                     path="/student/score/:studentId"
                     element={<Score />}
-                  />
-                  <Route
-                    path="/analysis"
-                    element={<Analysis />}
                   />
                   <Route
                     path="/profile/account"

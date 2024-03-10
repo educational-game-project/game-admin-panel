@@ -473,7 +473,7 @@ function GameTable() {
               <button
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
-                  fetchGame({ search: '', page: 1, limit: limitPage })
+                  fetchGame({ search: querySearch, page: 1, limit: limitPage })
                 }
                 disabled={Number(gamePages?.currentPage) <= 1 || isLoading}>
                 First
@@ -483,7 +483,7 @@ function GameTable() {
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
                 fetchGame({
-                  search: '',
+                  search: querySearch,
                   page: Number(gamePages?.currentPage) - 1,
                   limit: limitPage,
                 })
@@ -499,7 +499,7 @@ function GameTable() {
               className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
               onClick={() =>
                 fetchGame({
-                  search: '',
+                  search: querySearch,
                   page: Number(gamePages?.currentPage) + 1,
                   limit: limitPage,
                 })
@@ -519,7 +519,7 @@ function GameTable() {
                 className="px-2.5 py-1 font-medium rounded-md border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 transition hover:bg-indigo-600 hover:border-indigo-600 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed dark:bg-indigo-700 dark:border-indigo-700 dark:hover:bg-indigo-600 dark:hover:border-indigo-600 dark:disabled:bg-gray-700 dark:disabled:border-gray-700 dark:disabled:text-gray-500"
                 onClick={() =>
                   fetchGame({
-                    search: '',
+                    search: querySearch,
                     page: Number(gamePages?.totalPage),
                     limit: limitPage,
                   })

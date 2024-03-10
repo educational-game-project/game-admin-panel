@@ -165,6 +165,12 @@ function ScoreTable({
                   className="relative inline-block text-right">
                   <div>
                     <Menu.Button className="group/filter inline-flex w-full items-center justify-center rounded-md px-2 py-1.5 font-medium text-3.25xs text-gray-600 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 dark:bg-gray-700 dark:hover:bg-indigo-600 dark:text-gray-200 dark:hover:text-indigo-100">
+                      {category !== 'all' && (
+                        <div className="absolute -right-0.75 w-2.5 h-2.5 -top-0.75">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400" />
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-1.6375 translate-x-0.125" />
+                        </div>
+                      )}
                       <FilterIcon
                         className="mr-1.5 stroke-gray-600 group-hover/filter:stroke-indigo-600 transition dark:stroke-gray-200 dark:group-hover/filter:stroke-indigo-100"
                         aria-hidden="true"

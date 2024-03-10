@@ -39,6 +39,8 @@ import {
   ChevronDownIcon,
   SearchIcon,
 } from 'lucide-react';
+import { BarsScaleFade } from 'react-svg-spinners';
+import { getColorLevel } from '../../../utilities/appUtils';
 import { transformInteger } from '../../../utilities/numberUtils';
 
 import type {
@@ -47,7 +49,6 @@ import type {
   NormalizeScoreChartDataEntry,
   ScoreChartSuccessResponse,
 } from '../../../types';
-import { getColorLevel } from '../../../utilities/appUtils';
 
 function GameTable({
   scores,
@@ -424,7 +425,19 @@ function GameTable({
         onCloseModal={closeModalChart}
         isOpen={isOpenChart}>
         <div className="score-game-chart">
-          {isLoadingChart || isLoadingUser ? <p>Loading...</p> : null}
+          {isLoadingChart || isLoadingUser ? (
+            <div className="">
+              <div className="animate-pulse-fast skeleton-loader skeleton-sm w-2/3 mb-7" />
+              <div className="w-full h-96 mb-1.5 flex items-center justify-center">
+                <BarsScaleFade
+                  width="2rem"
+                  height="2rem"
+                  color="#6b7280"
+                  dur={0.5}
+                />
+              </div>
+            </div>
+          ) : null}
           {isSuccessChart && (
             <div className="">
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-7">
