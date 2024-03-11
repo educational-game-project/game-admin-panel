@@ -99,6 +99,14 @@ interface ModalDisplayProps {
   title: string;
 }
 
+interface PerformanceWidgetProps {
+  activeItem?: number;
+  countItem: number | undefined;
+  children?: ReactNode;
+  name: string;
+  type: 'simple' | 'advanced';
+}
+
 export type {
   AlertDialogProps,
   Breadcrumb,
@@ -110,6 +118,7 @@ export type {
   HeaderContainerProps,
   HeaderProfileProps,
   ModalDisplayProps,
+  PerformanceWidgetProps,
   ProfileUserProps,
   ScoreTableProps,
   StudentTableProps,
