@@ -95,6 +95,7 @@ button {
 }
 
 /* recharts */
-.score-game-chart .recharts-rectangle.recharts-tooltip-cursor {
+.score-game-chart .recharts-rectangle.recharts-tooltip-cursor,
+.school-overview-chart .recharts-rectangle.recharts-tooltip-cursor {
   fill: #64748b32;
 }
