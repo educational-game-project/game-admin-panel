@@ -63,3 +63,24 @@ export const convertLevelLegend = (
     return initialText;
   }
 };
+
+export const getItemUnit = (itemName: string): string => {
+  const match = itemName.match(/\((.*?)\)/);
+  if (match) {
+    const valueInBrackets = match[1];
+    if (valueInBrackets.toLowerCase().includes('score')) {
+      return 'pts';
+    } else {
+      return '';
+    }
+  }
+
+  return '';
+};
+
+export const getLabelCharts = (itemName: string | undefined): string => {
+  if (itemName === undefined) {
+    return '';
+  }
+  return itemName.replace(/\s*\([^)]*\)\s*/, '');
+};
