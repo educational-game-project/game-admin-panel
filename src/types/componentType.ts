@@ -107,6 +107,12 @@ interface PerformanceWidgetProps {
   type: 'simple' | 'advanced';
 }
 
+interface PerformanceChartProps {
+  baseColor: string;
+  currentvalue: number | undefined;
+  totalValue: number | undefined;
+}
+
 export type {
   AlertDialogProps,
   Breadcrumb,
@@ -118,6 +124,7 @@ export type {
   HeaderContainerProps,
   HeaderProfileProps,
   ModalDisplayProps,
+  PerformanceChartProps,
   PerformanceWidgetProps,
   ProfileUserProps,
   ScoreTableProps,
