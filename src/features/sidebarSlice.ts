@@ -1,18 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../app/store';
+import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../app/store";
 
 const initialState = {
-  showSidebar: true,
+	showSidebar: true,
 };
 
 export const sidebarSlice = createSlice({
-  name: 'sidebar',
-  initialState,
-  reducers: {
-    toggleSidebar: (state) => {
-      state.showSidebar = !state.showSidebar;
-    },
-  },
+	name: "sidebar",
+	initialState,
+	reducers: {
+		toggleSidebar: (state) => {
+			state.showSidebar = !state.showSidebar;
+		},
+	},
 });
 
 export const { toggleSidebar } = sidebarSlice.actions;
