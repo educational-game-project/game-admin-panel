@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const AutoTopProvider: React.FC = () => {
-  const location = useLocation();
+	const location = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [location]);
 
-  return null; // This component doesn't render anything in the DOM.
+	return null; // This component doesn't render anything in the DOM.
 };
 
 export default AutoTopProvider;
