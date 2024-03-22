@@ -200,6 +200,29 @@ function Activity() {
 				header: "Target",
 				cell: (info) => <>{info.getValue() ?? "-"}</>,
 			}),
+			columnHelper.accessor("success", {
+				header: "Status",
+				cell: (info) => (
+					<div className="flex">
+						<div className="flex items-center space-x-1.5 px-2 py-0.75 rounded-full bg-gradient-to-b from-slate-50 via-gray-100 to-gray-200 to-90% dark:from-slate-800 dark:to-gray-900">
+							<div
+								className={`size-2.5 rounded-full blur-[2px] ${
+									info.getValue() ? "bg-green-500" : "bg-red-400"
+								}`}
+							/>
+							<div className="text-xs text-nowrap">
+								{info.getValue() ? "Sukses" : "Gagal"}
+							</div>
+						</div>
+					</div>
+				),
+			}),
+			columnHelper.accessor("summary", {
+				header: "Log",
+				cell: (info) => (
+					<p className="break-words w-72">{info.getValue() ?? "-"}</p>
+				),
+			}),
 			columnHelper.accessor("createdAt", {
 				header: "Tanggal",
 				cell: (info) => longMonthDate(info.getValue()),
@@ -491,6 +514,12 @@ function Activity() {
 											<td className="px-3 py-3.5">
 												<div className="skeleton-loader skeleton-sm w-full" />
 											</td>
+											<td className="px-3 py-3.5">
+												<div className="skeleton-loader skeleton-sm w-full" />
+											</td>
+											<td className="px-3 py-3.5">
+												<div className="skeleton-loader skeleton-sm w-full" />
+											</td>
 											<td className="px-3 py-3.5 w-18">
 												<div className="skeleton-loader skeleton-sm w-full" />
 											</td>
@@ -499,7 +528,7 @@ function Activity() {
 								) : log.length === 0 ? (
 									<tr>
 										<td
-											colSpan={6}
+											colSpan={8}
 											className="text-center py-3 text-gray-500 dark:text-gray-400"
 										>
 											Tidak ada data aktivitas yang ditemukan.
