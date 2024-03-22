@@ -1,135 +1,135 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 import type {
-  ScoreSuccessResponse,
-  Student,
-  StudentSuccessResponse,
-  User,
-} from './apiType';
+	ScoreSuccessResponse,
+	Student,
+	StudentSuccessResponse,
+	User,
+} from "./apiType";
 
 // alert dialog
 interface AlertDialogProps {
-  isOpen: boolean;
-  message: string;
-  isLoading: boolean;
-  onCancel: () => void;
-  onConfirm: () => void;
+	isOpen: boolean;
+	message: string;
+	isLoading: boolean;
+	onCancel: () => void;
+	onConfirm: () => void;
 }
 
 // button clipboard
 interface ButtonClipboardProps {
-  linkToCopy: string;
-  children: ReactNode;
+	linkToCopy: string;
+	children: ReactNode;
 }
 
 // breadcrumb
 interface Breadcrumb {
-  icon: string;
-  label: string | undefined;
-  path: string;
+	icon: string;
+	label: string | undefined;
+	path: string;
 }
 interface BreadcrumbState {
-  breadcrumbs: Breadcrumb[];
+	breadcrumbs: Breadcrumb[];
 }
 interface BreadcrumbIconProps {
-  name: string | undefined;
+	name: string | undefined;
 }
 
 // toast
 interface ToastState {
-  isAllowed: boolean;
+	isAllowed: boolean;
 }
 interface ToastProviderProps {
-  children: ReactNode;
+	children: ReactNode;
 }
 
 // header
 interface HeaderContainerProps {
-  title: string;
-  subtitle: string;
-  btnHref?: string;
-  btnText?: string;
+	title: string;
+	subtitle: string;
+	btnHref?: string;
+	btnText?: string;
 }
 
 // student
 interface StudentTableProps {
-  student: Student[];
-  refetchStudent: () => void;
+	student: Student[];
+	refetchStudent: () => void;
 }
 
 // score
 interface ScoreTableProps {
-  scores: ScoreSuccessResponse | undefined;
-  isLoading: boolean;
-  isLargeView: boolean;
-  isSuccess: boolean;
-  isError: boolean;
-  fetchScore: () => void;
+	scores: ScoreSuccessResponse | undefined;
+	isLoading: boolean;
+	isLargeView: boolean;
+	isSuccess: boolean;
+	isError: boolean;
+	fetchScore: () => void;
 }
 interface UserScoreProps {
-  isLoading: boolean;
-  isLoadingGet: boolean;
-  students: StudentSuccessResponse | undefined;
+	isLoading: boolean;
+	isLoadingGet: boolean;
+	students: StudentSuccessResponse | undefined;
 }
 interface GameTableProps {
-  scores: ScoreSuccessResponse | undefined;
-  isLoading: boolean;
-  isLoadingUser: boolean;
-  isLargeView: boolean;
-  isError: boolean;
-  fetchScore: () => void;
-  studentId: string | undefined;
-  userData: StudentSuccessResponse | undefined;
+	scores: ScoreSuccessResponse | undefined;
+	isLoading: boolean;
+	isLoadingUser: boolean;
+	isLargeView: boolean;
+	isError: boolean;
+	fetchScore: () => void;
+	studentId: string | undefined;
+	userData: StudentSuccessResponse | undefined;
 }
 interface GameTableState {
-  id: string;
-  name: string;
+	id: string;
+	name: string;
 }
 // profile
 interface ProfileUserProps {
-  user: User;
+	user: User;
 }
 interface HeaderProfileProps {
-  isProfilePage: boolean;
+	isProfilePage: boolean;
 }
 
 interface ModalDisplayProps {
-  children: ReactNode;
-  isOpen: boolean;
-  onCloseModal: () => void;
-  title: string;
+	children: ReactNode;
+	isOpen: boolean;
+	onCloseModal: () => void;
+	title: string;
 }
 
 interface PerformanceWidgetProps {
-  activeItem?: number;
-  countItem: number | undefined;
-  children?: ReactNode;
-  name: string;
-  type: 'simple' | 'advanced';
+	activeItem?: number;
+	countItem: number | undefined;
+	children?: ReactNode;
+	name: string;
+	type: "simple" | "advanced";
 }
 
 interface PerformanceChartProps {
-  baseColor: string;
-  currentvalue: number | undefined;
-  totalValue: number | undefined;
+	baseColor: string;
+	currentvalue: number | undefined;
+	totalValue: number | undefined;
 }
 
 export type {
-  AlertDialogProps,
-  Breadcrumb,
-  BreadcrumbState,
-  BreadcrumbIconProps,
-  ButtonClipboardProps,
-  GameTableProps,
-  GameTableState,
-  HeaderContainerProps,
-  HeaderProfileProps,
-  ModalDisplayProps,
-  PerformanceChartProps,
-  PerformanceWidgetProps,
-  ProfileUserProps,
-  ScoreTableProps,
-  StudentTableProps,
-  ToastState,
-  ToastProviderProps,
-  UserScoreProps,
+	AlertDialogProps,
+	Breadcrumb,
+	BreadcrumbState,
+	BreadcrumbIconProps,
+	ButtonClipboardProps,
+	GameTableProps,
+	GameTableState,
+	HeaderContainerProps,
+	HeaderProfileProps,
+	ModalDisplayProps,
+	PerformanceChartProps,
+	PerformanceWidgetProps,
+	ProfileUserProps,
+	ScoreTableProps,
+	StudentTableProps,
+	ToastState,
+	ToastProviderProps,
+	UserScoreProps,
 };
