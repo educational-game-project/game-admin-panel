@@ -1,27 +1,40 @@
 interface ThemeState {
-  theme: 'light' | 'dark';
+	theme: "light" | "dark";
 }
 interface NormalizedScore {
-  level: number;
-  value: number;
-  createdAt: string;
-  gameId: string;
-  gameName: string;
-  gamePlayed: number | undefined;
+	level: number;
+	value: number;
+	createdAt: string;
+	gameId: string;
+	gameName: string;
+	gamePlayed: number | undefined;
 }
 interface NormalizeScoreChartDataEntry {
-  [key: string]: number | string;
+	[key: string]: number | string;
 }
-interface WidgetIconType {
-  permainan: JSX.Element;
-  sekolah: JSX.Element;
-  admin: JSX.Element;
-  siswa: JSX.Element;
+interface WidgetConfigType {
+	color: {
+		default: string;
+		dark: string;
+	};
+	icon: JSX.Element;
+}
+interface SchoolChartType {
+	name: string;
+	admin: number;
+	student: number;
+}
+interface WidgetConfigList {
+	permainan: WidgetConfigType;
+	sekolah: WidgetConfigType;
+	admin: WidgetConfigType;
+	siswa: WidgetConfigType;
 }
 
 export type {
-  NormalizedScore,
-  NormalizeScoreChartDataEntry,
-  ThemeState,
-  WidgetIconType,
+	NormalizedScore,
+	NormalizeScoreChartDataEntry,
+	SchoolChartType,
+	ThemeState,
+	WidgetConfigList,
 };

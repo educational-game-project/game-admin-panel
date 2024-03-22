@@ -1,289 +1,289 @@
 // BASE
 interface UserAddBy {
-  _id: string;
-  name: string;
-  role: string;
-  email: string;
-  phoneNumber: string;
-  image: Image | null;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  __v: number;
+	_id: string;
+	name: string;
+	role: string;
+	email: string;
+	phoneNumber: string;
+	image: Image | null;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt: string | null;
+	__v: number;
 }
 interface User {
-  _id: string;
-  name: string;
-  role: string;
-  email: string;
-  phoneNumber: string;
-  image: Image | null;
-  school: School | null;
-  addedBy: UserAddBy | null;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  __v: number;
+	_id: string;
+	name: string;
+	role: string;
+	email: string;
+	phoneNumber: string;
+	image: Image | null;
+	school: School | null;
+	addedBy: UserAddBy | null;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt: string | null;
+	__v: number;
 }
 interface Image {
-  _id: string;
-  originalName: string;
-  fileName: string;
-  fileLink: string;
-  mimeType: string;
-  size: number;
-  isDefault: boolean;
-  deletedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-  __v: 0;
+	_id: string;
+	originalName: string;
+	fileName: string;
+	fileLink: string;
+	mimeType: string;
+	size: number;
+	isDefault: boolean;
+	deletedAt: string | null;
+	createdAt: string;
+	updatedAt: string;
+	__v: 0;
 }
 interface Student {
-  _id: string;
-  name: string;
-  role: string;
-  email: string;
-  phoneNumber: string;
-  password?: string;
-  isActive?: boolean;
-  addedBy?: UserAddBy | null;
-  image: Image | null;
-  school: School;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string | null;
-  createdAtString?: string;
-  updatedAtString?: string;
-  __v: number;
+	_id: string;
+	name: string;
+	role: string;
+	email: string;
+	phoneNumber: string;
+	password?: string;
+	isActive?: boolean;
+	addedBy?: UserAddBy | null;
+	image: Image | null;
+	school: School;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt?: string | null;
+	createdAtString?: string;
+	updatedAtString?: string;
+	__v: number;
 }
 interface Admin {
-  _id: string;
-  name: string;
-  role: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  image: Image | null;
-  school: School | null;
-  addedBy: UserAddBy | null;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: null;
-  createdAtString?: string;
-  updatedAtString?: string;
+	_id: string;
+	name: string;
+	role: string;
+	email: string;
+	phoneNumber: string;
+	password: string;
+	image: Image | null;
+	school: School | null;
+	addedBy: UserAddBy | null;
+	isActive: boolean;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt?: null;
+	createdAtString?: string;
+	updatedAtString?: string;
 }
 interface School {
-  _id: string;
-  name: string;
-  address: string;
-  adminsCount: number;
-  studentsCount: number;
-  images: Image[];
-  admins?: Admin[] | null;
-  addedBy?: UserAddBy | null;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string | null;
-  createdAtString?: string;
-  updatedAtString?: string;
-  lastUpdatedBy?: string | null;
-  __v?: number;
+	_id: string;
+	name: string;
+	address: string;
+	adminsCount: number;
+	studentsCount: number;
+	images: Image[];
+	admins?: Admin[] | null;
+	addedBy?: UserAddBy | null;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt?: string | null;
+	createdAtString?: string;
+	updatedAtString?: string;
+	lastUpdatedBy?: string | null;
+	__v?: number;
 }
 interface GameLite {
-  _id: string;
-  name: string;
-  author: string;
-  description: string;
-  category: string;
-  maxLevel: number;
-  maxRetry: number;
-  maxTime?: number;
-  deletedAt: string | null;
-  images: string[];
-  addedBy: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+	_id: string;
+	name: string;
+	author: string;
+	description: string;
+	category: string;
+	maxLevel: number;
+	maxRetry: number;
+	maxTime?: number;
+	deletedAt: string | null;
+	images: string[];
+	addedBy: string;
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
 }
 interface Game {
-  _id: string;
-  name: string;
-  author: string;
-  description: string;
-  category: string;
-  maxLevel: number;
-  maxRetry: number;
-  maxTime?: number;
-  images: Image[];
-  addedBy: UserAddBy;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  createdAtString?: string;
-  updatedAtString?: string;
-  __v: number;
+	_id: string;
+	name: string;
+	author: string;
+	description: string;
+	category: string;
+	maxLevel: number;
+	maxRetry: number;
+	maxTime?: number;
+	images: Image[];
+	addedBy: UserAddBy;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt: string | null;
+	createdAtString?: string;
+	updatedAtString?: string;
+	__v: number;
 }
 interface Score {
-  level: number;
-  value: number;
-  createdAt: string;
-  gamePlayed?: number;
+	level: number;
+	value: number;
+	createdAt: string;
+	gamePlayed?: number;
 }
 interface Leaderboard {
-  _id: string;
-  value: number;
-  user: {
-    _id: string;
-    name: string;
-    role: string;
-    email: string | null;
-    phoneNumber: string | null;
-    image: Image;
-    school: string;
-    deletedAt: string | null;
-    createdAt: string;
-    updatedAt: string;
-  };
+	_id: string;
+	value: number;
+	user: {
+		_id: string;
+		name: string;
+		role: string;
+		email: string | null;
+		phoneNumber: string | null;
+		image: Image;
+		school: string;
+		deletedAt: string | null;
+		createdAt: string;
+		updatedAt: string;
+	};
 }
 interface Actor {
-  _id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  image: Image | null;
-  school: School | null;
-  isActive: boolean;
+	_id: string;
+	name: string;
+	email: string;
+	phoneNumber: string;
+	image: Image | null;
+	school: School | null;
+	isActive: boolean;
 }
 interface Log {
-  _id: string;
-  actor: Actor | null;
-  target: string;
-  type: string;
-  method: string;
-  userAgent: string;
-  description: string;
-  deletedAt: string | null;
-  summary: string;
-  success: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+	_id: string;
+	actor: Actor | null;
+	target: string;
+	type: string;
+	method: string;
+	userAgent: string;
+	description: string;
+	deletedAt: string | null;
+	summary: string;
+	success: boolean;
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
 }
 
 // RESPONSE
 interface DefaultResponse {
-  statusCode: number;
-  status?: string;
-  server_time: string;
-  message: string;
+	statusCode: number;
+	status?: string;
+	server_time: string;
+	message: string;
 }
 interface PageResponse {
-  totalData: number;
-  perPage: number;
-  currentPage: number;
-  totalPage: number;
+	totalData: number;
+	perPage: number;
+	currentPage: number;
+	totalPage: number;
 }
 interface SuccessResponse extends DefaultResponse {
-  success: true;
+	success: true;
 }
 interface ErrorResponse extends DefaultResponse {}
 interface ProfileSuccessResponse extends SuccessResponse {
-  data: User;
+	data: User;
 }
 interface StudentListSuccessResponse extends SuccessResponse {
-  data: Student[];
-  page: PageResponse;
+	data: Student[];
+	page: PageResponse;
 }
 interface StudentSuccessResponse extends SuccessResponse {
-  data: Student;
+	data: Student;
 }
 
 interface AdminListSuccessResponse extends SuccessResponse {
-  data: Admin[];
-  page: PageResponse;
+	data: Admin[];
+	page: PageResponse;
 }
 interface AdminSuccessResponse extends SuccessResponse {
-  data: Admin;
+	data: Admin;
 }
 interface SchoolListSuccessResponse extends SuccessResponse {
-  data: School[];
-  page: PageResponse;
+	data: School[];
+	page: PageResponse;
 }
 interface SchoolSuccessResponse extends SuccessResponse {
-  data: School;
+	data: School;
 }
 interface GameListSuccessResponse extends SuccessResponse {
-  data: Game[];
-  page: PageResponse;
+	data: Game[];
+	page: PageResponse;
 }
 interface GameSuccessResponse extends SuccessResponse {
-  data: Game;
+	data: Game;
 }
 interface ScoreResponse {
-  scores: Score[];
-  game: GameLite;
+	scores: Score[];
+	game: GameLite;
 }
 interface ScoreSuccessResponse extends SuccessResponse {
-  data: ScoreResponse[];
+	data: ScoreResponse[];
 }
 interface ScoreChartSuccessResponse extends SuccessResponse {
-  data: {
-    scores: Score[][];
-    game: GameLite;
-  };
+	data: {
+		scores: Score[][];
+		game: GameLite;
+	};
 }
 interface LeaderboardResponse {
-  game: GameLite;
-  school: School;
-  leaderboard: Leaderboard[];
+	game: GameLite;
+	school: School;
+	leaderboard: Leaderboard[];
 }
 interface LeaderboardSuccessResponse extends SuccessResponse {
-  data: LeaderboardResponse[];
+	data: LeaderboardResponse[];
 }
 interface DashboardSuccessResponse extends SuccessResponse {
-  data: {
-    studentsCount: number;
-    activeStudents: number;
-    adminCount: number;
-    activeAdmin: number;
-    gameCount: number;
-    games: Game[];
-    schoolCount: number;
-    schools: School[];
-  };
+	data: {
+		studentsCount: number;
+		activeStudents: number;
+		adminCount: number;
+		activeAdmin: number;
+		gameCount: number;
+		games: Game[];
+		schoolCount: number;
+		schools: School[];
+	};
 }
 interface LogListSuccessResponse extends SuccessResponse {
-  data: Log[];
-  page: PageResponse;
+	data: Log[];
+	page: PageResponse;
 }
 
 export type {
-  Admin,
-  AdminListSuccessResponse,
-  AdminSuccessResponse,
-  DashboardSuccessResponse,
-  ErrorResponse,
-  Image,
-  Game,
-  GameListSuccessResponse,
-  GameSuccessResponse,
-  LeaderboardResponse,
-  LeaderboardSuccessResponse,
-  Log,
-  LogListSuccessResponse,
-  PageResponse,
-  ProfileSuccessResponse,
-  School,
-  SchoolListSuccessResponse,
-  SchoolSuccessResponse,
-  Score,
-  ScoreResponse,
-  ScoreChartSuccessResponse,
-  ScoreSuccessResponse,
-  Student,
-  StudentListSuccessResponse,
-  StudentSuccessResponse,
-  SuccessResponse,
-  User,
+	Admin,
+	AdminListSuccessResponse,
+	AdminSuccessResponse,
+	DashboardSuccessResponse,
+	ErrorResponse,
+	Image,
+	Game,
+	GameListSuccessResponse,
+	GameSuccessResponse,
+	LeaderboardResponse,
+	LeaderboardSuccessResponse,
+	Log,
+	LogListSuccessResponse,
+	PageResponse,
+	ProfileSuccessResponse,
+	School,
+	SchoolListSuccessResponse,
+	SchoolSuccessResponse,
+	Score,
+	ScoreResponse,
+	ScoreChartSuccessResponse,
+	ScoreSuccessResponse,
+	Student,
+	StudentListSuccessResponse,
+	StudentSuccessResponse,
+	SuccessResponse,
+	User,
 };
