@@ -307,7 +307,7 @@ function Activity() {
 	}, [dispatch]);
 
 	return (
-		<div className="">
+		<div>
 			<div className="mb-6">
 				<Breadcrumb />
 				<HeaderContainer title="Activity" subtitle="Lihat aktivitas terbaru." />
@@ -330,7 +330,7 @@ function Activity() {
 						</div>
 						<div className="flex items-center space-x-6">
 							{/* filter */}
-							<div className="">
+							<div>
 								<Menu as="div" className="relative inline-block text-right">
 									<div>
 										<Menu.Button className="relative group/filter inline-flex w-full items-center justify-center rounded-md px-2 py-1.5 font-medium text-3.25xs text-gray-600 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 dark:bg-gray-700 dark:hover:bg-indigo-600 dark:text-gray-200 dark:hover:text-indigo-100">
@@ -750,18 +750,11 @@ function Activity() {
 							: "-z-10 opacity-0 scale-50"
 					}`}
 				>
-					<div className="rounded-full px-12 py-4 shadow-lg bg-gray-900">
+					<div className="rounded-full px-12 py-4 shadow-lg bg-gray-900 dark:bg-gray-950">
 						<div className="flex items-center space-x-4">
 							<p className="text-gray-100">
 								{Object.keys(rowSelection).length} data terpilih
 							</p>
-							{/* log */}
-							<button
-								className="px-3 py-1 font-medium rounded-full border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-								onClick={() => console.log("rowSelection", rowSelection)}
-							>
-								Log
-							</button>
 							{/* hapus */}
 							<button
 								className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"

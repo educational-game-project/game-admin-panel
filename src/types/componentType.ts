@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type {
+	Image,
 	ScoreSuccessResponse,
 	Student,
 	StudentSuccessResponse,
@@ -86,7 +87,7 @@ interface GameTableState {
 }
 // profile
 interface ProfileUserProps {
-	user: User;
+	user: User | undefined;
 }
 interface HeaderProfileProps {
 	isProfilePage: boolean;
@@ -105,6 +106,7 @@ interface PerformanceWidgetProps {
 	children?: ReactNode;
 	name: string;
 	type: "simple" | "advanced";
+	isError: boolean;
 }
 
 interface PerformanceChartProps {
@@ -113,16 +115,31 @@ interface PerformanceChartProps {
 	totalValue: number | undefined;
 }
 
+interface ImageGalleryProps {
+	images: Image[] | undefined;
+	height: number;
+}
+
+interface GalleryPortalProps {
+	images: Image[] | undefined;
+	currentSlide: number;
+	handleClose: () => void;
+	prevSlide: () => void;
+	nextSlide: () => void;
+}
+
 export type {
 	AlertDialogProps,
 	Breadcrumb,
 	BreadcrumbState,
 	BreadcrumbIconProps,
 	ButtonClipboardProps,
+	GalleryPortalProps,
 	GameTableProps,
 	GameTableState,
 	HeaderContainerProps,
 	HeaderProfileProps,
+	ImageGalleryProps,
 	ModalDisplayProps,
 	PerformanceChartProps,
 	PerformanceWidgetProps,

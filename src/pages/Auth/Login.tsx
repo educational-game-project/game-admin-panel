@@ -61,7 +61,7 @@ function Login() {
 		<main className="w-full min-h-screen p-3 bg-white relative dark:bg-gray-900">
 			<div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-4 min-h-screen">
 				<div className="col-span-full lg:col-span-6">
-					<div className="">
+					<div>
 						<div className="mx-10 mt-10">
 							<div>
 								<img

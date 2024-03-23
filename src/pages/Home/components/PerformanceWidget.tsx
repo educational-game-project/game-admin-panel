@@ -1,6 +1,7 @@
 import { useAppSelector } from "../../../app/hooks";
 import { selectTheme } from "../../../features/themeSlice";
 import {
+	AlertCircleIcon,
 	Gamepad2Icon,
 	GraduationCapIcon,
 	SchoolIcon,
@@ -16,6 +17,7 @@ function PerformanceWidget({
 	activeItem,
 	name,
 	children,
+	isError,
 }: PerformanceWidgetProps) {
 	const theme = useAppSelector(selectTheme);
 	const widgetConfig: WidgetConfigList = {
@@ -74,7 +76,14 @@ function PerformanceWidget({
 					}
         items-center justify-center mb-8`}
 				>
-					{widgetConfig[name as keyof WidgetConfigList].icon}
+					{isError ? (
+						<AlertCircleIcon
+							size={24}
+							className="stroke-gray-50 dark:stroke-gray-200"
+						/>
+					) : (
+						widgetConfig[name as keyof WidgetConfigList].icon
+					)}
 				</div>
 				{type === "advanced" && (
 					<div className="text-right">
@@ -82,24 +91,24 @@ function PerformanceWidget({
 							{getPercentage(activeItem, countItem)}
 						</p>
 						<p className="text-xs text-gray-400 dark:text-gray-400">
-							{activeItem} {name} aktif
+							{activeItem ?? 0} {name} aktif
 						</p>
 					</div>
 				)}
 			</div>
 			<div className={type === "advanced" ? "grid grid-cols-2 gap-x-3" : ""}>
-				<div className="">
+				<div>
 					<h5 className="text-gray-600 mb-1 capitalize dark:text-gray-400">
 						Performa {name}
 					</h5>
 					<p className="dark:text-gray-100 text-2xl">
-						{countItem}{" "}
+						{countItem ?? 0}{" "}
 						<span className="text-lg text-gray-600 dark:text-gray-400">
 							{name === "admin" || name === "siswa" ? "orang" : "item"}
 						</span>
 					</p>
 				</div>
-				{type === "advanced" && <div className="">{children}</div>}
+				{type === "advanced" && <div>{children}</div>}
 			</div>
 		</div>
 	);

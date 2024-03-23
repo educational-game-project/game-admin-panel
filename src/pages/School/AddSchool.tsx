@@ -103,7 +103,7 @@ function AddSchool() {
 			<div className="mb-6">
 				<Breadcrumb />
 				<div className="flex items-center justify-between">
-					<div className="">
+					<div>
 						<h5 className="font-semibold text-3xl mb-1.5">Tambah Sekolah</h5>
 						<p className="text-gray-500">
 							Tambahkan sekolah baru ke dalam sistem.
@@ -224,7 +224,7 @@ function AddSchool() {
 							</p>
 						</div>
 						<div className="p-5">
-							<div className="">
+							<div>
 								<div
 									{...getRootProps({ className: "dropzone" })}
 									className={`group drop-media cursor-pointer w-full p-4 border-2 border-dashed rounded-md flex flex-col justify-center items-center focus:ring-0 focus:outline-none focus:border-gray-400 focus:bg-neutral-200 dark:focus:bg-gray-700 dark:focus:!border-gray-600 hover:bg-gray-100/60 dark:hover:bg-gray-900/60 transition ${

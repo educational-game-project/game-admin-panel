@@ -274,7 +274,7 @@ function SchoolTable() {
 	}, [querySearch, limitPage]);
 
 	return (
-		<div className="">
+		<div>
 			<div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
 				<div className="flex space-x-3 my-4 px-5 items-center justify-between">
 					<div className="relative w-full">
@@ -290,7 +290,7 @@ function SchoolTable() {
 							<SearchIcon size={20} className="text-gray-500" />
 						</div>
 					</div>
-					<div className="">
+					<div>
 						<p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
 							{schoolPages?.currentPage ?? 1}/{schoolPages?.totalPage ?? 1}
 						</p>
@@ -519,18 +519,11 @@ function SchoolTable() {
 						: "-z-10 opacity-0 scale-50"
 				}`}
 			>
-				<div className="rounded-full px-12 py-4 shadow-lg bg-gray-900">
+				<div className="rounded-full px-12 py-4 shadow-lg bg-gray-900 dark:bg-gray-950">
 					<div className="flex items-center space-x-4">
 						<p className="text-gray-100">
 							{Object.keys(rowSelection).length} data terpilih
 						</p>
-						{/* log */}
-						<button
-							className="px-3 py-1 font-medium rounded-full border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-							onClick={() => console.log("rowSelection", rowSelection)}
-						>
-							Log
-						</button>
 						{/* hapus */}
 						<button
 							className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"

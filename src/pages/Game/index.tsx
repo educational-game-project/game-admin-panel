@@ -20,7 +20,7 @@ function Game() {
 	}, [dispatch]);
 
 	return (
-		<div className="">
+		<div>
 			<div className="mb-6">
 				<Breadcrumb />
 				<HeaderContainer

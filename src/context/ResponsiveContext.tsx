@@ -12,6 +12,7 @@ export const ResponsiveProvider = ({ children }: ResponsiveProviderProps) => {
 
 	const handleResize = () => {
 		setIsDesktopView(window.innerWidth > 768);
+		document.body.style.overflow = "auto";
 	};
 
 	useEffect(() => {

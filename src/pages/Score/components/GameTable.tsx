@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
 import {
 	Bar,
 	BarChart,
@@ -66,6 +67,7 @@ function GameTable({
 	const [isOpenChart, setIsOpenChart] = useState(false);
 	const theme = useAppSelector(selectTheme);
 	const axisColor = theme === "dark" ? "#6b7280" : "#9ca3af";
+	const [querySearch] = useDebounce(filter, 500);
 
 	const dispatch = useAppDispatch();
 	const [
@@ -131,7 +133,7 @@ function GameTable({
 		data: games,
 		columns: defaultColumns,
 		state: {
-			globalFilter: filter,
+			globalFilter: querySearch,
 			sorting,
 		},
 		enableRowSelection: true,
@@ -208,7 +210,7 @@ function GameTable({
 					<h4 className="font-semibold text-2xl mb-1">Daftar Permainan</h4>
 					<p className="text-gray-500">Tabel daftar permainan oleh pemain.</p>
 				</div>
-				<div className="">
+				<div>
 					<div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
 						<div className="flex space-x-3 my-4 px-5 items-center justify-between">
 							<div className="relative w-full">
@@ -224,7 +226,7 @@ function GameTable({
 									<SearchIcon size={20} className="text-gray-500" />
 								</div>
 							</div>
-							<div className="">
+							<div>
 								<p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
 									{table.getState().pagination.pageIndex + 1}/
 									{table.getPageCount()}
@@ -295,7 +297,7 @@ function GameTable({
 												</td>
 											</tr>
 										))
-									) : games.length === 0 || Object.keys(games).length === 0 ? (
+									) : table.getPrePaginationRowModel().rows.length === 0 ? (
 										<tr>
 											<td
 												colSpan={3}
@@ -368,7 +370,7 @@ function GameTable({
 								</div>
 								{/* total data */}
 								<p className="text-gray-500 ml-3 dark:text-gray-400">
-									dari {games.length ?? 0} data
+									dari {table.getPrePaginationRowModel().rows.length} data
 								</p>
 							</div>
 							<div className="flex space-x-3">
@@ -424,7 +426,7 @@ function GameTable({
 			>
 				<div className="score-game-chart">
 					{isLoadingChart || isLoadingUser ? (
-						<div className="">
+						<div>
 							<div className="animate-pulse-fast skeleton-loader skeleton-sm w-2/3 mb-7" />
 							<div className="w-full h-96 mb-1.5 flex items-center justify-center">
 								<BarsScaleFade
@@ -437,7 +439,7 @@ function GameTable({
 						</div>
 					) : null}
 					{isSuccessChart && (
-						<div className="">
+						<div>
 							<p className="text-sm text-gray-500 dark:text-gray-400 mb-7">
 								Grafik perolehan skor{" "}
 								<span className="text-teal-600 dark:text-teal-500">

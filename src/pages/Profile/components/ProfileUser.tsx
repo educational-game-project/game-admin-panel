@@ -16,32 +16,38 @@ function ProfileUser({ user }: ProfileUserProps) {
 						<p className="mb-1.5 text-gray-400 dark:text-gray-500">
 							Nama Depan
 						</p>
-						<p className="font-medium dark:text-gray-300">{firstName}</p>
+						<p className="font-medium dark:text-gray-300">
+							{firstName !== "" ? firstName : "-"}
+						</p>
 					</div>
 					<div className="col-span-3">
 						<p className="mb-1.5 text-gray-400 dark:text-gray-500">
 							Nama Belakang
 						</p>
-						<p className="font-medium dark:text-gray-300">{lastName}</p>
+						<p className="font-medium dark:text-gray-300">
+							{lastName !== "" ? lastName : "-"}
+						</p>
 					</div>
 					<div className="col-span-3">
 						<p className="mb-1.5 text-gray-400 dark:text-gray-500">
 							Alamat Email
 						</p>
-						<p className="font-medium dark:text-gray-300">{user?.email}</p>
+						<p className="font-medium dark:text-gray-300">
+							{user?.email ?? "-"}
+						</p>
 					</div>
 					<div className="col-span-3">
 						<p className="mb-1.5 text-gray-400 dark:text-gray-500">
 							Nomor Telepon
 						</p>
 						<p className="font-medium dark:text-gray-300">
-							{user?.phoneNumber}
+							{user?.phoneNumber ?? "-"}
 						</p>
 					</div>
 					<div className="col-span-full">
 						<p className="mb-1.5 text-gray-400 dark:text-gray-500">Alamat</p>
 						<p className="font-medium dark:text-gray-300">
-							Semarang, Indonesia
+							{firstName !== "" ? "Semarang, Indonesia" : "-"}
 						</p>
 					</div>
 				</div>
@@ -57,7 +63,7 @@ function ProfileUser({ user }: ProfileUserProps) {
 								Nama Sekolah
 							</p>
 							<p className="font-medium dark:text-gray-300">
-								{user?.school?.name}
+								{user?.school?.name ?? "-"}
 							</p>
 						</div>
 						<div className="col-span-3">
@@ -65,13 +71,13 @@ function ProfileUser({ user }: ProfileUserProps) {
 								Jumlah Siswa
 							</p>
 							<p className="font-medium dark:text-gray-300">
-								{user?.school?.studentsCount}
+								{user?.school?.studentsCount ?? "-"}
 							</p>
 						</div>
 						<div className="col-span-full">
 							<p className="mb-1.5 text-gray-400 dark:text-gray-500">Alamat</p>
 							<p className="font-medium dark:text-gray-300">
-								{user?.school?.address}
+								{user?.school?.address ?? "-"}
 							</p>
 						</div>
 					</div>

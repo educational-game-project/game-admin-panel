@@ -235,7 +235,7 @@ export default function Sidebar({ children, currentPath }: SidebarProps) {
 							)}
 						</div>
 						<hr className="mt-2 mb-1.5 dark:border-gray-600/80" />
-						<div className="">
+						<div>
 							<Link
 								className={`relative flex items-center py-1.5 px-2 mb-1 font-medium rounded-md cursor-pointer transition-colors group ${
 									currentPath === "profile"

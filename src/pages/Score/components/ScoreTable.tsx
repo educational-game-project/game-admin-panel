@@ -138,7 +138,7 @@ function ScoreTable({
 				<h4 className="font-semibold text-2xl mb-1">Daftar Skor</h4>
 				<p className="text-gray-500">Tabel perolehan skor siswa.</p>
 			</div>
-			<div className="">
+			<div>
 				<div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
 					<div className="flex space-x-3 my-4 px-5 items-center justify-between">
 						<div className="relative w-full">
@@ -156,7 +156,7 @@ function ScoreTable({
 						</div>
 						<div className="flex items-center space-x-6">
 							{/* filter */}
-							<div className="">
+							<div>
 								<Menu as="div" className="relative inline-block text-right">
 									<div>
 										<Menu.Button className="group/filter inline-flex w-full items-center justify-center rounded-md px-2 py-1.5 font-medium text-3.25xs text-gray-600 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 dark:bg-gray-700 dark:hover:bg-indigo-600 dark:text-gray-200 dark:hover:text-indigo-100">
@@ -327,8 +327,7 @@ function ScoreTable({
 											</td>
 										</tr>
 									))
-								) : filteredScore.length === 0 ||
-								  Object.keys(filteredScore).length === 0 ? (
+								) : table.getPrePaginationRowModel().rows.length === 0 ? (
 									<tr>
 										<td
 											colSpan={6}
@@ -401,7 +400,7 @@ function ScoreTable({
 							</div>
 							{/* total data */}
 							<p className="text-gray-500 ml-3 dark:text-gray-400">
-								dari {filteredScore.length ?? 0} data
+								dari {table.getPrePaginationRowModel().rows.length} data
 							</p>
 						</div>
 						<div className="flex space-x-3">

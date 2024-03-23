@@ -9,7 +9,7 @@ function GameOverview({ data }: { data: Game[] | undefined }) {
 				<h5 className="font-semibold text-lg mb-0.5">Game Overview</h5>
 				<p className="text-gray-500">Overview of the game's performance.</p>
 			</div>
-			<div className="">
+			<div>
 				{data?.map((game: Game) => (
 					<div
 						key={game?._id}
@@ -18,7 +18,7 @@ function GameOverview({ data }: { data: Game[] | undefined }) {
 						<h5 className="mb-0.5">{game?.name}</h5>
 						<Link
 							to={`/game/${game?._id}`}
-							className="text-violet-500 text-xs hover:text-violet-600 transition"
+							className="text-violet-500 text-xs hover:text-violet-600 transition dark:hover:text-violet-400"
 						>
 							Detail
 						</Link>
