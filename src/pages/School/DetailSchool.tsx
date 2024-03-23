@@ -6,6 +6,7 @@ import { useGetSchoolByIdMutation } from "../../services/schoolApi";
 import { setBreadcrumb } from "../../features/breadcrumbSlice";
 import { setAllowedToast } from "../../features/toastSlice";
 import Breadcrumb from "../../components/Breadcrumb";
+import ImageGallery from "../../components/ImageGallery";
 import { showErrorToast } from "../../components/Toast";
 import { AlertTriangleIcon, Loader2Icon } from "lucide-react";
 import { transformStringPlus } from "../../utilities/stringUtils";
@@ -209,22 +210,7 @@ function DetailSchool() {
 							</p>
 						</div>
 						<div className="p-5">
-							<div className="grid grid-cols-12 xl:grid-cols-10 gap-4">
-								{school?.data?.images.map((image, index) => (
-									<div
-										className="col-span-4 lg:col-span-3 xl:col-span-2"
-										key={index}
-									>
-										<figure className="group overflow-hidden w-full h-32 rounded-md mr-3">
-											<img
-												src={image?.fileLink}
-												alt={`${school?.data?.name}-${index} Profile`}
-												className="w-full h-full object-cover object-center"
-											/>
-										</figure>
-									</div>
-								))}
-							</div>
+							<ImageGallery images={school?.data?.images} height={128} />
 							{school?.data?.images?.length === 0 && (
 								<div className="w-full flex items-center p-3 rounded-md bg-gray-100 dark:bg-gray-900/90">
 									<p className="font-medium text-gray-500 flex items-center">
