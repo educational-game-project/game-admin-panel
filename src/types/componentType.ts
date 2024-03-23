@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type {
+	Image,
 	ScoreSuccessResponse,
 	Student,
 	StudentSuccessResponse,
@@ -114,16 +115,31 @@ interface PerformanceChartProps {
 	totalValue: number | undefined;
 }
 
+interface ImageGalleryProps {
+	images: Image[] | undefined;
+	height: number;
+}
+
+interface GalleryPortalProps {
+	images: Image[] | undefined;
+	currentSlide: number;
+	handleClose: () => void;
+	prevSlide: () => void;
+	nextSlide: () => void;
+}
+
 export type {
 	AlertDialogProps,
 	Breadcrumb,
 	BreadcrumbState,
 	BreadcrumbIconProps,
 	ButtonClipboardProps,
+	GalleryPortalProps,
 	GameTableProps,
 	GameTableState,
 	HeaderContainerProps,
 	HeaderProfileProps,
+	ImageGalleryProps,
 	ModalDisplayProps,
 	PerformanceChartProps,
 	PerformanceWidgetProps,
