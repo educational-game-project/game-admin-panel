@@ -5,7 +5,7 @@ import { useUser } from "../hook/authHooks";
 import { useAppSelector } from "../app/hooks";
 import { selectExpanded } from "../features/sidebarSlice";
 import { transformStringPlus } from "../utilities/stringUtils";
-import { BellRingIcon, CommandIcon, SearchIcon } from "lucide-react";
+import { CommandIcon, SearchIcon } from "lucide-react";
 
 function Navbar() {
 	const [isOpenGlobalSearch, setIsOpenGlobalSearch] = useState(false);
@@ -66,7 +66,7 @@ function Navbar() {
 					<div className="col-span-5 xl:col-span-7">
 						<div className="flex items-center justify-end">
 							<div className="flex items-center space-x-6">
-								<button
+								{/* <button
 									className="text-gray-800 hover:text-indigo-500 relative block dark:text-gray-300 dark:hover:text-indigo-500"
 									title="Notification"
 								>
@@ -75,7 +75,7 @@ function Navbar() {
 										<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400" />
 										<span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 -translate-y-1.6375 translate-x-0.125" />
 									</div>
-								</button>
+								</button> */}
 								<Link to="/profile/account" title="Profile">
 									<img
 										src={
