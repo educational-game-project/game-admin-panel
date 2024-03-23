@@ -86,7 +86,7 @@ interface GameTableState {
 }
 // profile
 interface ProfileUserProps {
-	user: User;
+	user: User | undefined;
 }
 interface HeaderProfileProps {
 	isProfilePage: boolean;

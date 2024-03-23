@@ -2,9 +2,14 @@ import ProfileUser from "./components/ProfileUser";
 import { useGetProfileQuery } from "../../services/profileApi";
 import HeaderProfile from "./components/HeaderProfile";
 import LoadingProfileUser from "./components/LoadingProfileUser";
+import { showErrorToast } from "../../components/Toast";
 
 function Profile() {
-	const { data: user, isLoading, isSuccess } = useGetProfileQuery();
+	const { data: user, isError, isLoading } = useGetProfileQuery();
+
+	if (isError) {
+		showErrorToast("Gagal memuat data");
+	}
 
 	return (
 		<div className="bg-white rounded-xl min-h-[calc(100vh-120.5px)] dark:bg-gray-800">
@@ -15,8 +20,11 @@ function Profile() {
 					<p className="mb-4 text-gray-600 dark:text-gray-400">
 						Kelola informasi profil Anda
 					</p>
-					{isLoading && <LoadingProfileUser />}
-					{isSuccess && <ProfileUser user={user.data} />}
+					{isLoading ? (
+						<LoadingProfileUser />
+					) : (
+						<ProfileUser user={user?.data} />
+					)}
 				</div>
 			</div>
 		</div>
