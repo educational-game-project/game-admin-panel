@@ -11,6 +11,7 @@ import GameOverview from "./components/GameOverview";
 import { BarsScaleFade } from "react-svg-spinners";
 
 import type { School, SchoolChartType } from "../../types";
+import { AlertTriangleIcon } from "lucide-react";
 
 function Home() {
 	const dispatch = useAppDispatch();
@@ -47,27 +48,29 @@ function Home() {
 	}, [dispatch]);
 
 	return (
-		<div className="">
+		<div>
 			<div className="mb-6">
 				<Breadcrumb />
 				<h5 className="font-semibold text-3xl mb-1.5">Home</h5>
 				<p className="text-gray-500">Selamat datang di Dashboard Gameon.</p>
 			</div>
-			{isLoading && <p>Loading...</p>}
 			<div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-6 gap-4">
 				<PerformanceWidget
 					countItem={dashboards?.data?.gameCount}
+					isError={isError}
 					name="permainan"
 					type="simple"
 				/>
 				<PerformanceWidget
 					countItem={dashboards?.data?.schoolCount}
+					isError={isError}
 					name="sekolah"
 					type="simple"
 				/>
 				<PerformanceWidget
 					activeItem={dashboards?.data?.activeAdmin}
 					countItem={dashboards?.data?.adminCount}
+					isError={isError}
 					name="admin"
 					type="advanced"
 				>
@@ -80,6 +83,7 @@ function Home() {
 				<PerformanceWidget
 					activeItem={dashboards?.data?.activeStudents}
 					countItem={dashboards?.data?.studentsCount}
+					isError={isError}
 					name="siswa"
 					type="advanced"
 				>
@@ -107,6 +111,29 @@ function Home() {
 						</div>
 					)}
 					{isSuccess && <SchoolOverview data={schoolChart} />}
+					{isError && (
+						<div className="bg-white p-5 rounded-xl dark:bg-gray-800">
+							<div className="mb-4">
+								<h5 className="font-semibold text-lg mb-0.5">
+									School Overview
+								</h5>
+								<p className="text-gray-500">
+									Overview of the school's performance.
+								</p>
+							</div>
+							<div className="w-full h-44 flex items-center justify-center flex-col">
+								<div className="mb-3">
+									<AlertTriangleIcon
+										size={42}
+										className="stroke-gray-500 dark:stroke-gray-400"
+									/>
+								</div>
+								<p className="text-center text-gray-500">
+									No data available. Please try again later.
+								</p>
+							</div>
+						</div>
+					)}
 				</div>
 				<div className="col-span-full xl:col-span-2">
 					{isLoading && (
@@ -124,6 +151,27 @@ function Home() {
 						</div>
 					)}
 					{isSuccess && <GameOverview data={dashboards?.data?.games} />}
+					{isError && (
+						<div className="bg-white p-5 rounded-xl dark:bg-gray-800">
+							<div className="mb-4">
+								<h5 className="font-semibold text-lg mb-0.5">Game Overview</h5>
+								<p className="text-gray-500">
+									Overview of the game's performance.
+								</p>
+							</div>
+							<div className="w-full h-44 flex items-center justify-center flex-col">
+								<div className="mb-3">
+									<AlertTriangleIcon
+										size={42}
+										className="stroke-gray-500 dark:stroke-gray-400"
+									/>
+								</div>
+								<p className="text-center text-gray-500">
+									No data available. Please try again later.
+								</p>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
