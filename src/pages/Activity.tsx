@@ -750,18 +750,11 @@ function Activity() {
 							: "-z-10 opacity-0 scale-50"
 					}`}
 				>
-					<div className="rounded-full px-12 py-4 shadow-lg bg-gray-900">
+					<div className="rounded-full px-12 py-4 shadow-lg bg-gray-900 dark:bg-gray-950">
 						<div className="flex items-center space-x-4">
 							<p className="text-gray-100">
 								{Object.keys(rowSelection).length} data terpilih
 							</p>
-							{/* log */}
-							<button
-								className="px-3 py-1 font-medium rounded-full border border-indigo-500 flex items-center bg-indigo-500 text-gray-50 disabled:bg-indigo-300 disabled:border-indigo-300 disabled:cursor-not-allowed"
-								onClick={() => console.log("rowSelection", rowSelection)}
-							>
-								Log
-							</button>
 							{/* hapus */}
 							<button
 								className="px-3 py-1 font-medium rounded-full border border-red-500 flex items-center bg-red-500 text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
