@@ -247,8 +247,7 @@ function Leaderboard() {
 												</td>
 											</tr>
 										))
-									) : leaderboard.length === 0 ||
-									  Object.keys(leaderboard).length === 0 ? (
+									) : table.getPrePaginationRowModel().rows.length === 0 ? (
 										<tr>
 											<td
 												colSpan={4}
@@ -324,7 +323,7 @@ function Leaderboard() {
 								</div>
 								{/* total data */}
 								<p className="text-gray-500 ml-3 dark:text-gray-400">
-									dari {leaderboard.length ?? 0} data
+									dari {table.getPrePaginationRowModel().rows.length} data
 								</p>
 							</div>
 							<div className="flex space-x-3">

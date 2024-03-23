@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
 import {
 	Bar,
 	BarChart,
@@ -66,6 +67,7 @@ function GameTable({
 	const [isOpenChart, setIsOpenChart] = useState(false);
 	const theme = useAppSelector(selectTheme);
 	const axisColor = theme === "dark" ? "#6b7280" : "#9ca3af";
+	const [querySearch] = useDebounce(filter, 500);
 
 	const dispatch = useAppDispatch();
 	const [
@@ -131,7 +133,7 @@ function GameTable({
 		data: games,
 		columns: defaultColumns,
 		state: {
-			globalFilter: filter,
+			globalFilter: querySearch,
 			sorting,
 		},
 		enableRowSelection: true,
@@ -295,7 +297,7 @@ function GameTable({
 												</td>
 											</tr>
 										))
-									) : games.length === 0 || Object.keys(games).length === 0 ? (
+									) : table.getPrePaginationRowModel().rows.length === 0 ? (
 										<tr>
 											<td
 												colSpan={3}
@@ -368,7 +370,7 @@ function GameTable({
 								</div>
 								{/* total data */}
 								<p className="text-gray-500 ml-3 dark:text-gray-400">
-									dari {games.length ?? 0} data
+									dari {table.getPrePaginationRowModel().rows.length} data
 								</p>
 							</div>
 							<div className="flex space-x-3">

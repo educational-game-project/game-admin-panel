@@ -327,8 +327,7 @@ function ScoreTable({
 											</td>
 										</tr>
 									))
-								) : filteredScore.length === 0 ||
-								  Object.keys(filteredScore).length === 0 ? (
+								) : table.getPrePaginationRowModel().rows.length === 0 ? (
 									<tr>
 										<td
 											colSpan={6}
@@ -401,7 +400,7 @@ function ScoreTable({
 							</div>
 							{/* total data */}
 							<p className="text-gray-500 ml-3 dark:text-gray-400">
-								dari {filteredScore.length ?? 0} data
+								dari {table.getPrePaginationRowModel().rows.length} data
 							</p>
 						</div>
 						<div className="flex space-x-3">
