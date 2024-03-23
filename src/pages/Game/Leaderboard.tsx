@@ -129,11 +129,11 @@ function Leaderboard() {
 	}, [gameId]);
 
 	return (
-		<div className="">
+		<div>
 			<div className="mb-6">
 				<Breadcrumb />
 				<div className="flex items-center justify-between">
-					<div className="">
+					<div>
 						<h5 className="font-semibold text-3xl mb-1.5">Leaderboard</h5>
 						<p className="text-gray-500">
 							Lihat peringkat pemain game{" "}
@@ -157,7 +157,7 @@ function Leaderboard() {
 				</div>
 			</div>
 			<div className="bg-white p-5 rounded-xl dark:bg-gray-800">
-				<div className="">
+				<div>
 					<div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
 						<div className="flex space-x-3 my-4 px-5 items-center justify-between">
 							<div className="relative w-full">
@@ -173,7 +173,7 @@ function Leaderboard() {
 									<SearchIcon size={20} className="text-gray-500" />
 								</div>
 							</div>
-							<div className="">
+							<div>
 								<p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
 									{table.getState().pagination.pageIndex + 1}/
 									{table.getPageCount()}

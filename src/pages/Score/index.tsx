@@ -84,7 +84,7 @@ function Score() {
 			<div className="mb-5">
 				<Breadcrumb />
 				<div className="flex items-center justify-between">
-					<div className="">
+					<div>
 						<h5 className="font-semibold text-3xl mb-1.5 flex items-center">
 							Skor
 							{isLoading || isLoadingGet ? (

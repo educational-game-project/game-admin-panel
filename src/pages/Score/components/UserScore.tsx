@@ -11,10 +11,10 @@ function UserScore({ isLoading, isLoadingGet, students }: UserScoreProps) {
 		>
 			{isLoading || isLoadingGet ? (
 				<>
-					<div className="">
+					<div>
 						<div className="skeleton-loader skeleton-sm !size-18 !rounded-full mr-3" />
 					</div>
-					<div className="">
+					<div>
 						<div className="skeleton-loader skeleton-sm w-40 mb-3" />
 						<div className="skeleton-loader skeleton-sm w-58 mb-2.5" />
 						<div className="skeleton-loader skeleton-sm w-58" />
@@ -34,7 +34,7 @@ function UserScore({ isLoading, isLoadingGet, students }: UserScoreProps) {
 							className="w-full h-full object-cover object-center block"
 						/>
 					</figure>
-					<div className="">
+					<div>
 						<p className="font-semibold text-lg mb-0.5">
 							{students?.data?.name}
 						</p>

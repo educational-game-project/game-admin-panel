@@ -64,7 +64,7 @@ function DetailGame() {
 			<div className="mb-6">
 				<Breadcrumb />
 				<div className="flex items-center justify-between">
-					<div className="">
+					<div>
 						<h5 className="font-semibold text-3xl mb-1.5 flex items-center">
 							Detail Game
 							{isLoading && (

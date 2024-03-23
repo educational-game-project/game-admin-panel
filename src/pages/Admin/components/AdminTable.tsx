@@ -183,7 +183,7 @@ function AdminTable() {
 				header: "Nama Lengkap",
 				cell: (info) => (
 					<div className="flex items-center">
-						<div className="">
+						<div>
 							<figure className="mr-3 size-6 rounded-full block overflow-hidden">
 								<img
 									src={
@@ -297,7 +297,7 @@ function AdminTable() {
 	}, [querySearch, limitPage]);
 
 	return (
-		<div className="">
+		<div>
 			<div className="w-full border border-gray-200 rounded-lg overflow-hidden dark:border-gray-600">
 				<div className="flex space-x-3 my-4 px-5 items-center justify-between">
 					<div className="relative w-full">
@@ -313,7 +313,7 @@ function AdminTable() {
 							<SearchIcon size={20} className="text-gray-500" />
 						</div>
 					</div>
-					<div className="">
+					<div>
 						<p className="bg-indigo-400 rounded-md px-1.5 py-1 text-gray-50 text-3.25xs dark:bg-indigo-600 dark:text-gray-100">
 							{adminPages?.currentPage ?? 1}/{adminPages?.totalPage ?? 1}
 						</p>

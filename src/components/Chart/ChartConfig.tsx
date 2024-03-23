@@ -42,7 +42,7 @@ export const CustomLegend = (props: LegendProps) => {
 						}}
 					/>
 					<span
-						className="align-middle"
+						className="align-middle capitalize"
 						style={{
 							color: entry?.color,
 						}}

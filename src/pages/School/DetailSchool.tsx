@@ -61,7 +61,7 @@ function DetailSchool() {
 			<div className="mb-6">
 				<Breadcrumb />
 				<div className="flex items-center justify-between">
-					<div className="">
+					<div>
 						<h5 className="font-semibold text-3xl mb-1.5 flex items-center">
 							Detail Sekolah
 							{isLoading && (
@@ -175,7 +175,7 @@ function DetailSchool() {
 													className="w-full h-full object-cover object-center"
 												/>
 											</figure>
-											<div className="">
+											<div>
 												<p className="font-medium dark:text-gray-200">
 													{admin?.name}
 												</p>

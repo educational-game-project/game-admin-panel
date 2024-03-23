@@ -105,6 +105,7 @@ interface PerformanceWidgetProps {
 	children?: ReactNode;
 	name: string;
 	type: "simple" | "advanced";
+	isError: boolean;
 }
 
 interface PerformanceChartProps {
