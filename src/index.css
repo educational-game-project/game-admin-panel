@@ -28,7 +28,7 @@ body {
 }
 
 body {
-	@apply antialiased text-sm selection:bg-indigo-500 selection:text-gray-50 dark:selection:bg-indigo-600;
+	@apply antialiased text-sm selection:bg-indigo-500 selection:text-gray-50 dark:selection:bg-indigo-600 relative;
 }
 
 button {
