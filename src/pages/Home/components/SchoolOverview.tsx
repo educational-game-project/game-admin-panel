@@ -21,7 +21,7 @@ import {
 } from "../../../components/Chart/ChartConfig";
 
 import type { SchoolChartType } from "../../../types";
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon, Loader2Icon } from "lucide-react";
 
 const RoundedSchoolBar = ({ ...props }: RectangleProps) => {
 	const { x, y, width, height } = props;
@@ -42,7 +42,8 @@ const RoundedSchoolBar = ({ ...props }: RectangleProps) => {
 function SchoolOverview({ data }: { data: SchoolChartType[] }) {
 	const theme = useAppSelector(selectTheme);
 	const axisColor = theme === "dark" ? "#6b7280" : "#9ca3af";
-	const [getSchoolChartPng, { ref: schoolChartRef }] = useCurrentPng();
+	const [getSchoolChartPng, { ref: schoolChartRef, isLoading }] =
+		useCurrentPng();
 
 	const handleSchoolChartDownload = useCallback(async () => {
 		const png = await getSchoolChartPng();
@@ -57,10 +58,22 @@ function SchoolOverview({ data }: { data: SchoolChartType[] }) {
 				<button
 					type="button"
 					onClick={handleSchoolChartDownload}
-					className="flex items-center text-xs px-3 py-1.5 rounded-md bg-white dark:bg-gray-700 dark:text-white border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 ease-in-out"
+					className="flex items-center text-xs px-3 py-1.5 rounded-md bg-white dark:bg-gray-700 dark:text-white border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 ease-in-out disabled:opacity-60"
+					disabled={isLoading}
 				>
-					<DownloadIcon size={16} className="mr-1.5" />
-					Export
+					{isLoading ? (
+						<>
+							<span className="">
+								<Loader2Icon size={18} className="mr-1.5 animate-spin-fast" />
+							</span>
+							<span>Exporting...</span>
+						</>
+					) : (
+						<>
+							<DownloadIcon size={16} className="mr-1.5" />
+							Export
+						</>
+					)}
 				</button>
 			</div>
 			<div className="px-5">

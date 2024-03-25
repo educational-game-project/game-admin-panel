@@ -42,6 +42,7 @@ import {
 	BarChart2Icon,
 	ChevronDownIcon,
 	DownloadIcon,
+	Loader2Icon,
 	SearchIcon,
 } from "lucide-react";
 import { BarsScaleFade } from "react-svg-spinners";
@@ -72,7 +73,8 @@ function GameTable({
 	const theme = useAppSelector(selectTheme);
 	const axisColor = theme === "dark" ? "#6b7280" : "#9ca3af";
 	const [querySearch] = useDebounce(filter, 500);
-	const [getGameChartPng, { ref: gameChartRef }] = useCurrentPng();
+	const [getGameChartPng, { ref: gameChartRef, isLoading: isLoadingExport }] =
+		useCurrentPng();
 
 	const handleGameChartDownload = useCallback(
 		async (name: string | undefined, game: string | undefined) => {
@@ -451,9 +453,14 @@ function GameTable({
 								scoreCharts?.data?.game?.name
 							)
 						}
-						className="flex items-center size-10 justify-center rounded-full bg-white dark:bg-gray-700 dark:text-white border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 ease-in-out"
+						className="flex items-center size-10 justify-center rounded-full bg-white dark:bg-gray-700 dark:text-white border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 ease-in-out disabled:opacity-60"
+						disabled={isLoadingExport}
 					>
-						<DownloadIcon size={16} className="" />
+						{isLoadingExport ? (
+							<Loader2Icon size={18} className="animate-spin-fast" />
+						) : (
+							<DownloadIcon size={16} className="" />
+						)}
 					</button>
 				</div>
 				<div className="score-game-chart">
