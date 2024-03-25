@@ -1,6 +1,5 @@
-import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Dialog, Transition } from "@headlessui/react";
+import { useKBar } from "kbar";
 import { useUser } from "../hook/authHooks";
 import { useAppSelector } from "../app/hooks";
 import { selectExpanded } from "../features/sidebarSlice";
@@ -8,34 +7,9 @@ import { transformStringPlus } from "../utilities/stringUtils";
 import { CommandIcon, SearchIcon } from "lucide-react";
 
 function Navbar() {
-	const [isOpenGlobalSearch, setIsOpenGlobalSearch] = useState(false);
 	const isExpanded = useAppSelector(selectExpanded);
 	const { user } = useUser();
-
-	const closeGlobalSearch = () => {
-		setIsOpenGlobalSearch(false);
-	};
-	const openGlobalSearch = () => {
-		setIsOpenGlobalSearch(true);
-	};
-	const toggleGlobalSearch = () => {
-		setIsOpenGlobalSearch((prev) => !prev);
-	};
-
-	useEffect(() => {
-		const handleKeyPress = (e: KeyboardEvent) => {
-			if (e.ctrlKey && e.key === "k") {
-				e.preventDefault();
-				toggleGlobalSearch();
-			}
-		};
-
-		window.addEventListener("keydown", handleKeyPress);
-
-		return () => {
-			window.removeEventListener("keydown", handleKeyPress);
-		};
-	}, []);
+	const { query } = useKBar();
 
 	return (
 		<div
@@ -48,7 +22,7 @@ function Navbar() {
 					<div className="col-span-7 xl:col-span-5">
 						<button
 							type="button"
-							onClick={openGlobalSearch}
+							onClick={query.toggle}
 							className="flex items-center justify-between rounded-md bg-gray-50 border border-gray-200 pl-3 pr-4 py-2 text-gray-400 transition-all-200 hover:border-gray-300 w-full cursor-text focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-indigo-500/30 focus:border-indigo-500/80 dark:bg-gray-700 dark:border-gray-700 dark:hover:border-gray-700 dark:text-gray-400 dark:focus:outline-indigo-500/30 dark:focus:border-indigo-600"
 						>
 							<span className="flex items-center">
@@ -93,60 +67,6 @@ function Navbar() {
 					</div>
 				</div>
 			</nav>
-			<Transition appear show={isOpenGlobalSearch} as={Fragment}>
-				<Dialog as="div" className="relative z-30" onClose={closeGlobalSearch}>
-					<Transition.Child
-						as={Fragment}
-						enter="ease-out duration-300"
-						enterFrom="opacity-0"
-						enterTo="opacity-100"
-						leave="ease-in duration-200"
-						leaveFrom="opacity-100"
-						leaveTo="opacity-0"
-					>
-						<div className="fixed inset-0 bg-black/25 backdrop-blur-sm dark:bg-black/60" />
-					</Transition.Child>
-
-					<div className="fixed inset-0 overflow-y-auto">
-						<div className="flex min-h-full items-center justify-center p-4 text-center">
-							<Transition.Child
-								as={Fragment}
-								enter="ease-out duration-300"
-								enterFrom="opacity-0 scale-95"
-								enterTo="opacity-100 scale-100"
-								leave="ease-in duration-200"
-								leaveFrom="opacity-100 scale-100"
-								leaveTo="opacity-0 scale-95"
-							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-gray-800">
-									<Dialog.Title
-										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200"
-									>
-										Global Search
-									</Dialog.Title>
-									<div className="mt-2">
-										<p className="text-sm text-gray-500 dark:text-gray-400">
-											This is a global search feature. You can use this feature
-											to search for anything you want. You can also use the
-											shortcut <code>Ctrl + K</code> to open this feature.
-										</p>
-									</div>
-									<div className="mt-4">
-										<button
-											type="button"
-											className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-											onClick={closeGlobalSearch}
-										>
-											Got it, thanks!
-										</button>
-									</div>
-								</Dialog.Panel>
-							</Transition.Child>
-						</div>
-					</div>
-				</Dialog>
-			</Transition>
 		</div>
 	);
 }
