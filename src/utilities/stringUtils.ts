@@ -84,3 +84,8 @@ export const getLabelCharts = (itemName: string | undefined): string => {
 	}
 	return itemName.replace(/\s*\([^)]*\)\s*/, "");
 };
+
+export const toKebabCase = (input: string | undefined): string => {
+	if (input === undefined) return "";
+	return input.toLowerCase().replace(/\s+/g, "-");
+};

@@ -1,5 +1,6 @@
 import { Fragment, useMemo, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { useDebounce } from "use-debounce";
 import {
 	createColumnHelper,
 	flexRender,
@@ -41,6 +42,7 @@ function ScoreTable({
 	const [category, setCategory] = useState<string>("all");
 	const [filter, setFilter] = useState("");
 	const [sorting, setSorting] = useState<SortingState>([]);
+	const [querySearch] = useDebounce(filter, 500);
 
 	const headerClass: Record<string, string> = {
 		checkboxs: "w-14 text-center",
@@ -72,16 +74,15 @@ function ScoreTable({
 	}, [score, category]);
 	const listGame: { id: string; name: string }[] = useMemo(() => {
 		const scoresData = scores?.data || [];
-		return scoresData.length
-			? Array.from(
-					new Set(
-						scoresData.map((item) => ({
-							id: item.game._id,
-							name: item.game.name,
-						}))
-					)
-			  )
-			: [];
+		if (!scoresData.length) return [];
+		return Array.from(
+			new Set(
+				scoresData.map((item) => ({
+					id: item.game._id,
+					name: item.game.name,
+				}))
+			)
+		);
 	}, [scores]);
 
 	const columnHelper = createColumnHelper<NormalizedScore>();
@@ -120,7 +121,7 @@ function ScoreTable({
 		data: filteredScore,
 		columns: defaultColumns,
 		state: {
-			globalFilter: filter,
+			globalFilter: querySearch,
 			sorting,
 		},
 		enableRowSelection: true,

@@ -13,7 +13,7 @@ function GameOverview({ data }: { data: Game[] | undefined }) {
 				{data?.map((game: Game) => (
 					<div
 						key={game?._id}
-						className="bg-gray-50 px-3 py-2 rounded-md dark:bg-gray-700/40 mb-2 flex items-center justify-between transition hover:bg-gray-100 cursor-default hover:dark:bg-gray-700"
+						className="bg-gray-100/80 px-3 py-2 rounded-md dark:bg-gray-700/40 mb-2 flex items-center justify-between transition hover:bg-gray-200/80 cursor-default hover:dark:bg-gray-700"
 					>
 						<h5 className="mb-0.5">{game?.name}</h5>
 						<Link

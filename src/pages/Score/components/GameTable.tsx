@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
+import FileSaver from "file-saver";
 import {
 	Bar,
 	BarChart,
@@ -10,6 +11,7 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
+import { useCurrentPng } from "recharts-to-png";
 import {
 	createColumnHelper,
 	flexRender,
@@ -39,11 +41,14 @@ import {
 	ArrowUpIcon,
 	BarChart2Icon,
 	ChevronDownIcon,
+	DownloadIcon,
+	Loader2Icon,
 	SearchIcon,
 } from "lucide-react";
 import { BarsScaleFade } from "react-svg-spinners";
 import { getColorLevel } from "../../../utilities/appUtils";
 import { transformInteger } from "../../../utilities/numberUtils";
+import { toKebabCase } from "../../../utilities/stringUtils";
 
 import type {
 	GameTableProps,
@@ -68,6 +73,21 @@ function GameTable({
 	const theme = useAppSelector(selectTheme);
 	const axisColor = theme === "dark" ? "#6b7280" : "#9ca3af";
 	const [querySearch] = useDebounce(filter, 500);
+	const [getGameChartPng, { ref: gameChartRef, isLoading: isLoadingExport }] =
+		useCurrentPng();
+
+	const handleGameChartDownload = useCallback(
+		async (name: string | undefined, game: string | undefined) => {
+			const png = await getGameChartPng();
+			if (png) {
+				FileSaver.saveAs(
+					png,
+					`${toKebabCase(name)}-${toKebabCase(game)}-chart.png`
+				);
+			}
+		},
+		[getGameChartPng]
+	);
 
 	const dispatch = useAppDispatch();
 	const [
@@ -424,6 +444,25 @@ function GameTable({
 				onCloseModal={closeModalChart}
 				isOpen={isOpenChart}
 			>
+				<div className="absolute top-5 right-20">
+					<button
+						type="button"
+						onClick={() =>
+							handleGameChartDownload(
+								userData?.data?.name,
+								scoreCharts?.data?.game?.name
+							)
+						}
+						className="flex items-center size-10 justify-center rounded-full bg-white dark:bg-gray-700 dark:text-white border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 ease-in-out disabled:opacity-60"
+						disabled={isLoadingExport}
+					>
+						{isLoadingExport ? (
+							<Loader2Icon size={18} className="animate-spin-fast" />
+						) : (
+							<DownloadIcon size={16} className="" />
+						)}
+					</button>
+				</div>
 				<div className="score-game-chart">
 					{isLoadingChart || isLoadingUser ? (
 						<div>
@@ -453,7 +492,12 @@ function GameTable({
 							</p>
 							<div className="w-full h-96 mb-1.5">
 								<ResponsiveContainer>
-									<BarChart width={730} height={250} data={dataCharts}>
+									<BarChart
+										width={730}
+										height={250}
+										data={dataCharts}
+										ref={gameChartRef}
+									>
 										<CartesianGrid strokeDasharray="3 3" stroke={axisColor} />
 										<XAxis
 											dataKey="name"

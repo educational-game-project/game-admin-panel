@@ -128,6 +128,21 @@ interface GalleryPortalProps {
 	nextSlide: () => void;
 }
 
+interface SearchActionsProps {
+	onClickLink: (url: string) => void;
+}
+
+interface KbdProps {
+	children: ReactNode;
+}
+
+interface SocialData {
+	id: string;
+	name: string;
+	url: string;
+	icon: ReactNode;
+}
+
 export type {
 	AlertDialogProps,
 	Breadcrumb,
@@ -140,11 +155,14 @@ export type {
 	HeaderContainerProps,
 	HeaderProfileProps,
 	ImageGalleryProps,
+	KbdProps,
 	ModalDisplayProps,
 	PerformanceChartProps,
 	PerformanceWidgetProps,
 	ProfileUserProps,
 	ScoreTableProps,
+	SearchActionsProps,
+	SocialData,
 	StudentTableProps,
 	ToastState,
 	ToastProviderProps,

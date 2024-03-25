@@ -98,8 +98,13 @@ function Home() {
 				<div className="col-span-full xl:col-span-4">
 					{isLoading && (
 						<div className="bg-white p-5 rounded-xl dark:bg-gray-800">
-							<div className="animate-pulse-fast skeleton-loader skeleton-sm w-48 mb-2" />
-							<div className="animate-pulse-fast skeleton-loader skeleton-sm w-2/3 min-w-40 mb-5" />
+							<div className="flex justify-between">
+								<div>
+									<div className="animate-pulse-fast skeleton-loader skeleton-sm w-48 mb-2" />
+									<div className="animate-pulse-fast skeleton-loader skeleton-sm w-72 mb-5" />
+								</div>
+								<div className="animate-pulse-fast skeleton-loader skeleton-sm w-16 h-8" />
+							</div>
 							<div className="w-full h-80 mb-1.5 flex items-center justify-center">
 								<BarsScaleFade
 									width="2rem"

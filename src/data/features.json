@@ -1,0 +1,60 @@
+{
+	"features": [
+		{
+			"id": "admin",
+			"slug": "admin",
+			"title": "Admin",
+			"role": "Super Admin",
+			"keywords": "admin"
+		},
+		{
+			"id": "add-admin",
+			"slug": "admin/add",
+			"title": "Add Admin",
+			"role": "Super Admin",
+			"keywords": "add tambah admin"
+		},
+		{
+			"id": "add-game",
+			"slug": "game/add",
+			"title": "Add Game",
+			"role": "Super Admin",
+			"keywords": "add tambah game permainan"
+		},
+		{
+			"id": "add-school",
+			"slug": "school/add",
+			"title": "Add School",
+			"role": "Super Admin",
+			"keywords": "add tambah school sekolah"
+		},
+		{
+			"id": "add-student",
+			"slug": "student/add",
+			"title": "Add Student",
+			"role": "All",
+			"keywords": "add tambah student user siswa"
+		},
+		{
+			"id": "change-password",
+			"slug": "profile/change-password",
+			"title": "Change Password",
+			"role": "All",
+			"keywords": "ubah password change kata sandi"
+		},
+		{
+			"id": "profile",
+			"slug": "profile/account",
+			"title": "Profile",
+			"role": "All",
+			"keywords": "profile akun profil"
+		},
+		{
+			"id": "school",
+			"slug": "school",
+			"title": "School",
+			"role": "Super Admin",
+			"keywords": "school sekolah"
+		}
+	]
+}
