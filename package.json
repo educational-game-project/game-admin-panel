@@ -26,6 +26,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "file-saver": "^2.0.5",
+    "kbar": "^0.1.0-beta.45",
     "lucide-react": "^0.291.0",
     "luxon": "^3.4.3",
     "postcss": "^8.4.31",
