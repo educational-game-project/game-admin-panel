@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--color-s-thumb: #a5a7aa;
+	--color-s-thumb-hover: #b0b3b8;
+}
+
+html[data-color-mode="dark"]:root {
+	--color-s-thumb: #4b515b;
+	--color-s-thumb-hover: #5c636e;
+}
+
 * {
 	@apply font-inter leading-normal;
 }
@@ -33,6 +43,26 @@ body {
 
 button {
 	@apply leading-normal;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+	width: 7px;
+	height: 3px;
+}
+
+::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background: var(--color-s-thumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-s-thumb-hover);
 }
 
 /* form */
