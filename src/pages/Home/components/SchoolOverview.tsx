@@ -78,7 +78,7 @@ function SchoolOverview({ data }: { data: SchoolChartType[] }) {
 			</div>
 			<div className="px-5">
 				<h5 className="font-semibold text-lg mb-0.5">School Overview</h5>
-				<p className="text-gray-500">Overview of the school's performance.</p>
+				<p className="text-gray-500">Overview of the school's statistics.</p>
 			</div>
 			<div className="w-full h-80 school-overview-chart pl-1.5 pr-5">
 				<ResponsiveContainer>

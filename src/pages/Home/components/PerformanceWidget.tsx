@@ -99,7 +99,7 @@ function PerformanceWidget({
 			<div className={type === "advanced" ? "grid grid-cols-2 gap-x-3" : ""}>
 				<div>
 					<h5 className="text-gray-600 mb-1 capitalize dark:text-gray-400">
-						Performa {name}
+						Total {name}
 					</h5>
 					<p className="dark:text-gray-100 text-2xl">
 						{countItem ?? 0}{" "}

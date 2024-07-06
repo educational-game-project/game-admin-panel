@@ -125,7 +125,7 @@ function Home() {
                   School Overview
                 </h5>
                 <p className="text-gray-500">
-                  Overview of the school's performance.
+                  Overview of the school's statistics.
                 </p>
               </div>
               <div className="w-full h-44 flex items-center justify-center flex-col">
@@ -163,7 +163,7 @@ function Home() {
               <div className="mb-4">
                 <h5 className="font-semibold text-lg mb-0.5">Game Overview</h5>
                 <p className="text-gray-500">
-                  Overview of the game's performance.
+                  Overview of the game's statistics.
                 </p>
               </div>
               <div className="w-full h-44 flex items-center justify-center flex-col">
