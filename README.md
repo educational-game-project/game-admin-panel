@@ -41,13 +41,13 @@ Install game-api with yarn
 Clone the project
 
 ```bash
-  git clone https://github.com/sningratGames/game-api.git
+  git clone https://github.com/sningratGames/game-admin-panel.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd game-api
+  cd game-admin-panel
 ```
 
 Add environment variables with copy `.env.example` file to `.env`
