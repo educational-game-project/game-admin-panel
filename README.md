@@ -1,33 +1,85 @@
-# React + TypeScript + Vite
+# Educational Game Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An Admin Dashboard for Educational Game with users, schools management and score statistics and users play histories.
 
-Currently, two official plugins are available:
+## Screenshots
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![App Screenshot](https://res.cloudinary.com/sningratt/image/upload/v1705343945/pghs5nattqjwq2cod5ib)
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Games Management
+- Users Management
+- Schools Management
+- Admin/Teachers Management
+- User Scores Statistic
+- User Played Games Histories
+- User Leaderboard
 
-- Configure the top-level `parserOptions` property like this:
+## Tech Stack
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+**Backend:** NodeJs, Typescript, NestJs
+
+**Database:** MongoDB
+
+**DevOps:** Docker, GitHub Workflow
+
+**Frontend:** ReactJs, Vite, Typescript, TailwindCss
+
+**Mobile:** Dart, Flutter
+
+## Installation
+
+Install game-api with yarn
+
+```bash
+  yarn install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Run Locally
 
-Postman Link : https://app.getpostman.com/join-team?invite_code=b69255e19c972d3664e07049cc8c7be5&target_code=a73b1487bdbe171d90ca996dd4d79f94
+Clone the project
 
-Deployed Link: https://game-admin-panel-three.vercel.app/
+```bash
+  git clone https://github.com/sningratGames/game-api.git
+```
 
-BE Link: https://be-game.cyclic.app/admin
+Go to the project directory
+
+```bash
+  cd game-api
+```
+
+Add environment variables with copy `.env.example` file to `.env`
+
+Install dependencies
+
+```bash
+  yarn install
+```
+
+Start the server
+
+```bash
+  yarn dev
+```
+
+## Authors
+
+- [@iwansuryaningrat](https://www.github.com/iwansuryaningrat)
+
+## Contributing
+
+Contributions are always welcome!
+
+## Feedback
+
+If you have any feedback, please reach out to us at iwan.suryaningrat28@gmail.com
+
+## License
+
+[MIT](https://github.com/nestjs/nest/blob/master/LICENSE)
+
+## Support
+
+For support, email iwan.suryaningrat28@gmail.com.
