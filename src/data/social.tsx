@@ -29,7 +29,7 @@ const socials: SocialData[] = [
   {
     id: "website",
     name: "Website",
-    url: "https://iwansuryaningrat.github.io/#/",
+    url: "https://iwansuryaningrat.tech",
     icon: <GlobeIcon color="#ff0000" />,
   },
   {
