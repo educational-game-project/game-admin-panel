@@ -379,10 +379,9 @@ function EditAdmin() {
                   <img
                     ref={mediaRef}
                     src={
-                      // !errors.media && watchMedia?.length > 0
-                      //   ? URL.createObjectURL(watchMedia[0])
-                      //   : `https://ui-avatars.com/api/?name=${watch("name")}`
-                      URL.createObjectURL(watchMedia[0])
+                      !errors.media && watchMedia?.length > 0
+                        ? URL.createObjectURL(watchMedia[0])
+                        : `https://ui-avatars.com/api/?name=${watch("name")}`
                     }
                     alt="Profile Placeholder"
                     className="w-full h-full object-cover object-center"
