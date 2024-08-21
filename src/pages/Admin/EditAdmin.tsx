@@ -380,7 +380,7 @@ function EditAdmin() {
                     ref={mediaRef}
                     src={
                       !errors.media && watchMedia?.length > 0
-                        ? URL.createObjectURL(watchMedia[0])
+                        ? watchMedia[0]
                         : `https://ui-avatars.com/api/?name=${watch("name")}`
                     }
                     alt="Profile Placeholder"
