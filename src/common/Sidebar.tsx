@@ -337,21 +337,10 @@ export function SidebarItem({
         </span>
         {alert && (
           <div
-            className={`absolute right-2 text-2xs rounded-full text-center ${
-              isExpanded
-                ? "py-px px-1.5 min-w-6.5 bg-red-400 text-slate-50 dark:bg-red-500"
-                : "w-2.5 h-2.5 top-1.5"
-            }`}
-          >
-            {isExpanded ? (
-              "10"
-            ) : (
-              <>
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-300 opacity-75 dark:bg-red-400" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500 translate-x-px -translate-y-0.75" />
-              </>
-            )}
-          </div>
+            className={
+              "absolute right-2 text-2xs rounded-full text-center w-2.5 h-2.5 top-1.5"
+            }
+          ></div>
         )}
 
         {!isExpanded && (
