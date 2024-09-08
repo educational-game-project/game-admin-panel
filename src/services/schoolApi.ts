@@ -13,7 +13,7 @@ export const schoolApi = coreApi.injectEndpoints({
 		getSchool: builder.mutation<SchoolListSuccessResponse, DataTableGetRequest>(
 			{
 				query: (data) => ({
-					url: "/schools/find",
+					url: "/school/find",
 					method: "POST",
 					body: data,
 				}),
@@ -21,7 +21,7 @@ export const schoolApi = coreApi.injectEndpoints({
 		),
 		getSchoolById: builder.mutation<SchoolSuccessResponse, SchoolIdRequest>({
 			query: (id) => ({
-				url: "/schools/detail",
+				url: "/school/detail",
 				method: "POST",
 				body: id,
 			}),
@@ -35,7 +35,7 @@ export const schoolApi = coreApi.injectEndpoints({
 					formAddSchool.append("media", data?.media[0] || "");
 				}
 				return {
-					url: "/schools",
+					url: "/school",
 					method: "POST",
 					body: formAddSchool,
 					formData: true,
@@ -53,7 +53,7 @@ export const schoolApi = coreApi.injectEndpoints({
 					formEditSchool.append("media", data?.media[0] || "");
 				}
 				return {
-					url: "/schools",
+					url: "/school",
 					method: "PUT",
 					body: formEditSchool,
 					formData: true,
@@ -63,7 +63,7 @@ export const schoolApi = coreApi.injectEndpoints({
 		}),
 		deleteSchool: builder.mutation<SuccessResponse, SchoolIdRequest>({
 			query: (id) => ({
-				url: "/schools",
+				url: "/school",
 				method: "DELETE",
 				body: id,
 			}),

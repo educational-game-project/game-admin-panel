@@ -41,7 +41,7 @@ Install game-api with yarn
 Clone the project
 
 ```bash
-  git clone https://github.com/sningratGames/game-admin-panel.git
+  git clone https://github.com/educational-game-project/game-admin-panel
 ```
 
 Go to the project directory

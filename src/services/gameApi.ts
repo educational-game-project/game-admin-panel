@@ -12,14 +12,14 @@ export const gameApi = coreApi.injectEndpoints({
 	endpoints: (builder) => ({
 		getGame: builder.mutation<GameListSuccessResponse, DataTableGetRequest>({
 			query: (data) => ({
-				url: "/games/find",
+				url: "/game/find",
 				method: "POST",
 				body: data,
 			}),
 		}),
 		getGameById: builder.mutation<GameSuccessResponse, GameIdRequest>({
 			query: (id) => ({
-				url: "/games/detail",
+				url: "/game/detail",
 				method: "POST",
 				body: id,
 			}),
@@ -40,7 +40,7 @@ export const gameApi = coreApi.injectEndpoints({
 					});
 				}
 				return {
-					url: "/games",
+					url: "/game",
 					method: "POST",
 					body: formDefineGame,
 					formData: true,
@@ -65,7 +65,7 @@ export const gameApi = coreApi.injectEndpoints({
 					});
 				}
 				return {
-					url: "/games",
+					url: "/game",
 					method: "PUT",
 					body: formEditGame,
 					formData: true,
@@ -75,7 +75,7 @@ export const gameApi = coreApi.injectEndpoints({
 		}),
 		deleteGame: builder.mutation<SuccessResponse, GameIdRequest>({
 			query: (id) => ({
-				url: "/games",
+				url: "/game",
 				method: "DELETE",
 				body: id,
 			}),

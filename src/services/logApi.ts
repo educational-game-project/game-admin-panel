@@ -10,14 +10,14 @@ export const logApi = coreApi.injectEndpoints({
 	endpoints: (builder) => ({
 		getLogs: builder.mutation<LogListSuccessResponse, DataTableGetRequest>({
 			query: (data) => ({
-				url: "/logs",
+				url: "/log/find",
 				method: "POST",
 				body: data,
 			}),
 		}),
 		deleteLog: builder.mutation<SuccessResponse, LogIdRequest>({
 			query: (id) => ({
-				url: "/logs",
+				url: "/log",
 				method: "DELETE",
 				body: id,
 			}),
